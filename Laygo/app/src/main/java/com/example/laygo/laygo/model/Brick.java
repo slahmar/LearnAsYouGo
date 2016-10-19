@@ -1,21 +1,33 @@
-package com.example.laygo.laygo;
+package com.example.laygo.laygo.model;
 
 import android.location.Location;
 
 import java.io.File;
 import java.util.Vector;
 
-
 /**
- * Created by Petra on 12-10-2016.
+ * A brick is a word with its translation under different formats (audio, picture, text) and example sentences
  */
-
 public class Brick {
+    /**
+     * The word in the learned language
+     */
     private String word;
+    /**
+     * The word in the user's mother tongue
+     */
     private String translation;
+    /**
+     * A set of example sentences using the word
+     */
     private Vector<String> examples;
-
+    /**
+     * An image of the object
+     */
     private File image;
+    /**
+     * An audio recording
+     */
     private File audio;
 
     private Location location;
