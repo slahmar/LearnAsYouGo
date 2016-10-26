@@ -9,6 +9,7 @@ import java.util.Vector;
  * A brick is a word with its translation under different formats (audio, picture, text) and example sentences
  */
 public class Brick {
+    private long id;
     /**
      * The word in the learned language
      */
@@ -79,5 +80,18 @@ public class Brick {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public long getId(){
+        return id;
+    }
+
+    @Override
+    public String toString(){
+        return "Brick : "+word + " = "+translation;
     }
 }
