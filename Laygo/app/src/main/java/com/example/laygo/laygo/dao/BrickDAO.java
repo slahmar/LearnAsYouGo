@@ -91,7 +91,7 @@ public class BrickDAO {
          * @return the brick created
          */
         public Brick createBrick(String word) throws NullPointerException, IllegalStateException{
-            if(findByWord(word).size() == 0) {
+            //if(findByWord(word).size() == 0) {
                 ContentValues values = new ContentValues();
                 values.put(BrickSQLiteHelper.COLUMN_WORD, word);
                 long insertId = database.insert(BrickSQLiteHelper.TABLE_BRICK, null,
@@ -103,10 +103,10 @@ public class BrickDAO {
                 Brick newBrick = cursorToBrick(cursor);
                 cursor.close();
                 return newBrick;
-            }
-            else{
-                throw new RuntimeException("Duplicate word");
-            }
+            //}
+            //else{
+            //    throw new RuntimeException("Duplicate word");
+            //}
         }
 
         private Brick cursorToBrick(Cursor cursor) {

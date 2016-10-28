@@ -5,6 +5,8 @@ import android.location.Location;
 import java.io.File;
 import java.util.Vector;
 
+
+
 /**
  * A brick is a word with its translation under different formats (audio, picture, text) and example sentences
  */
