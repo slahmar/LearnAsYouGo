@@ -11,17 +11,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -46,11 +41,9 @@ public class AddBrick extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_brick);
-        ButterKnife.bind(this);
-        this.imageView = (ImageView)this.findViewById(R.id.showPhoto);
+        this.imageView = (ImageView)this.findViewById(R.id.camera);
 
-        ImageView photoButton = (ImageView) this.findViewById(R.id.takePhoto);
-        photoButton.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Brick b = null;
@@ -97,7 +90,8 @@ public class AddBrick extends AppCompatActivity {
     protected void  onActivityResult(int reqCode, int resCode, Intent data) {
         if (resCode == RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
+            ImageView pic = (ImageView)this.findViewById(R.id.photo);
+            pic.setImageBitmap(photo);
         }
         else {
             Toast.makeText(this, "Error (" + String.valueOf(resCode) + ")", Toast.LENGTH_LONG).show();
@@ -112,9 +106,8 @@ public class AddBrick extends AppCompatActivity {
             // set location of the brick
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
             ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
-            ImageView locationAvailableButton = (ImageView) this.findViewById(R.id.locationAvailable);
-            locationButton.setVisibility(View.INVISIBLE);
-            locationAvailableButton.setVisibility(View.VISIBLE);
+            locationButton.setImageResource(R.drawable.location_set_icon);
+
 
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
@@ -128,6 +121,7 @@ public class AddBrick extends AppCompatActivity {
         }
     }
 }
+
 
 class LocationService implements LocationListener  {
 	private long minTime = 0; // minimum time interval between location updates, in milliseconds

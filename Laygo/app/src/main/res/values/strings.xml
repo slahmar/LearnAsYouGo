@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Laygo</string>
     <string name="search_hint">Find your brick</string>
+    <string name="add_activity">Add a new word</string>
 </resources>
