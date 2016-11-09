@@ -35,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchableActivity.class);
+            startActivity(intent);
             return true;
         }
 
