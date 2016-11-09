@@ -6,6 +6,7 @@ import java.util.Vector;
  * A block is a set of related words
  */
 public class Block {
+    private long id;
     /**
      * The name of the block
      */
@@ -14,6 +15,14 @@ public class Block {
      * The set of words contained by the block
      */
     private Vector<Brick> block = new Vector<Brick>();
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName(){
         return name;
