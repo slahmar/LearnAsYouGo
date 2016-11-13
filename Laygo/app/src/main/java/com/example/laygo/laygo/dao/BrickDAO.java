@@ -30,7 +30,7 @@ public class BrickDAO extends GenericDAO{
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Brick brick = cursorToBrick(cursor);
+                Brick brick = cursorToBrick(cursor, false);
                 bricks.add(brick);
                 cursor.moveToNext();
             }
@@ -63,7 +63,7 @@ public class BrickDAO extends GenericDAO{
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Brick brick = cursorToBrick(cursor);
+                Brick brick = cursorToBrick(cursor, false);
                 bricks.add(brick);
                 cursor.moveToNext();
             }
@@ -89,7 +89,7 @@ public class BrickDAO extends GenericDAO{
                         allColumns, LaygoSQLiteHelper.COLUMN_ID + " = " + insertId, null,
                         null, null, null);
                 cursor.moveToFirst();
-                Brick newBrick = cursorToBrick(cursor);
+                Brick newBrick = cursorToBrick(cursor, true);
                 cursor.close();
                 return newBrick;
             //}
@@ -98,11 +98,14 @@ public class BrickDAO extends GenericDAO{
             //}
         }
 
-        private Brick cursorToBrick(Cursor cursor) {
+        private Brick cursorToBrick(Cursor cursor, boolean insert) {
             Brick brick = new Brick();
             brick.setId(cursor.getLong(0));
             brick.setWord(cursor.getString(1));
-            brick.setTranslation(cursor.getString(2));
+            if(!insert){
+                brick.setTranslation(cursor.getString(2));
+                // TODO : Add all columns
+            }
             return brick;
         }
 
