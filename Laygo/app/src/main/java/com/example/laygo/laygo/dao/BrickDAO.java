@@ -3,20 +3,31 @@ package com.example.laygo.laygo.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 
-import com.example.laygo.laygo.db.LaygoSQLiteHelper;
+import com.example.laygo.laygo.db.BrickSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrickDAO extends GenericDAO{
-    private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID,
-                LaygoSQLiteHelper.COLUMN_WORD };
+public class BrickDAO {
+        private SQLiteDatabase database;
+        private BrickSQLiteHelper dbHelper;
+        private String[] allColumns = { BrickSQLiteHelper.COLUMN_ID,
+                BrickSQLiteHelper.COLUMN_WORD };
 
     public BrickDAO(Context context) {
-        super(context);
-        dbHelper = new LaygoSQLiteHelper(context);
+        dbHelper = new BrickSQLiteHelper(context);
+    }
+
+    public void open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+    }
+
+    public void close() {
+        dbHelper.close();
     }
 
         /**
@@ -25,7 +36,7 @@ public class BrickDAO extends GenericDAO{
          */
         public List<Brick> findAll(){
             List<Brick> bricks = new ArrayList<Brick>();
-            Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
+            Cursor cursor = database.query(BrickSQLiteHelper.TABLE_BRICK,
                     allColumns, null, null, null, null, null);
 
             cursor.moveToFirst();
@@ -58,8 +69,8 @@ public class BrickDAO extends GenericDAO{
          */
         public List<Brick> findByWord(String word) throws NullPointerException{
             List<Brick> bricks = new ArrayList<Brick>();
-            Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK, allColumns,
-                    LaygoSQLiteHelper.COLUMN_WORD +" = \"" + word +"\"", null, null, null, null);
+            Cursor cursor = database.query(BrickSQLiteHelper.TABLE_BRICK, allColumns,
+                    BrickSQLiteHelper.COLUMN_WORD +" = \"" + word +"\"", null, null, null, null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -82,11 +93,11 @@ public class BrickDAO extends GenericDAO{
         public Brick createBrick(String word) throws NullPointerException, IllegalStateException{
             //if(findByWord(word).size() == 0) {
                 ContentValues values = new ContentValues();
-                values.put(LaygoSQLiteHelper.COLUMN_WORD, word);
-                long insertId = database.insert(LaygoSQLiteHelper.TABLE_BRICK, null,
+                values.put(BrickSQLiteHelper.COLUMN_WORD, word);
+                long insertId = database.insert(BrickSQLiteHelper.TABLE_BRICK, null,
                         values);
-                Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
-                        allColumns, LaygoSQLiteHelper.COLUMN_ID + " = " + insertId, null,
+                Cursor cursor = database.query(BrickSQLiteHelper.TABLE_BRICK,
+                        allColumns, BrickSQLiteHelper.COLUMN_ID + " = " + insertId, null,
                         null, null, null);
                 cursor.moveToFirst();
                 Brick newBrick = cursorToBrick(cursor, true);
@@ -111,13 +122,13 @@ public class BrickDAO extends GenericDAO{
 
         public boolean updateBrick(Brick brick){
             ContentValues values = new ContentValues();
-            values.put(LaygoSQLiteHelper.COLUMN_WORD, brick.getWord());
+            values.put(BrickSQLiteHelper.COLUMN_WORD, brick.getWord());
             // TODO : add all columns
-            return (database.update(LaygoSQLiteHelper.TABLE_BRICK, values, LaygoSQLiteHelper.COLUMN_ID + "=" + brick.getId(), null) > 0);
+            return (database.update(BrickSQLiteHelper.TABLE_BRICK, values, BrickSQLiteHelper.COLUMN_ID + "=" + brick.getId(), null) > 0);
         }
 
         public boolean deleteBrick(Brick brick){
             long id = brick.getId();
-            return (database.delete(LaygoSQLiteHelper.TABLE_BRICK, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
+            return (database.delete(BrickSQLiteHelper.TABLE_BRICK, BrickSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
         }
 }
