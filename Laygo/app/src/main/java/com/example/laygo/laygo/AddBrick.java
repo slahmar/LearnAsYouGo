@@ -191,9 +191,9 @@ public class AddBrick extends AppCompatActivity {
 
 
 class LocationService implements LocationListener  {
-	private long minTime = 0; // minimum time interval between location updates, in milliseconds
-	private float minDistance = 12; // 12 m (minimum distance between location updates)
-	
+    private long minTime = 0; // minimum time interval between location updates, in milliseconds
+    private float minDistance = 12; // 12 m (minimum distance between location updates)
+    
     public Location getLocation(Context context) {
         Location location = null;
         LocationManager locationManager;
