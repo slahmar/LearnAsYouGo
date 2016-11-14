@@ -10,6 +10,10 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_WORD = "word";
     public static final String COLUMN_TRANSLATION = "translation";
+    public static final String COLUMN_EXAMPLES = "examples";
+    public static final String COLUMN_PHOTO = "photo";
+    public static final String COLUMN_LATITUDE = "latitude";
+    public static final String COLUMN_LONGITUDE = "longitude";
 
     public static final String TABLE_BLOCK = "block";
     public static final String COLUMN_NAME = "name";
@@ -20,7 +24,8 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_BRICK = "create table "
             + TABLE_BRICK + "(" + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_WORD
-            + " text not null, "+ COLUMN_TRANSLATION +" );";
+            + " text not null, "+ COLUMN_TRANSLATION +" text, " + COLUMN_EXAMPLES + " text, "
+            + COLUMN_PHOTO + " text, " + COLUMN_LATITUDE + " double, " + COLUMN_LONGITUDE + "double );";
 
     private static final String CREATE_TABLE_BLOCK = "create table "
             + TABLE_BLOCK + "(" + COLUMN_ID

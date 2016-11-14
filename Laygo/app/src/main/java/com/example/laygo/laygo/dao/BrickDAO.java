@@ -3,6 +3,7 @@ package com.example.laygo.laygo.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
 
 import com.example.laygo.laygo.db.LaygoSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;
@@ -45,8 +46,19 @@ public class BrickDAO extends GenericDAO{
          * @throws NullPointerException if id is null
          * @return a list of bricks empty if none is found
          */
-        public List<Brick> findById(Integer id) throws NullPointerException {
-            return null;
+        public List<Brick> findById(long id) throws NullPointerException {
+            List<Brick> bricks = new ArrayList<Brick>();
+            Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK, allColumns,
+                    LaygoSQLiteHelper.COLUMN_ID +" = \"" + id +"\"", null, null, null, null);
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Brick brick = cursorToBrick(cursor);
+                bricks.add(brick);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return bricks;
         }
 
         /**
@@ -81,8 +93,13 @@ public class BrickDAO extends GenericDAO{
          */
         public Brick createBrick(String word) throws NullPointerException, IllegalStateException{
             //if(findByWord(word).size() == 0) {
-                ContentValues values = new ContentValues();
+                ContentValues values = new ContentValues(4);
                 values.put(LaygoSQLiteHelper.COLUMN_WORD, word);
+                values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, "");
+                values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, "");
+                values.put(LaygoSQLiteHelper.COLUMN_PHOTO, "");
+                values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, 0);
+                values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, 0);
                 long insertId = database.insert(LaygoSQLiteHelper.TABLE_BRICK, null,
                         values);
                 Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
@@ -103,13 +120,23 @@ public class BrickDAO extends GenericDAO{
             brick.setId(cursor.getLong(0));
             brick.setWord(cursor.getString(1));
             brick.setTranslation(cursor.getString(2));
+            brick.setExamples(cursor.getString(3));
+            brick.setImage(cursor.getString(4));
+            Location loc = new Location("");
+            loc.setLatitude(cursor.getDouble(5));
+            loc.setLongitude(cursor.getDouble(6));
+            brick.setLocation(loc);
             return brick;
         }
 
         public boolean updateBrick(Brick brick){
-            ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues(4);
             values.put(LaygoSQLiteHelper.COLUMN_WORD, brick.getWord());
-            // TODO : add all columns
+            values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, brick.getTranslation());
+            values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, brick.getExamples());
+            values.put(LaygoSQLiteHelper.COLUMN_PHOTO, brick.getImage());
+            values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, brick.getLocation().getLatitude());
+            values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, brick.getLocation().getLongitude());
             return (database.update(LaygoSQLiteHelper.TABLE_BRICK, values, LaygoSQLiteHelper.COLUMN_ID + "=" + brick.getId(), null) > 0);
         }
 

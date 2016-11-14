@@ -1,17 +1,22 @@
 package com.example.laygo.laygo;
 
+import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
@@ -19,14 +24,12 @@ import android.widget.Toast;
 
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.laygo.laygo.BrickArrayAdapter;
 
 import java.util.List;
+import java.util.Locale;
 
-public class SearchableActivity extends ListActivity{
+public class SearchableActivity extends ListActivity {
 
     ListView listView;
 
@@ -41,21 +44,17 @@ public class SearchableActivity extends ListActivity{
         BrickDAO b = new BrickDAO(this);
         b.open();
         List<Brick> bricks = b.findAll();
-        String [] values = new String[bricks.size()];
-        for(int i = 0 ; i < bricks.size(); i ++) {
-            values[i] = bricks.get(i).getWord();
-        }
-        BrickArrayAdapter adapter = new BrickArrayAdapter(this, values);
+        final BrickArrayAdapter adapter = new BrickArrayAdapter(this, bricks);
         setListAdapter(adapter);
 
-        EditText editSearch = (EditText) findViewById(R.id.search);
+        final EditText editSearch = (EditText) findViewById(R.id.search);
  
         // Capture Text in EditText
         editSearch.addTextChangedListener(new TextWatcher() {
  
             @Override
             public void afterTextChanged(Editable arg0) {
-                String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
+                String text = editSearch.getText().toString().toLowerCase(Locale.getDefault());
                 adapter.filter(text);
             }
  
@@ -70,6 +69,7 @@ public class SearchableActivity extends ListActivity{
                     int arg3) {
                 return;
             }
+        });
     }
 
     @Override

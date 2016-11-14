@@ -23,15 +23,11 @@ public class Brick {
     /**
      * A set of example sentences using the word
      */
-    private Vector<String> examples;
+    private String examples;
     /**
      * An image of the object
      */
     private String imagePath;
-    /**
-     * An audio recording
-     */
-    private File audio;
 
     private Location location;
 
@@ -43,11 +39,11 @@ public class Brick {
         this.translation = translation;
     }
 
-    public Vector<String> getExamples() {
+    public String getExamples() {
         return examples;
     }
 
-    public void setExamples(Vector<String> examples) {
+    public void setExamples(String examples) {
         this.examples = examples;
     }
 
@@ -57,14 +53,6 @@ public class Brick {
 
     public void setImage(String image) {
         this.imagePath = image;
-    }
-
-    public File getAudio() {
-        return audio;
-    }
-
-    public void setAudio(File audio) {
-        this.audio = audio;
     }
 
     public Location getLocation() {
