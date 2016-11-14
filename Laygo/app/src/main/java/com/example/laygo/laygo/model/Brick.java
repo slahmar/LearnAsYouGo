@@ -27,7 +27,7 @@ public class Brick {
     /**
      * An image of the object
      */
-    private File image;
+    private String imagePath;
     /**
      * An audio recording
      */
@@ -51,12 +51,12 @@ public class Brick {
         this.examples = examples;
     }
 
-    public File getImage() {
-        return image;
+    public String getImage() {
+        return imagePath;
     }
 
-    public void setImage(File image) {
-        this.image = image;
+    public void setImage(String image) {
+        this.imagePath = image;
     }
 
     public File getAudio() {
@@ -85,7 +85,7 @@ public class Brick {
     }
 
     public void setId(long id){
-        this.id = id;
+        this.id = id++;
     }
 
     public long getId(){
