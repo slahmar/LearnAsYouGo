@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class BrickArrayAdapter extends ArrayAdapter<String> {
     public BrickArrayAdapter(Context context, List<Brick> bricks) {
         super(context, R.layout.list_brick);
         this.context = context;
-        this.bricksToFilter = bricksToFilter;
+        this.bricksToFilter = bricks;
         this.bricks = new ArrayList<Brick>();
         this.bricks.addAll(bricksToFilter);
     }
@@ -40,10 +41,10 @@ public class BrickArrayAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.list_brick, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.wordBrick);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageBrick);
-        textView.setText(bricks.get(position).getWord());
+        textView.setText(bricksToFilter.get(position).getWord());
 
-        // Get image path of image 
-        String imagePath = bricks.get(position).getImage();
+        // Get image path of image
+        String imagePath = bricksToFilter.get(position).getImage();
         if(imagePath != ""){
             Uri path = Uri.parse(imagePath);
             try{
