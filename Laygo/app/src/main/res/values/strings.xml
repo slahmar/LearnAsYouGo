@@ -2,4 +2,7 @@
     <string name="app_name">Laygo</string>
     <string name="search_hint">Find your brick</string>
     <string name="add_activity">Add a new word</string>
+    <string name="quiz_next">Next word!</string>
+    <string name="quiz_title">QUIZ</string>
+    <string name="quiz_radiobutton">Question</string>
 </resources>
