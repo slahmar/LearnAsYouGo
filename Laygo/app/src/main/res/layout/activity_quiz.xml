@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    tools:context=".QuizActivity">
+
+    <TextView
+        android:id="@+id/textViewQuizTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/quiz_title"
+        android:textAlignment="center"
+        android:textSize="32sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.04">
+
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/quiz_next"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="15dp" />
+
+        </RadioGroup>
+
+    <RadioButton
+    android:id="@+id/radio2"
+    android:layout_width="match_parent"
+    android:layout_height="24dp"
+    android:text="@string/quiz_radiobutton"
+        android:layout_marginBottom="245dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="71dp"
+        android:layout_marginStart="71dp" />
+
+    <RadioButton
+        android:id="@+id/radio0"
+        android:layout_width="match_parent"
+        android:text="@string/quiz_radiobutton"
+        android:layout_height="24dp"
+        android:layout_marginBottom="38dp"
+        android:layout_above="@+id/radio2"
+        android:layout_alignLeft="@+id/radio2"
+        android:layout_alignStart="@+id/radio2" />
+
+    <RadioButton
+        android:id="@+id/radio1"
+        android:layout_width="match_parent"
+        android:text="@string/quiz_radiobutton"
+        android:layout_height="24dp"
+        android:layout_marginBottom="27dp"
+        android:layout_above="@+id/radio0"
+        android:layout_alignLeft="@+id/radio0"
+        android:layout_alignStart="@+id/radio0" />
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/noimage"
+        android:id="@+id/imageView0"
+        android:layout_alignTop="@+id/radio1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/noimage"
+        android:id="@+id/imageView3"
+        android:layout_alignTop="@+id/radio2"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_alignStart="@+id/imageView2" />
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/noimage"
+        android:id="@+id/imageView2"
+        android:layout_below="@+id/radio1"
+        android:layout_alignLeft="@+id/imageView0"
+        android:layout_alignStart="@+id/imageView0" />
+
+</RelativeLayout>
