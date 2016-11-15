@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,24 +20,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class BrickArrayAdapter extends ArrayAdapter<String> {
-    private Context context;
+public class BrickListAdapter extends BaseAdapter {
+    Context context;
+    LayoutInflater inflater;
     private List<Brick> bricksToFilter = null;
     private ArrayList<Brick> bricks = null;
 
-    // Maybe change type of values to get the image path as well
-    public BrickArrayAdapter(Context context, List<Brick> bricks) {
-        super(context, R.layout.list_brick);
+    public BrickListAdapter(Context context, List<Brick> bricks) {
         this.context = context;
+        inflater = LayoutInflater.from(context);
         this.bricksToFilter = bricks;
         this.bricks = new ArrayList<Brick>();
         this.bricks.addAll(bricksToFilter);
     }
 
     @Override
+    public int getCount() {
+        return bricksToFilter.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return bricksToFilter.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        /*LayoutInflater inflater = (LayoutInflater) context
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
 
         View rowView = inflater.inflate(R.layout.list_brick, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.wordBrick);
@@ -45,12 +61,14 @@ public class BrickArrayAdapter extends ArrayAdapter<String> {
 
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
+        Log.d("SALOME", imagePath);
         if(imagePath != ""){
             Uri path = Uri.parse(imagePath);
             try{
                 Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path);
                 imageView.setImageBitmap(image);
             } catch(IOException e ){
+                Log.d("SALOME", "IOException");
                 // TODO
             }
 
