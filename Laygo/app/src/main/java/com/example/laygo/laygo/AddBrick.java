@@ -79,6 +79,16 @@ public class AddBrick extends AppCompatActivity {
             }
         });
 
+        final Context context = this.getApplicationContext();
+        ((Button)this.findViewById(R.id.cancelButton)).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, HomeActivity.class);
+                startActivity(i);
+            }
+        });
+
+
         ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +185,6 @@ public class AddBrick extends AppCompatActivity {
         if (b == null) throw new IllegalStateException("Error creating the brick");
 
         String transl = ((EditText)this.findViewById(R.id.editTranslation)).getText().toString();
-        //LinkedList<String> transl = ((TextView)this.findViewById(R.id.editTranslation)).getText().toString();
 
         b.setImage(photoPath);
         b.setLocation(location);
@@ -184,6 +193,8 @@ public class AddBrick extends AppCompatActivity {
         bdao.updateBrick(b);
 
         Toast.makeText(this, bdao.findAll().get(bdao.findAll().size() - 1).toString(), Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this, HomeActivity.class);
+        startActivity(i);
     }
 
 

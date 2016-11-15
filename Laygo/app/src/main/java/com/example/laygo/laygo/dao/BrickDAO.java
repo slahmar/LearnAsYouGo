@@ -13,7 +13,9 @@ import java.util.List;
 
 public class BrickDAO extends GenericDAO{
     private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID,
-                LaygoSQLiteHelper.COLUMN_WORD };
+                LaygoSQLiteHelper.COLUMN_WORD, LaygoSQLiteHelper.COLUMN_TRANSLATION,
+                LaygoSQLiteHelper.COLUMN_EXAMPLES, LaygoSQLiteHelper.COLUMN_PHOTO,
+                LaygoSQLiteHelper.COLUMN_LATITUDE, LaygoSQLiteHelper.COLUMN_LONGITUDE};
 
     public BrickDAO(Context context) {
         super(context);
@@ -107,6 +109,7 @@ public class BrickDAO extends GenericDAO{
                         null, null, null);
                 cursor.moveToFirst();
                 Brick newBrick = cursorToBrick(cursor);
+                newBrick.setId(insertId);
                 cursor.close();
                 return newBrick;
             //}
@@ -135,8 +138,15 @@ public class BrickDAO extends GenericDAO{
             values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, brick.getTranslation());
             values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, brick.getExamples());
             values.put(LaygoSQLiteHelper.COLUMN_PHOTO, brick.getImage());
-            values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, brick.getLocation().getLatitude());
-            values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, brick.getLocation().getLongitude());
+            Location location = brick.getLocation();
+            if(location == null){
+                values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, 0);
+                values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, 0);
+            }
+            else{
+                values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, brick.getLocation().getLatitude());
+                values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, brick.getLocation().getLongitude());
+            }
             return (database.update(LaygoSQLiteHelper.TABLE_BRICK, values, LaygoSQLiteHelper.COLUMN_ID + "=" + brick.getId(), null) > 0);
         }
 

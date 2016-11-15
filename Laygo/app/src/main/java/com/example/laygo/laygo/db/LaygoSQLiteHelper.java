@@ -25,7 +25,7 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
             + TABLE_BRICK + "(" + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_WORD
             + " text not null, "+ COLUMN_TRANSLATION +" text, " + COLUMN_EXAMPLES + " text, "
-            + COLUMN_PHOTO + " text, " + COLUMN_LATITUDE + " double, " + COLUMN_LONGITUDE + "double );";
+            + COLUMN_PHOTO + " text, " + COLUMN_LATITUDE + " double, " + COLUMN_LONGITUDE + " double );";
 
     private static final String CREATE_TABLE_BLOCK = "create table "
             + TABLE_BLOCK + "(" + COLUMN_ID
