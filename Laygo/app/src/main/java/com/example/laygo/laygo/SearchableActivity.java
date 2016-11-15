@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class SearchableActivity extends ListActivity {
         setContentView(R.layout.activity_searchable);
 
         // Get ListView object from xml
-        listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) this.findViewById(android.R.id.list);
 
         BrickDAO b = new BrickDAO(this);
         b.open();
@@ -47,29 +48,46 @@ public class SearchableActivity extends ListActivity {
         final BrickArrayAdapter adapter = new BrickArrayAdapter(this, bricks);
         setListAdapter(adapter);
 
-        final EditText editSearch = (EditText) findViewById(R.id.search);
- 
-        // Capture Text in EditText
+        final EditText editSearch = (EditText) this.findViewById(R.id.search);
         editSearch.addTextChangedListener(new TextWatcher() {
- 
             @Override
-            public void afterTextChanged(Editable arg0) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String text = editSearch.getText().toString().toLowerCase(Locale.getDefault());
                 adapter.filter(text);
             }
- 
+
             @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                    int arg2, int arg3) {
-                return;
-            }
- 
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-                    int arg3) {
-                return;
+            public void afterTextChanged(Editable s) {
+
             }
         });
+
+        /*final SearchView editSearch = (SearchView) this.findViewById(R.id.search);
+ 
+        // Capture Text in EditText
+        editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
+                adapter.filter(text);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
+                adapter.filter(text);
+                return true;
+            }
+        });*/
+
+
     }
 
     @Override
