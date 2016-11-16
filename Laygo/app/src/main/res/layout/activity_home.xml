@@ -8,6 +8,7 @@
     tools:context="com.example.laygo.laygo.HomeActivity"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- The main content view -->
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/activity_home"
         android:layout_width="match_parent"
@@ -49,17 +50,25 @@
 
     </RelativeLayout>
 
-    <ListView android:id="@+id/left_drawer"
-        android:layout_width="240dp"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#111">
+        android:layout_width="200dp"
+        android:background="#FFFFFF">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/logo2"
+            android:id="@+id/imageView5"
+            android:adjustViewBounds="true" />
 
-
-     </ListView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/drawerMenu">
+        </ListView>
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

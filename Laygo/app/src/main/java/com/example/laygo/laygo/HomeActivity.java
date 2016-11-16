@@ -1,5 +1,6 @@
 package com.example.laygo.laygo;
 
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -8,15 +9,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.support.v4.widget.DrawerLayout;
 
 public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+        setContentView(R.layout.activity_home); //Set the layout
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar); //We created a app with a toolbar-free theme
+        setSupportActionBar(myToolbar); //So we need to add one and say that it can have buttons
+
+        String truc[] = {"Item1", "Item2", "Item3"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, truc);
+        ListView drawerMenu = (ListView) findViewById(R.id.drawerMenu); //We add some items in the drawer menu
+        drawerMenu.setAdapter(adapter);
+
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                this,  mDrawerLayout, myToolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        );
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
     }
 
     @Override

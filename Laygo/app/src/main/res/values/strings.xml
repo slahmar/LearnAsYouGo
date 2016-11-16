@@ -5,4 +5,6 @@
     <string name="quiz_next">Next word!</string>
     <string name="quiz_title">QUIZ</string>
     <string name="quiz_radiobutton">Question</string>
+    <string name="navigation_drawer_open">Open Drawer</string>
+    <string name="navigation_drawer_close">Close Drawer</string>
 </resources>
