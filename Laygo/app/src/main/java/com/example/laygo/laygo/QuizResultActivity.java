@@ -9,5 +9,10 @@ public class QuizResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int score = extras.getInt("SCORE");
+        }
     }
 }

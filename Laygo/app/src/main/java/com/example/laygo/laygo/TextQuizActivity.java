@@ -1,5 +1,6 @@
 package com.example.laygo.laygo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -109,12 +110,11 @@ public class TextQuizActivity extends AppCompatActivity {
     }
 
     private void setResults() {
-        ((RadioButton) findViewById(R.id.radio0)) .setVisibility(View.INVISIBLE);
-        ((RadioButton) findViewById(R.id.radio1)) .setVisibility(View.INVISIBLE);
-        ((RadioButton) findViewById(R.id.radio2)) .setVisibility(View.INVISIBLE);
-        TextView res = (TextView) findViewById(R.id.textViewResultText);
-        res.setVisibility(View.VISIBLE);
-        res.setText("Score: " + score);
+        Intent i = new Intent(getApplicationContext(), QuizResultActivity.class);
+
+        i.putExtra("SCORE", score);
+        startActivity(i);
+
     }
 
 }
