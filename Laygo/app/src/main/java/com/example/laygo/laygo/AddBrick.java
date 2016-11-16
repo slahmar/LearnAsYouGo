@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -42,37 +43,31 @@ public class AddBrick extends AppCompatActivity {
     public static final int REQ_SET_LOCATION = 1;
     public static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 2;
     private ImageView imageView;
-
-
+    private TextView word;
+    private EditText translation;
+    private EditText examples;
     private Brick b;
     private BrickDAO bdao;
     private String photoPath;
     private Bitmap photo;
     private Location location;
 
-
     private Uri mMediaUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean editable = getIntent().getBooleanExtra("editable", true);
 
         setContentView(R.layout.activity_add_brick);
-        this.imageView = (ImageView)this.findViewById(R.id.camera);
+        imageView = (ImageView)this.findViewById(R.id.camera);
+        word = ((TextView)this.findViewById(R.id.editWord));
+        translation = ((EditText)this.findViewById(R.id.editTranslation));
+        examples = ((EditText)this.findViewById(R.id.editExamples));
+        Button save = (Button)this.findViewById(R.id.saveButton);
+        Button cancel = (Button)this.findViewById(R.id.cancelButton);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Brick b = null;
-                //mMediaUri = getOutputFileUri(b);
-
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                //intent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                startActivityForResult(intent, REQ_TAKE_PHOTO);
-            }
-        });
-
-        ((Button)this.findViewById(R.id.saveButton)).setOnClickListener(new Button.OnClickListener() {
+        save.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 completeBrick();
@@ -80,7 +75,7 @@ public class AddBrick extends AppCompatActivity {
         });
 
         final Context context = this.getApplicationContext();
-        ((Button)this.findViewById(R.id.cancelButton)).setOnClickListener(new Button.OnClickListener() {
+        cancel.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, HomeActivity.class);
@@ -88,60 +83,64 @@ public class AddBrick extends AppCompatActivity {
             }
         });
 
-
         ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setLocation();
-            }
-        });
-    }
 
-
-    private Uri getOutputFileUri(Brick b) {
-        String word = b != null ? b.getWord() : "";
-        String tStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String fName = "IMG_" + word + "_" + tStamp + ".jpg";
-        if (isExtStorageAvailable()) {
-            File file = new File(Environment.getExternalStorageDirectory() + "/DCIM", fName);
-            Uri imgUri = Uri.fromFile(file);
-
-            return imgUri;
-
+        if(editable){
+            locationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setLocation();
+                }
+            });
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQ_TAKE_PHOTO);
+                }
+            });
         }
-        return null;
-    }
-
-    private boolean isExtStorageAvailable() {
-        return Environment.MEDIA_MOUNTED.equals(
-                Environment.getExternalStorageState());
-        //Log.e("Ext storage available? ", String.valueOf(result));
-
+        else{
+            save.setVisibility(View.INVISIBLE);
+            cancel.setVisibility(View.INVISIBLE);
+            locationButton.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+            String wordString = getIntent().getStringExtra("word");
+            String translationString = getIntent().getStringExtra("translation");
+            String examplesString = getIntent().getStringExtra("examples");
+            word.setText(wordString);
+            word.setEnabled(false);
+            translation.setEnabled(false);
+            translation.setText(translationString);
+            examples.setEnabled(false);
+            examples.setText(examplesString);
+        }
     }
 
     @Override
-    protected void  onActivityResult(int reqCode, int resCode, Intent data) {
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
         if (resCode == RESULT_OK) {
-            photo = (Bitmap) data.getExtras().get("data");
-            ImageView pic = (ImageView)this.findViewById(R.id.photo);
-            pic.setImageBitmap(photo);
+            String[] projection = new String[]{
+                    MediaStore.Images.ImageColumns._ID,
+                    MediaStore.Images.ImageColumns.DATA,
+                    MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+                    MediaStore.Images.ImageColumns.DATE_TAKEN,
+                    MediaStore.Images.ImageColumns.MIME_TYPE
+            };
+            final Cursor cursor = getContentResolver()
+                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+                            null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
-            Uri uri;
-            Cursor cursor;
-
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            String path = MediaStore.Images.Media.insertImage(
-                    getApplicationContext().getContentResolver(), photo, "Title", null); // TODO: "Title"
-            uri = Uri.parse(path);
-            cursor = getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
-
-            photoPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-        }
-        else {
-            Toast.makeText(this, "Error (" + String.valueOf(resCode) + ")", Toast.LENGTH_LONG).show();
+            // Put it in the image view
+            if (cursor.moveToFirst()) {
+                final ImageView imageView = (ImageView) findViewById(R.id.photo);
+                photoPath = cursor.getString(1);
+                File imageFile = new File(photoPath);
+                if (imageFile.exists()) {
+                    Bitmap bm = BitmapFactory.decodeFile(photoPath);
+                    imageView.setImageBitmap(bm);
+                }
+            }
         }
     }
 
@@ -154,8 +153,6 @@ public class AddBrick extends AppCompatActivity {
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
             ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
             locationButton.setImageResource(R.drawable.location_set_icon);
-
-
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
             try {
@@ -172,8 +169,7 @@ public class AddBrick extends AppCompatActivity {
     private void completeBrick() {
         bdao = new BrickDAO(getApplicationContext());
         bdao.open();
-        String word = ((TextView)this.findViewById(R.id.editWord)).getText().toString();
-        Log.d("", word);
+        String word = this.word.getText().toString();
         if (word.length() < 1) throw new IllegalStateException("Empty word");
         try {
             b = bdao.createBrick(word);
@@ -183,12 +179,13 @@ public class AddBrick extends AppCompatActivity {
         }
         if (b == null) throw new IllegalStateException("Error creating the brick");
 
-        String transl = ((EditText)this.findViewById(R.id.editTranslation)).getText().toString();
+        String transl = translation.getText().toString();
 
         b.setImage(photoPath);
         b.setLocation(location);
         b.setWord(word);
         b.setTranslation(transl);
+        b.setExamples("");
         bdao.updateBrick(b);
 
         Toast.makeText(this, bdao.findAll().get(bdao.findAll().size() - 1).toString(), Toast.LENGTH_LONG).show();

@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/activity_text_quiz"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
     android:layout_alignParentEnd="true"
@@ -10,7 +12,7 @@
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
-    tools:context=".QuizActivity">
+    tools:context=".TextQuizActivity">
 
     <TextView
         android:id="@+id/textViewQuizTitle"
@@ -100,5 +102,17 @@
         android:layout_below="@+id/radio1"
         android:layout_alignLeft="@+id/imageView0"
         android:layout_alignStart="@+id/imageView0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewQuizTitle"
+        android:layout_alignLeft="@+id/radio1"
+        android:layout_alignStart="@+id/radio1"
+        android:layout_marginLeft="78dp"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="52dp"
+        android:id="@+id/textViewResultText"
+        android:textSize="24sp" />
 
 </RelativeLayout>

@@ -34,15 +34,14 @@ public class Question implements Comparable {
     public void incCorrect() {correct++;}
 
     /**
-     * Precedence: this has precedence if it has been asked not more than q2;
-     *             if the same, it has precedence if it has been answered correctly fewer times
+     * Precedence: this has precedence if it has been answered correctly fewer times
      * @param q the other question to be compared this to
      * @return
      */
     public int compareTo(Object q) {
         Question q2 = (Question)q;
-        int r = getAsked() - q2.getAsked();
-        return r != 0 ? r : getCorrect() - q2.getCorrect();
+
+        return (getAsked() - getCorrect()) - (q2.getAsked() - q2.getCorrect());
     }
 
     public String toString() {

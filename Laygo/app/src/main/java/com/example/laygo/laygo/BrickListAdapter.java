@@ -4,6 +4,7 @@ import com.example.laygo.laygo.model.Brick;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +60,12 @@ public class BrickListAdapter extends BaseAdapter {
 
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
-        if(imagePath != ""){
-            Uri path = Uri.parse(imagePath);
-            try{
-                Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path);
-                imageView.setImageBitmap(image);
-            } catch(IOException e){
-                Log.d("SALOME", e.getMessage());
-            }
-
+        Log.d("SALOME", imagePath);
+        File imageFile = new File(imagePath);
+        if (imageFile.exists()) {
+            Bitmap bm = BitmapFactory.decodeFile(imagePath);
+            imageView.setImageBitmap(bm);
         }
-        
         return rowView;
     }
 
