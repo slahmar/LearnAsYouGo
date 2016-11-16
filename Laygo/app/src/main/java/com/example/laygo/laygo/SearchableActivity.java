@@ -60,12 +60,13 @@ public class SearchableActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedValue = (String) getListAdapter().getItem(position);
-        Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
-
+        Brick selectedBrick = (Brick) getListAdapter().getItem(position);
         // TODO : This is not working (error)
         Intent i = new Intent(getApplicationContext(), AddBrick.class);
         i.putExtra("editable", false);
+        i.putExtra("word", selectedBrick.getWord());
+        i.putExtra("translation", selectedBrick.getTranslation());
+        i.putExtra("examples", selectedBrick.getExamples());
         startActivity(i);
 
     }
