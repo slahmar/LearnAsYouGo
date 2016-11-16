@@ -36,25 +36,6 @@ public class SearchableActivity extends ListActivity {
         final BrickListAdapter adapter = new BrickListAdapter(this, bricks);
         listView.setAdapter(adapter);
 
-        /*final EditText editSearch = (EditText) this.findViewById(R.id.search);
-        editSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String text = editSearch.getText().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
-
         final SearchView editSearch = (SearchView) this.findViewById(R.id.search);
         // Capture Text in EditText
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -135,7 +135,6 @@ public class AddBrick extends AppCompatActivity {
             String path = MediaStore.Images.Media.insertImage(
                     getApplicationContext().getContentResolver(), photo, "Title", null); // TODO: "Title"
             uri = Uri.parse(path);
-
             cursor = getContentResolver().query(uri, null, null, null, null);
             cursor.moveToFirst();
 

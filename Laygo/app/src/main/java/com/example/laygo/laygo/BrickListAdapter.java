@@ -51,9 +51,6 @@ public class BrickListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        /*LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
-
         View rowView = inflater.inflate(R.layout.list_brick, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.wordBrick);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageBrick);
@@ -61,15 +58,13 @@ public class BrickListAdapter extends BaseAdapter {
 
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
-        Log.d("SALOME", imagePath);
         if(imagePath != ""){
             Uri path = Uri.parse(imagePath);
             try{
                 Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path);
                 imageView.setImageBitmap(image);
-            } catch(IOException e ){
-                Log.d("SALOME", "IOException");
-                // TODO
+            } catch(IOException e){
+                Log.d("SALOME", e.getMessage());
             }
 
         }
