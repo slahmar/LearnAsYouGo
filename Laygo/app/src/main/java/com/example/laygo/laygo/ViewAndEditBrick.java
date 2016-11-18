@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,19 +25,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AddBrick extends AppCompatActivity {
+public class ViewAndEditBrick extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
     public static final int REQ_SET_LOCATION = 1;
     public static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 2;
@@ -59,7 +56,7 @@ public class AddBrick extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         boolean editable = getIntent().getBooleanExtra("editable", true);
 
-        setContentView(R.layout.activity_add_brick);
+        setContentView(R.layout.activity_view_edit_brick);
         imageView = (ImageView)this.findViewById(R.id.camera);
         word = ((TextView)this.findViewById(R.id.editWord));
         translation = ((EditText)this.findViewById(R.id.editTranslation));
@@ -70,7 +67,7 @@ public class AddBrick extends AppCompatActivity {
         save.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                completeBrick();
+                completeBrick(true);
             }
         });
 
@@ -100,20 +97,74 @@ public class AddBrick extends AppCompatActivity {
                 }
             });
         }
-        else{
-            save.setVisibility(View.INVISIBLE);
-            cancel.setVisibility(View.INVISIBLE);
-            locationButton.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.INVISIBLE);
-            String wordString = getIntent().getStringExtra("word");
-            String translationString = getIntent().getStringExtra("translation");
-            String examplesString = getIntent().getStringExtra("examples");
-            word.setText(wordString);
-            word.setEnabled(false);
-            translation.setEnabled(false);
-            translation.setText(translationString);
-            examples.setEnabled(false);
-            examples.setText(examplesString);
+        else {
+            setModeView();
+        }
+    }
+
+    public void setModeView(){
+        final Button save = (Button)this.findViewById(R.id.saveButton);
+        final Button cancel = (Button)this.findViewById(R.id.cancelButton);
+        save.setVisibility(View.INVISIBLE);
+        cancel.setVisibility(View.INVISIBLE);
+
+        final long id = getIntent().getLongExtra("id", -1);
+        final String wordString = getIntent().getStringExtra("word");
+        final String translationString = getIntent().getStringExtra("translation");
+        final String examplesString = getIntent().getStringExtra("examples");
+        final String path = getIntent().getStringExtra("photo");
+
+        b = new Brick();
+        b.setExamples(examplesString);
+        b.setTranslation(translationString);
+        b.setWord(wordString);
+        b.setId(id);
+        b.setImage(path);
+
+        final ViewSwitcher wordSwitcher = (ViewSwitcher) findViewById(R.id.wordSwitcher);
+        wordSwitcher.showNext();
+        TextView viewWord = (TextView) wordSwitcher.findViewById(R.id.viewWord);
+        viewWord.setText(wordString);
+
+        final ViewSwitcher translationSwitcher = (ViewSwitcher) findViewById(R.id.translationSwitcher);
+        translationSwitcher.showNext();
+        TextView viewTranslation = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
+        viewTranslation.setText(translationString);
+
+        final ViewSwitcher examplesSwitcher = (ViewSwitcher) findViewById(R.id.examplesSwitcher);
+        examplesSwitcher.showNext();
+        TextView viewExamples = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
+        viewExamples.setText(examplesString);
+
+        final Button edit = (Button)findViewById(R.id.editButton);
+        edit.setVisibility(View.VISIBLE);
+        edit.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                wordSwitcher.showPrevious();
+                word.setText(wordString);
+                examplesSwitcher.showPrevious();
+                examples.setText(examplesString);
+                translationSwitcher.showPrevious();
+                translation.setText(translationString);
+                save.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.INVISIBLE);
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        completeBrick(false);
+                    }
+                });
+            }
+        });
+
+        File imageFile = new File(path);
+        if (imageFile.exists()) {
+            Bitmap bm = BitmapFactory.decodeFile(path);
+            final ImageView imageView = (ImageView) findViewById(R.id.photo);
+            imageView.setImageBitmap(bm);
         }
     }
 
@@ -166,31 +217,32 @@ public class AddBrick extends AppCompatActivity {
     }
 
 
-    private void completeBrick() {
+    private void completeBrick(boolean create) {
         bdao = new BrickDAO(getApplicationContext());
         bdao.open();
         String word = this.word.getText().toString();
-        if (word.length() < 1) throw new IllegalStateException("Empty word");
-        try {
-            b = bdao.createBrick(word);
-        } catch (Exception e) {
-            Log.d("Error", e.toString());
-            Toast.makeText(this, "Word already added to the DB", Toast.LENGTH_LONG).show();
-        }
-        if (b == null) throw new IllegalStateException("Error creating the brick");
-
         String transl = translation.getText().toString();
 
+        if (word.length() < 1) throw new IllegalStateException("Empty word");
+        if(create) {
+            try {
+                b = bdao.createBrick(word);
+            } catch (Exception e) {
+                Log.d("Error", e.toString());
+                Toast.makeText(this, "Word already added to the DB", Toast.LENGTH_LONG).show();
+            }
+            if (b == null) throw new IllegalStateException("Error creating the brick");
+        }
         b.setImage(photoPath);
         b.setLocation(location);
         b.setWord(word);
         b.setTranslation(transl);
         b.setExamples("");
         bdao.updateBrick(b);
-
-        Toast.makeText(this, bdao.findAll().get(bdao.findAll().size() - 1).toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
+
     }
 
 

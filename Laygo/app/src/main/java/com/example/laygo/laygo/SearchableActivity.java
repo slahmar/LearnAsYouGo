@@ -2,15 +2,10 @@ package com.example.laygo.laygo;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
@@ -60,13 +55,15 @@ public class SearchableActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Brick selectedBrick = (Brick) getListAdapter().getItem(position);
+        Brick selectedBrick = (Brick) listView.getAdapter().getItem(position);
         // TODO : This is not working (error)
-        Intent i = new Intent(getApplicationContext(), AddBrick.class);
+        Intent i = new Intent(getApplicationContext(), ViewAndEditBrick.class);
         i.putExtra("editable", false);
         i.putExtra("word", selectedBrick.getWord());
+        i.putExtra("photo", selectedBrick.getImage());
         i.putExtra("translation", selectedBrick.getTranslation());
         i.putExtra("examples", selectedBrick.getExamples());
+        i.putExtra("id", selectedBrick.getId());
         startActivity(i);
 
     }

@@ -27,8 +27,12 @@
         </activity>
         <activity android:name=".TextQuizActivity" />
         <activity android:name=".ChooseQuiz" />
-        <activity android:name=".AddBrick" />
+        <activity android:name=".ViewAndEditBrick" />
         <activity android:name=".HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".QuizResultActivity"></activity>
     </application>

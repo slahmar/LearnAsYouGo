@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void startAddBrick (View view) {
-        Intent intent = new Intent(this, AddBrick.class);
+        Intent intent = new Intent(this, ViewAndEditBrick.class);
         startActivity(intent);
     }
 }

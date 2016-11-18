@@ -54,13 +54,14 @@ public class BrickListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = inflater.inflate(R.layout.list_brick, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.wordBrick);
+        TextView wordView = (TextView) rowView.findViewById(R.id.wordBrick);
+        TextView translationView = (TextView) rowView.findViewById(R.id.translationBrick);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageBrick);
-        textView.setText(bricksToFilter.get(position).getWord());
+        wordView.setText(bricksToFilter.get(position).getWord());
+        translationView.setText(bricksToFilter.get(position).getTranslation());
 
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
-        Log.d("SALOME", imagePath);
         File imageFile = new File(imagePath);
         if (imageFile.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(imagePath);
@@ -79,7 +80,8 @@ public class BrickListAdapter extends BaseAdapter {
         {
             for (Brick b : bricks) 
             {
-                if (b.getWord().toLowerCase(Locale.getDefault()).contains(charText)) 
+                if (b.getWord().toLowerCase(Locale.getDefault()).contains(charText) ||
+                        b.getTranslation().toLowerCase(Locale.getDefault()).contains(charText))
                 {
                     bricksToFilter.add(b);
                 }
