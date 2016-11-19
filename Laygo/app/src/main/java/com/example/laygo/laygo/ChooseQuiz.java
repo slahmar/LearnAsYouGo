@@ -26,7 +26,8 @@ public class ChooseQuiz extends AppCompatActivity {
     }
 
     public void onClickPictureQuiz(View view) {
-
+        Intent intent = new Intent(this, GalleryQuiz.class);
+        startActivity(intent);
     }
 
 

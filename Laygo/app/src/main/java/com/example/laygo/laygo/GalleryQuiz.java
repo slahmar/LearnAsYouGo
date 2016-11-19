@@ -1,13 +1,14 @@
 package com.example.laygo.laygo;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
-import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -15,12 +16,14 @@ import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class TextQuizActivity extends AppCompatActivity {
+public class GalleryQuiz extends AppCompatActivity {
 
     private List<Question> questions;
     private int currentQuestionID;
@@ -48,7 +51,8 @@ public class TextQuizActivity extends AppCompatActivity {
         bdao.open();
         List<Brick> bricks = bdao.findAll();
         for (Brick b : bricks) {
-            tmp.add(new Question(b));
+            if (b.getImage() != null) // IMPORTANT
+                tmp.add(new Question(b));
         }
         ///
 
@@ -59,16 +63,17 @@ public class TextQuizActivity extends AppCompatActivity {
 
 
     private void setQuestions() {
-        List<RadioButton> rButtons;
+        List<ImageButton> iButtons;
         Button next;
         TextView tv;
         Random r;
         List<Question> options;
         Question tmp;
         int i;
+        final long currentCorrectBrickID;
 
         options = new LinkedList<>();
-        rButtons = new LinkedList<>();
+        iButtons = new LinkedList<>();
         r = new Random();
 
         currentQuestion = questions.get(currentQuestionID++);
@@ -81,32 +86,35 @@ public class TextQuizActivity extends AppCompatActivity {
         }
         Collections.shuffle(options, new Random());
 
-        tv = (TextView) findViewById(R.id.textViewQuizTitle);
-        rButtons.add((RadioButton) findViewById(R.id.radio0));
-        rButtons.add((RadioButton) findViewById(R.id.radio1));
-        rButtons.add((RadioButton) findViewById(R.id.radio2));
-        next = (Button) findViewById(R.id.button1);
+        tv = (TextView) findViewById(R.id.galleryQuizQuestionText);
+        iButtons.add((ImageButton) findViewById(R.id.imageButton0));
+        iButtons.add((ImageButton) findViewById(R.id.imageButton1));
+        iButtons.add((ImageButton) findViewById(R.id.imageButton2));
+
+
 
         i = 0;
         tv.setText("WORD: " + currentQuestion);
-        for (RadioButton rb : rButtons)
-            rb.setText(options.get(i++).getBrick().getTranslation());
+        for (ImageButton button : iButtons) {
+            Brick brick = options.get(i++).getBrick();
+            button.setImageBitmap(getImageFromPath(brick.getImage()));
+            button.setContentDescription(brick.getTranslation());
 
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup1);
-                RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
-                if (currentQuestion.getBrick().getTranslation().equals(selected.getText())) {
-                    score++;
-                    currentQuestion.incCorrect();
+            final ImageButton buttonOnClick = button;
+            buttonOnClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (buttonOnClick.getContentDescription().equals(currentQuestion.getBrick().getTranslation())) {
+                        score++;
+                        currentQuestion.incCorrect();
+                    }
+                    if (currentQuestionID == questions.size() - 1)
+                        setResults();
+                    else
+                        setQuestions();
                 }
-                if (currentQuestionID == questions.size() - 1)
-                    setResults();
-                else
-                    setQuestions();
-            }
-        });
+            });
+        }
     }
 
     private void setResults() {
@@ -117,5 +125,18 @@ public class TextQuizActivity extends AppCompatActivity {
 
     }
 
+    private Bitmap getImageFromPath(String path) {
+        BitmapFactory.Options ops;
+        Bitmap bitmap;
+        File file;
+        try {
+            file = new File(path);
+            ops = new BitmapFactory.Options();
+            ops.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, ops);
+            return bitmap;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
-
