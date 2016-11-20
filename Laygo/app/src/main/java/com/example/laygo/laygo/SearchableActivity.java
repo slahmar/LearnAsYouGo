@@ -63,6 +63,7 @@ public class SearchableActivity extends ListActivity {
         i.putExtra("photo", selectedBrick.getImage());
         i.putExtra("translation", selectedBrick.getTranslation());
         i.putExtra("examples", selectedBrick.getExamples());
+        // Location
         i.putExtra("id", selectedBrick.getId());
         startActivity(i);
 

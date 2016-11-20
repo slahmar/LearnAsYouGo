@@ -82,6 +82,6 @@ public class Brick {
 
     @Override
     public String toString(){
-        return "Brick : "+word + " = "+translation;
+        return "Brick : "+word + " = "+translation+", examples = "+examples+", path = "+imagePath;
     }
 }

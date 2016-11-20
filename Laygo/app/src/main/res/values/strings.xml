@@ -7,4 +7,12 @@
     <string name="quiz_radiobutton">Question</string>
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+    <string name="word">Word</string>
+    <string name="translation">Translation</string>
+    <string name="examples">Write some examples here.</string>
+
+
 </resources>

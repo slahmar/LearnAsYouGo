@@ -2,22 +2,16 @@ package com.example.laygo.laygo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,10 +33,23 @@ public class ViewAndEditBrick extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
     public static final int REQ_SET_LOCATION = 1;
     public static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 2;
-    private ImageView imageView;
-    private TextView word;
+    // Graphic elements
+    private ImageView locationButton;
+    private ImageView cameraButton;
+    private ImageView photoView;
+    private Button saveButton;
+    private Button cancelButton;
+    private Button editButton;
+    private EditText word;
+    private TextView wordView;
     private EditText translation;
+    private TextView translationView;
     private EditText examples;
+    private TextView examplesView;
+    private ViewSwitcher wordSwitcher;
+    private ViewSwitcher translationSwitcher;
+    private ViewSwitcher examplesSwitcher;
+    // Model elements
     private Brick b;
     private BrickDAO bdao;
     private String photoPath;
@@ -57,22 +64,23 @@ public class ViewAndEditBrick extends AppCompatActivity {
         boolean editable = getIntent().getBooleanExtra("editable", true);
 
         setContentView(R.layout.activity_view_edit_brick);
-        imageView = (ImageView)this.findViewById(R.id.camera);
-        word = ((TextView)this.findViewById(R.id.editWord));
-        translation = ((EditText)this.findViewById(R.id.editTranslation));
-        examples = ((EditText)this.findViewById(R.id.editExamples));
-        Button save = (Button)this.findViewById(R.id.saveButton);
-        Button cancel = (Button)this.findViewById(R.id.cancelButton);
+        final Context context = this.getApplicationContext();
 
-        save.setOnClickListener(new Button.OnClickListener() {
+        cameraButton = (ImageView) this.findViewById(R.id.camera);
+        word = ((EditText) this.findViewById(R.id.editWord));
+        translation = ((EditText) this.findViewById(R.id.editTranslation));
+        examples = ((EditText) this.findViewById(R.id.editExamples));
+        saveButton = (Button) this.findViewById(R.id.saveButton);
+        cancelButton = (Button) this.findViewById(R.id.cancelButton);
+
+        saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 completeBrick(true);
             }
         });
 
-        final Context context = this.getApplicationContext();
-        cancel.setOnClickListener(new Button.OnClickListener() {
+        cancelButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, HomeActivity.class);
@@ -80,65 +88,69 @@ public class ViewAndEditBrick extends AppCompatActivity {
             }
         });
 
-        ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
-
-        if(editable){
-            locationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setLocation();
-                }
-            });
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQ_TAKE_PHOTO);
-                }
-            });
-        }
-        else {
-            setModeView();
+        locationButton = (ImageView) this.findViewById(R.id.setLocation);
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setLocation();
+            }
+        });
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQ_TAKE_PHOTO);
+            }
+        });
+        if (!editable) {
+            setModeView(getIntent());
         }
     }
 
-    public void setModeView(){
-        final Button save = (Button)this.findViewById(R.id.saveButton);
-        final Button cancel = (Button)this.findViewById(R.id.cancelButton);
-        save.setVisibility(View.INVISIBLE);
-        cancel.setVisibility(View.INVISIBLE);
+    public void setModeView(Intent i) {
+        saveButton.setVisibility(View.INVISIBLE);
+        saveButton.setEnabled(false);
+        cancelButton.setVisibility(View.INVISIBLE);
+        cancelButton.setEnabled(false);
+        cameraButton.setEnabled(false);
+        cameraButton.setVisibility(View.INVISIBLE);
+        locationButton.setEnabled(false);
+        locationButton.setVisibility(View.INVISIBLE);
 
-        final long id = getIntent().getLongExtra("id", -1);
-        final String wordString = getIntent().getStringExtra("word");
-        final String translationString = getIntent().getStringExtra("translation");
-        final String examplesString = getIntent().getStringExtra("examples");
-        final String path = getIntent().getStringExtra("photo");
+        final long id = i.getLongExtra("id", -1);
+        final String wordString = i.getStringExtra("word");
+        final String translationString = i.getStringExtra("translation");
+        final String examplesString = i.getStringExtra("examples");
+        final String path = i.getStringExtra("photo");
+        // TODO location
 
         b = new Brick();
         b.setExamples(examplesString);
         b.setTranslation(translationString);
         b.setWord(wordString);
         b.setId(id);
-        b.setImage(path);
+        photoPath = path;
 
-        final ViewSwitcher wordSwitcher = (ViewSwitcher) findViewById(R.id.wordSwitcher);
+        wordSwitcher = (ViewSwitcher) findViewById(R.id.wordSwitcher);
         wordSwitcher.showNext();
-        TextView viewWord = (TextView) wordSwitcher.findViewById(R.id.viewWord);
-        viewWord.setText(wordString);
+        wordView = (TextView) wordSwitcher.findViewById(R.id.viewWord);
+        wordView.setText(wordString);
 
-        final ViewSwitcher translationSwitcher = (ViewSwitcher) findViewById(R.id.translationSwitcher);
+        translationSwitcher = (ViewSwitcher) findViewById(R.id.translationSwitcher);
         translationSwitcher.showNext();
-        TextView viewTranslation = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
-        viewTranslation.setText(translationString);
+        translationView = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
+        translationView.setText(translationString);
 
-        final ViewSwitcher examplesSwitcher = (ViewSwitcher) findViewById(R.id.examplesSwitcher);
+        examplesSwitcher = (ViewSwitcher) findViewById(R.id.examplesSwitcher);
         examplesSwitcher.showNext();
-        TextView viewExamples = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
-        viewExamples.setText(examplesString);
+        examplesView = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
+        examplesView.setText(examplesString);
 
-        final Button edit = (Button)findViewById(R.id.editButton);
-        edit.setVisibility(View.VISIBLE);
-        edit.setOnClickListener(new View.OnClickListener(){
+        setPhotoView();
+
+        editButton = (Button) findViewById(R.id.editButton);
+        editButton.setVisibility(View.VISIBLE);
+        editButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -148,24 +160,29 @@ public class ViewAndEditBrick extends AppCompatActivity {
                 examples.setText(examplesString);
                 translationSwitcher.showPrevious();
                 translation.setText(translationString);
-                save.setVisibility(View.VISIBLE);
-                cancel.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.INVISIBLE);
-                save.setOnClickListener(new View.OnClickListener() {
+                saveButton.setVisibility(View.VISIBLE);
+                saveButton.setEnabled(true);
+                cancelButton.setVisibility(View.VISIBLE);
+                cancelButton.setEnabled(true);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setModeView(getIntent());
+                    }
+                });
+                editButton.setVisibility(View.INVISIBLE);
+                saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         completeBrick(false);
                     }
                 });
+                cameraButton.setVisibility(View.VISIBLE);
+                cameraButton.setEnabled(true);
+                locationButton.setVisibility(View.VISIBLE);
+                locationButton.setEnabled(true);
             }
         });
-
-        File imageFile = new File(path);
-        if (imageFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(path);
-            final ImageView imageView = (ImageView) findViewById(R.id.photo);
-            imageView.setImageBitmap(bm);
-        }
     }
 
     @Override
@@ -184,14 +201,18 @@ public class ViewAndEditBrick extends AppCompatActivity {
 
             // Put it in the image view
             if (cursor.moveToFirst()) {
-                final ImageView imageView = (ImageView) findViewById(R.id.photo);
                 photoPath = cursor.getString(1);
-                File imageFile = new File(photoPath);
-                if (imageFile.exists()) {
-                    Bitmap bm = BitmapFactory.decodeFile(photoPath);
-                    imageView.setImageBitmap(bm);
-                }
+                setPhotoView();
             }
+        }
+    }
+
+    private void setPhotoView() {
+        photoView = (ImageView) findViewById(R.id.photo);
+        File imageFile = new File(photoPath);
+        if (imageFile.exists()) {
+            Bitmap bm = BitmapFactory.decodeFile(photoPath);
+            photoView.setImageBitmap(bm);
         }
     }
 
@@ -202,7 +223,7 @@ public class ViewAndEditBrick extends AppCompatActivity {
         if (location != null) {
             // set location of the brick
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
-            ImageView locationButton = (ImageView) this.findViewById(R.id.setLocation);
+            locationButton = (ImageView) this.findViewById(R.id.setLocation);
             locationButton.setImageResource(R.drawable.location_set_icon);
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
@@ -210,9 +231,11 @@ public class ViewAndEditBrick extends AppCompatActivity {
                 List<Address> addr = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 if (addr.size() > 0)
                     Toast.makeText(this, addr.get(0).getLocality(), Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
             }
-            catch (IOException e) {}
 
+        } else {
+            Toast.makeText(this, "Location not retrieved", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -222,9 +245,10 @@ public class ViewAndEditBrick extends AppCompatActivity {
         bdao.open();
         String word = this.word.getText().toString();
         String transl = translation.getText().toString();
+        String examples = this.examples.getText().toString();
 
         if (word.length() < 1) throw new IllegalStateException("Empty word");
-        if(create) {
+        if (create) {
             try {
                 b = bdao.createBrick(word);
             } catch (Exception e) {
@@ -237,7 +261,7 @@ public class ViewAndEditBrick extends AppCompatActivity {
         b.setLocation(location);
         b.setWord(word);
         b.setTranslation(transl);
-        b.setExamples("");
+        b.setExamples(examples);
         bdao.updateBrick(b);
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
@@ -245,54 +269,10 @@ public class ViewAndEditBrick extends AppCompatActivity {
 
     }
 
-
-}
-
-
-class LocationService implements LocationListener  {
-    private long minTime = 0; // minimum time interval between location updates, in milliseconds
-    private float minDistance = 12; // 12 m (minimum distance between location updates)
-    
-    public Location getLocation(Context context) {
-        Location location = null;
-        LocationManager locationManager;
-
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-
-        try   {
-            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                return null;
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    minTime,
-                    minDistance, this);
-
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            return location;
-
-        } catch (Exception e) {
-
-        }
-        return null;
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
-
-
-    @Override
-    public void onLocationChanged(Location location) {}
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-    @Override
-    public void onProviderEnabled(String provider) {}
-
-    @Override
-    public void onProviderDisabled(String provider) {}
 }
+
+
