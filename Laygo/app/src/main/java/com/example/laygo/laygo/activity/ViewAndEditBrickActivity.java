@@ -1,4 +1,4 @@
-package com.example.laygo.laygo;
+package com.example.laygo.laygo.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.example.laygo.laygo.LocationService;
+import com.example.laygo.laygo.HomeActivity;
+import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 
@@ -29,7 +32,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class ViewAndEditBrick extends AppCompatActivity {
+public class ViewAndEditBrickActivity extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
     // Graphic elements
     private ImageView locationButton;

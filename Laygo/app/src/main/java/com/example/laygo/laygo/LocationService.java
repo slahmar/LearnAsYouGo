@@ -12,10 +12,7 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-/**
- * Created by salom_000 on 20/11/2016.
- */
-class LocationService implements LocationListener {
+public class LocationService implements LocationListener {
     private long minTime = 0; // minimum time interval between location updates, in milliseconds
     private float minDistance = 12; // 12 m (minimum distance between location updates)
 

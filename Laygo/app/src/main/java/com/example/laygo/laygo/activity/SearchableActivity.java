@@ -1,4 +1,4 @@
-package com.example.laygo.laygo;
+package com.example.laygo.laygo.activity;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.laygo.laygo.BrickListAdapter;
+import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 
@@ -57,7 +59,7 @@ public class SearchableActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Brick selectedBrick = (Brick) listView.getAdapter().getItem(position);
-        Intent i = new Intent(getApplicationContext(), ViewAndEditBrick.class);
+        Intent i = new Intent(getApplicationContext(), ViewAndEditBrickActivity.class);
         i.putExtra("editable", false);
         i.putExtra("word", selectedBrick.getWord());
         i.putExtra("photo", selectedBrick.getImage());

@@ -14,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
 
+import com.example.laygo.laygo.activity.SearchableActivity;
+import com.example.laygo.laygo.activity.ViewAndEditBrickActivity;
+
 public class HomeActivity extends AppCompatActivity {
 
     @Override
@@ -62,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void startAddBrick (View view) {
-        Intent intent = new Intent(this, ViewAndEditBrick.class);
+        Intent intent = new Intent(this, ViewAndEditBrickActivity.class);
         startActivity(intent);
     }
 
