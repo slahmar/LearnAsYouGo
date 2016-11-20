@@ -30,7 +30,7 @@ public class GalleryQuiz extends AppCompatActivity {
     private Question currentQuestion;
     private int score;
     private final static int QUESTION_OPTIONS = 3;
-    private final static int MAX_NUM_QUESTIONS = 10;
+    private final static int MAX_NUM_QUESTIONS = Quiz.MIN_PICTURES;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
