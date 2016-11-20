@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
-import com.example.laygo.laygo.model.Quiz;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +30,7 @@ public class GalleryQuiz extends AppCompatActivity {
     private Question currentQuestion;
     private int score;
     private final static int QUESTION_OPTIONS = 3;
-    private final static int MAX_NUM_QUESTIONS = Quiz.MIN_PICTURES;
+    private final static int MAX_NUM_QUESTIONS = 10;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +57,7 @@ public class GalleryQuiz extends AppCompatActivity {
         ///
 
         // get all questions from the DB: tmp = ..
+        questions = new LinkedList<>();
         Collections.sort(tmp);
         for (int i = 0; i < MAX_NUM_QUESTIONS; questions.add(tmp.get(i)), i++) ;
     }

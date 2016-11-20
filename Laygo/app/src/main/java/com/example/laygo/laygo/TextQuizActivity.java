@@ -24,11 +24,11 @@ import java.util.Random;
 public class TextQuizActivity extends AppCompatActivity {
 
     private List<Question> questions;
+    private List<Brick> bricks;
+    private List<Question> allQuestions;
     private int currentQuestionID;
     private Question currentQuestion;
     private int score;
-    private final static int QUESTION_OPTIONS = 3;
-    private final static int MAX_NUM_QUESTIONS = Quiz.MIN_TEXTS;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,21 +41,21 @@ public class TextQuizActivity extends AppCompatActivity {
     }
 
     private void getQuestions() {
-        List<Question> tmp = null;
-        tmp = new LinkedList<>();
+        allQuestions = new LinkedList<>();
 
         /// DELETE
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
-        List<Brick> bricks = bdao.findAll();
+        bricks = bdao.findAll();
         for (Brick b : bricks) {
-            tmp.add(new Question(b));
+            allQuestions.add(new Question(b));
         }
         ///
 
         // get all questions from the DB: tmp = ..
-        Collections.sort(tmp);
-        for (int i = 0; i < MAX_NUM_QUESTIONS; questions.add(tmp.get(i)), i++) ;
+        questions = new LinkedList<>();
+        Collections.sort(allQuestions);
+        for (int i = 0; i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS); questions.add(allQuestions.get(i)), i++) ;
     }
 
 
@@ -75,8 +75,10 @@ public class TextQuizActivity extends AppCompatActivity {
         currentQuestion = questions.get(currentQuestionID++);
 
         options.add(currentQuestion);
-        for (i = 0; i < QUESTION_OPTIONS - 1; ++i) {
-            tmp = questions.get(r.nextInt(questions.size()));
+        allQuestions.remove(currentQuestion);
+        for (i = 0; i < questions.size() - 1; ++i) {
+            int index = r.nextInt(allQuestions.size());
+            tmp = allQuestions.get(index);
             tmp.incAsked();
             options.add(tmp);
         }
@@ -90,15 +92,18 @@ public class TextQuizActivity extends AppCompatActivity {
 
         i = 0;
         tv.setText("WORD: " + currentQuestion);
-        for (RadioButton rb : rButtons)
+        for (RadioButton rb : rButtons) {
             rb.setText(options.get(i++).getBrick().getTranslation());
+        }
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup1);
+                RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
                 RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
-                if (currentQuestion.getBrick().getTranslation().equals(selected.getText())) {
+                String text = selected.getText() + "";
+                Log.e("Selected RadioButton: ", text);
+                if (currentQuestion.getBrick().getTranslation().equals(text)) {
                     score++;
                     currentQuestion.incCorrect();
                 }

@@ -55,7 +55,7 @@ public class ChooseQuiz extends AppCompatActivity {
             if (b.getImage() == null || b.getImage().equals("")) continue;
             tmp.add(new Question(b));
         }
-        
+
         if (tmp.size() < Quiz.MIN_PICTURES) {
             Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
         }

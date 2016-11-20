@@ -1,5 +1,7 @@
 package com.example.laygo.laygo.model;
 
+import java.util.Objects;
+
 /**
  * This class represents a question about a certain brick
  */
@@ -48,4 +50,9 @@ public class Question implements Comparable {
         return brick.getWord();
     }
 
+    public boolean equals(Object o) {
+        Question q = (Question)o;
+        return q.getAsked() == this.getAsked() && q.getCorrect() == this.getCorrect() &&
+                q.getBrick().equals(this.getBrick());
+    }
 }
