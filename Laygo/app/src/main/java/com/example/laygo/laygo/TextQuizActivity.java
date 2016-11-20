@@ -3,6 +3,7 @@ package com.example.laygo.laygo;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -101,9 +102,7 @@ public class TextQuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
                 RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
-                String text = selected.getText() + "";
-                Log.e("Selected RadioButton: ", text);
-                if (currentQuestion.getBrick().getTranslation().equals(text)) {
+                if (currentQuestion.getBrick().getTranslation().equals(selected.getText())) {
                     score++;
                     currentQuestion.incCorrect();
                 }
@@ -121,6 +120,17 @@ public class TextQuizActivity extends AppCompatActivity {
         i.putExtra("SCORE", score);
         startActivity(i);
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            // don't do anything: the user shouldn't go back (otherwise
+            // currentQuestion.incCorrect() may be called too much)
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
 }
