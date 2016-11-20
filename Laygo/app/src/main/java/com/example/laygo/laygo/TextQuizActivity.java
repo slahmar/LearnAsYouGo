@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
+import com.example.laygo.laygo.model.Quiz;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -27,7 +28,7 @@ public class TextQuizActivity extends AppCompatActivity {
     private Question currentQuestion;
     private int score;
     private final static int QUESTION_OPTIONS = 3;
-    private final static int MAX_NUM_QUESTIONS = 10;
+    private final static int MAX_NUM_QUESTIONS = Quiz.MIN_TEXTS;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
