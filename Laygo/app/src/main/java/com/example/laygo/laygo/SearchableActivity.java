@@ -2,6 +2,7 @@ package com.example.laygo.laygo;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -56,14 +57,17 @@ public class SearchableActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Brick selectedBrick = (Brick) listView.getAdapter().getItem(position);
-        // TODO : This is not working (error)
         Intent i = new Intent(getApplicationContext(), ViewAndEditBrick.class);
         i.putExtra("editable", false);
         i.putExtra("word", selectedBrick.getWord());
         i.putExtra("photo", selectedBrick.getImage());
         i.putExtra("translation", selectedBrick.getTranslation());
         i.putExtra("examples", selectedBrick.getExamples());
-        // Location
+        Location loc = selectedBrick.getLocation();
+        if(loc != null ){
+            i.putExtra("latitude", loc.getLatitude());
+            i.putExtra("longitude", loc.getLongitude());
+        }
         i.putExtra("id", selectedBrick.getId());
         startActivity(i);
 

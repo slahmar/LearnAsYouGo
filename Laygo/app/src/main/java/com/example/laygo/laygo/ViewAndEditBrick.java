@@ -31,32 +31,22 @@ import java.util.Locale;
 
 public class ViewAndEditBrick extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
-    public static final int REQ_SET_LOCATION = 1;
-    public static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 2;
     // Graphic elements
     private ImageView locationButton;
     private ImageView cameraButton;
-    private ImageView photoView;
     private Button saveButton;
     private Button cancelButton;
     private Button editButton;
     private EditText word;
-    private TextView wordView;
     private EditText translation;
-    private TextView translationView;
     private EditText examples;
-    private TextView examplesView;
     private ViewSwitcher wordSwitcher;
     private ViewSwitcher translationSwitcher;
     private ViewSwitcher examplesSwitcher;
     // Model elements
     private Brick b;
-    private BrickDAO bdao;
     private String photoPath;
-    private Bitmap photo;
     private Location location;
-
-    private Uri mMediaUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,28 +112,36 @@ public class ViewAndEditBrick extends AppCompatActivity {
         final String translationString = i.getStringExtra("translation");
         final String examplesString = i.getStringExtra("examples");
         final String path = i.getStringExtra("photo");
-        // TODO location
+        final double latitude = i.getDoubleExtra("latitude", Double.MAX_VALUE);
+        final double longitude = i.getDoubleExtra("longitude", Double.MAX_VALUE);
 
         b = new Brick();
         b.setExamples(examplesString);
         b.setTranslation(translationString);
         b.setWord(wordString);
         b.setId(id);
+        if(latitude!= Double.MAX_VALUE && longitude!=Double.MAX_VALUE){
+            location = new Location("");
+            location.setLatitude(latitude);
+            location.setLongitude(longitude);
+            locationButton.setImageResource(R.drawable.location_set_icon);
+        }
+
         photoPath = path;
 
         wordSwitcher = (ViewSwitcher) findViewById(R.id.wordSwitcher);
         wordSwitcher.showNext();
-        wordView = (TextView) wordSwitcher.findViewById(R.id.viewWord);
+        TextView wordView = (TextView) wordSwitcher.findViewById(R.id.viewWord);
         wordView.setText(wordString);
 
         translationSwitcher = (ViewSwitcher) findViewById(R.id.translationSwitcher);
         translationSwitcher.showNext();
-        translationView = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
+        TextView translationView = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
         translationView.setText(translationString);
 
         examplesSwitcher = (ViewSwitcher) findViewById(R.id.examplesSwitcher);
         examplesSwitcher.showNext();
-        examplesView = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
+        TextView examplesView = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
         examplesView.setText(examplesString);
 
         setPhotoView();
@@ -200,15 +198,16 @@ public class ViewAndEditBrick extends AppCompatActivity {
                             null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
             // Put it in the image view
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 photoPath = cursor.getString(1);
                 setPhotoView();
+                cursor.close();
             }
         }
     }
 
     private void setPhotoView() {
-        photoView = (ImageView) findViewById(R.id.photo);
+        ImageView photoView = (ImageView) findViewById(R.id.photo);
         File imageFile = new File(photoPath);
         if (imageFile.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(photoPath);
@@ -223,7 +222,6 @@ public class ViewAndEditBrick extends AppCompatActivity {
         if (location != null) {
             // set location of the brick
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
-            locationButton = (ImageView) this.findViewById(R.id.setLocation);
             locationButton.setImageResource(R.drawable.location_set_icon);
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
@@ -241,7 +239,7 @@ public class ViewAndEditBrick extends AppCompatActivity {
 
 
     private void completeBrick(boolean create) {
-        bdao = new BrickDAO(getApplicationContext());
+        BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
         String word = this.word.getText().toString();
         String transl = translation.getText().toString();
@@ -251,9 +249,9 @@ public class ViewAndEditBrick extends AppCompatActivity {
         if (create) {
             try {
                 b = bdao.createBrick(word);
-            } catch (Exception e) {
-                Log.d("Error", e.toString());
-                Toast.makeText(this, "Word already added to the DB", Toast.LENGTH_LONG).show();
+            } catch (RuntimeException e) {
+                Log.e("Error", e.toString());
+                Toast.makeText(this, "This word is already in your database", Toast.LENGTH_LONG).show();
             }
             if (b == null) throw new IllegalStateException("Error creating the brick");
         }

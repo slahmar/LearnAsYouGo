@@ -94,14 +94,14 @@ public class BrickDAO extends GenericDAO{
          * @return the brick created
          */
         public Brick createBrick(String word) throws NullPointerException, IllegalStateException{
-            //if(findByWord(word).size() == 0) {
+            if(findByWord(word).size() == 0) {
                 ContentValues values = new ContentValues(4);
                 values.put(LaygoSQLiteHelper.COLUMN_WORD, word);
                 values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, "");
                 values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, "");
                 values.put(LaygoSQLiteHelper.COLUMN_PHOTO, "");
-                values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, 0);
-                values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, 0);
+                values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, Double.MAX_VALUE);
+                values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, Double.MAX_VALUE);
                 long insertId = database.insert(LaygoSQLiteHelper.TABLE_BRICK, null,
                         values);
                 Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
@@ -112,10 +112,10 @@ public class BrickDAO extends GenericDAO{
                 newBrick.setId(insertId);
                 cursor.close();
                 return newBrick;
-            //}
-            //else{
-            //    throw new RuntimeException("Duplicate word");
-            //}
+            }
+            else{
+                throw new RuntimeException("Duplicate word");
+            }
         }
 
         private Brick cursorToBrick(Cursor cursor) {

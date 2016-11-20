@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
+import com.example.laygo.laygo.model.Quiz;
 
 import java.io.File;
 import java.io.FileInputStream;
