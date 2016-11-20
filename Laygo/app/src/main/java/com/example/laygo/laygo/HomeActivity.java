@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,10 +23,11 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar); //We created a app with a toolbar-free theme
         setSupportActionBar(myToolbar); //So we need to add one and say that it can have buttons
 
-        String truc[] = {"Item1", "Item2", "Item3"};
+        String truc[] = {"Quiz", "Brick List", "About"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, truc);
         ListView drawerMenu = (ListView) findViewById(R.id.drawerMenu); //We add some items in the drawer menu
         drawerMenu.setAdapter(adapter);
+        drawerMenu.setOnItemClickListener(new DrawerItemClickListener());
 
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
@@ -63,4 +65,27 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ViewAndEditBrick.class);
         startActivity(intent);
     }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem (int position){
+        switch(position){
+            case 0:
+                Intent intent = new Intent(this, ChooseQuiz.class);
+                startActivity(intent);
+                break;
+
+            case 1:
+                Intent intent2 = new Intent(this, SearchableActivity.class);
+                startActivity(intent2);
+                break;
+        }
+    }
+
 }
+
