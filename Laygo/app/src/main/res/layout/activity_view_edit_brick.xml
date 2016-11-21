@@ -133,15 +133,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_below="@+id/camera"
-        android:layout_alignLeft="@+id/setLocation"
-        android:layout_alignStart="@+id/setLocation">
+        android:layout_alignLeft="@+id/camera"
+        android:layout_alignStart="@+id/camera">
 
         <EditText
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:inputType="textMultiLine"
+            android:layout_width="wrap_content"
             android:ems="10"
             android:id="@+id/editExamples"
-            android:layout_width="300dp"
             android:enabled="true"
             android:hint="@string/examples" />
 
@@ -159,6 +159,8 @@
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
         android:layout_below="@id/examplesSwitcher"
+        android:layout_alignStart="@id/examplesSwitcher"
+        android:layout_alignLeft="@id/examplesSwitcher"
         android:id="@+id/searchButton" />
 
 </RelativeLayout>

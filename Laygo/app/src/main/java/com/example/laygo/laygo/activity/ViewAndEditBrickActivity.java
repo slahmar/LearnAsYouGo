@@ -251,11 +251,14 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
     private void setPhotoView() {
         ImageView photoView = (ImageView) findViewById(R.id.photo);
-        File imageFile = new File(photoPath);
-        if (imageFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(photoPath);
-            photoView.setImageBitmap(bm);
+        if(photoPath!=null && photoPath!=""){
+            File imageFile = new File(photoPath);
+            if (imageFile.exists()) {
+                Bitmap bm = BitmapFactory.decodeFile(photoPath);
+                photoView.setImageBitmap(bm);
+            }
         }
+
     }
 
 
