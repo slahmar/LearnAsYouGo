@@ -13,6 +13,5 @@
     <string name="word">Word</string>
     <string name="translation">Translation</string>
     <string name="examples">Write some examples here.</string>
-
-
+    <string name="search_examples">Search example sentences</string>
 </resources>

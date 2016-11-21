@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,8 +25,11 @@ import android.widget.ViewSwitcher;
 import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
+import com.example.laygo.laygo.RemoteFetchExamples;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +44,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private Button saveButton;
     private Button cancelButton;
     private Button editButton;
+    private Button searchButton;
     private EditText word;
     private EditText translation;
     private EditText examples;
@@ -51,21 +56,24 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private String photoPath;
     private Location location;
 
+    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handler = new Handler();
         boolean editable = getIntent().getBooleanExtra("editable", true);
 
         setContentView(R.layout.activity_view_edit_brick);
         final Context context = this.getApplicationContext();
 
+        searchButton = ((Button) this.findViewById(R.id.searchButton));
         cameraButton = (ImageView) this.findViewById(R.id.camera);
         word = ((EditText) this.findViewById(R.id.editWord));
         translation = ((EditText) this.findViewById(R.id.editTranslation));
         examples = ((EditText) this.findViewById(R.id.editExamples));
         saveButton = (Button) this.findViewById(R.id.saveButton);
         cancelButton = (Button) this.findViewById(R.id.cancelButton);
-
+        editButton = (Button) findViewById(R.id.editButton);
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +81,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             }
         });
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchExamples();
+            }
+        });
         cancelButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +94,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
         locationButton = (ImageView) this.findViewById(R.id.setLocation);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +113,29 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
     }
 
+    public void searchExamples(){
+        new Thread(){
+            public void run(){
+                final String example = RemoteFetchExamples.getXML(getApplicationContext(), word.getText().toString());
+                if(example == null){
+                    handler.post(new Runnable(){
+                        public void run(){
+                            Toast.makeText(getApplicationContext(),
+                                    "No examples found",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable(){
+                        public void run(){
+                            examples.setText(examples.getText()+"\n"+example);
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
     public void setModeView(Intent i) {
         saveButton.setVisibility(View.INVISIBLE);
         saveButton.setEnabled(false);
@@ -109,6 +145,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         cameraButton.setVisibility(View.INVISIBLE);
         locationButton.setEnabled(false);
         locationButton.setVisibility(View.INVISIBLE);
+        searchButton.setVisibility(View.INVISIBLE);
+        searchButton.setEnabled(false);
 
         final long id = i.getLongExtra("id", -1);
         final String wordString = i.getStringExtra("word");
@@ -149,7 +187,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
         setPhotoView();
 
-        editButton = (Button) findViewById(R.id.editButton);
+
         editButton.setVisibility(View.VISIBLE);
         editButton.setOnClickListener(new View.OnClickListener() {
 
@@ -163,6 +201,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 translation.setText(translationString);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setEnabled(true);
+                searchButton.setEnabled(true);
+                searchButton.setVisibility(View.VISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
                 cancelButton.setEnabled(true);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -264,16 +304,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         b.setTranslation(transl);
         b.setExamples(examples);
         bdao.updateBrick(b);
+        bdao.close();
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
-        startActivity(i);
-
-    }
+        startActivity(i);    }
 
     @Override
     protected void onPause() {
         super.onPause();
     }
+
 }
 
 

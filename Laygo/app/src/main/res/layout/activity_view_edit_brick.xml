@@ -10,8 +10,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.laygo.laygo.activity.ViewAndEditBrickActivity">
-
-
  <Button
         android:text="@string/cancel"
         android:layout_width="wrap_content"
@@ -29,7 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/cancelButton"
-        android:layout_below="@+id/cancelButton"
         android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
         android:id="@+id/editButton" />
@@ -135,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/setLocation"
+        android:layout_below="@+id/camera"
         android:layout_alignLeft="@+id/setLocation"
         android:layout_alignStart="@+id/setLocation">
 
@@ -154,5 +151,14 @@
             android:layout_height="wrap_content"
             />
     </ViewSwitcher>
+
+    <Button
+        android:text="@string/search_examples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
+        android:layout_below="@id/examplesSwitcher"
+        android:id="@+id/searchButton" />
 
 </RelativeLayout>

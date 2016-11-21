@@ -62,10 +62,12 @@ public class BrickListAdapter extends BaseAdapter {
 
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
-        File imageFile = new File(imagePath);
-        if (imageFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(imagePath);
-            imageView.setImageBitmap(bm);
+        if(imagePath != null && imagePath != ""){
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                imageView.setImageBitmap(bm);
+            }
         }
         return rowView;
     }
