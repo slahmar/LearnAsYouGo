@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
 
+import com.example.laygo.laygo.activity.ChooseQuiz;
 import com.example.laygo.laygo.activity.SearchableActivity;
 import com.example.laygo.laygo.activity.ViewAndEditBrickActivity;
 

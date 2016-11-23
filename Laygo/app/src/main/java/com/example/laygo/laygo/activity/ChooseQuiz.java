@@ -1,16 +1,12 @@
-package com.example.laygo.laygo;
+package com.example.laygo.laygo.activity;
 
 import android.content.Intent;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
@@ -18,8 +14,6 @@ import com.example.laygo.laygo.model.Quiz;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.example.laygo.laygo.R.styleable.View;
 
 public class ChooseQuiz extends AppCompatActivity {
 
