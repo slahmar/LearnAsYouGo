@@ -5,14 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
+import com.example.laygo.laygo.dao.QuestionDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
 import com.example.laygo.laygo.model.Quiz;
@@ -35,7 +36,7 @@ public class GalleryQuiz extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_gallery_quiz);
 
         getQuestions();
         currentQuestionID = score = 0;
@@ -44,29 +45,41 @@ public class GalleryQuiz extends AppCompatActivity {
     }
 
     private void getQuestions() {
-        allQuestions = new LinkedList<>();
+        List<Question> deleteQs = new LinkedList<>();
 
-        /// DELETE
+        QuestionDAO dao = new QuestionDAO(getApplicationContext());
+        dao.open();
+        allQuestions = Collections.synchronizedList(dao.findAll());
+        dao.close();
+
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
-        bricks = bdao.findAll();
-        for (Brick b : bricks) {
-            if (b.getImage() == null) continue;
-            allQuestions.add(new Question(b));
-        }
-        ///
+        List<Brick> bricks = Collections.synchronizedList(bdao.findAll());
 
-        // get all questions from the DB: tmp = ..
+        for (Question q : allQuestions)
+            for (Brick b : bricks)
+                if (q.getBrickID() == b.getId() && b.getImage() != null && b.getImage().length() > 1)
+                    q.setBrick(b);
+                else if (q.getBrickID() == b.getId() && (b.getImage() == null || b.getImage().length() <= 1))
+                    deleteQs.add(q);
+
+        allQuestions.removeAll(deleteQs);
+
+        bdao.close();
+
         questions = new LinkedList<>();
         Collections.sort(allQuestions);
-        for (int i = 0; i < Math.min(allQuestions.size(), Quiz.MAX_PICTURES); questions.add(allQuestions.get(i)), i++)
+        for (int i = 0;
+             i < Math.min(allQuestions.size(), Quiz.MAX_PICTURES);
+             questions.add(allQuestions.get(i)), ++i)
             ;
+
+
     }
 
 
     private void setQuestions() {
         List<ImageButton> iButtons;
-        Button next;
         TextView tv;
         Random r;
         List<Question> options;
@@ -80,28 +93,32 @@ public class GalleryQuiz extends AppCompatActivity {
 
         currentQuestion = questions.get(currentQuestionID++);
 
-
         options.add(currentQuestion);
-        allQuestions.remove(currentQuestion);
-        for (i = 0; i < questions.size() - 1; ++i) {
-            int index = r.nextInt(allQuestions.size());
-            tmp = allQuestions.get(index);
+        //questions.remove(currentQuestion);
+        for (i = 0; i < questions.size(); ++i) {
+            do {
+                int index = r.nextInt(allQuestions.size());
+                tmp = allQuestions.get(index);
+            } while (options.contains(tmp) || tmp.equals(currentQuestion));
+
             tmp.incAsked();
             options.add(tmp);
         }
+
         Collections.shuffle(options, new Random());
 
-        tv = (TextView) findViewById(R.id.galleryQuizQuestionText);
+        tv = (TextView) findViewById(R.id.galleryQuizQuestionText0);
         iButtons.add((ImageButton) findViewById(R.id.imageButton0));
         iButtons.add((ImageButton) findViewById(R.id.imageButton1));
         iButtons.add((ImageButton) findViewById(R.id.imageButton2));
-        next = (Button) findViewById(R.id.button1);
 
         i = 0;
-        tv.setText("WORD: " + currentQuestion);
+        String s = "WORD: " + currentQuestion;
+        tv.setText(s);
         for (ImageButton ib : iButtons) {
             if (options.get(i).equals(currentQuestion)) correctImageId = i;
-            ib.setImageBitmap(getImageFromPath(options.get(i++).getBrick().getImage()));
+            ib.setImageBitmap(getImageFromPath(options.get(i).getBrick().getImage()));
+            ++i;
         }
 
         for (ImageButton ib : iButtons) {
@@ -110,10 +127,17 @@ public class GalleryQuiz extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (cImgId == button.getId()) {
-                        score++;
+                    boolean correct = false;
+                    switch (button.getId()) {
+                        case R.id.imageButton0: if (cImgId == 0) correct = true; break;
+                        case R.id.imageButton1: if (cImgId == 1) correct = true; break;
+                        case R.id.imageButton2: if (cImgId == 2) correct = true; break;
+                    }
+                    if (correct) {
+                        ++score;
                         currentQuestion.incCorrect();
                     }
+
                     if (currentQuestionID == questions.size() - 1)
                         setResults();
                     else
