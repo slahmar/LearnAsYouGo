@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -35,7 +34,7 @@ public class GalleryQuiz extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_gallery_quiz);
 
         getQuestions();
         currentQuestionID = score = 0;
@@ -66,7 +65,6 @@ public class GalleryQuiz extends AppCompatActivity {
 
     private void setQuestions() {
         List<ImageButton> iButtons;
-        Button next;
         TextView tv;
         Random r;
         List<Question> options;
@@ -91,14 +89,14 @@ public class GalleryQuiz extends AppCompatActivity {
         }
         Collections.shuffle(options, new Random());
 
-        tv = (TextView) findViewById(R.id.galleryQuizQuestionText);
+        tv = (TextView) findViewById(R.id.galleryQuizQuestionText0);
         iButtons.add((ImageButton) findViewById(R.id.imageButton0));
         iButtons.add((ImageButton) findViewById(R.id.imageButton1));
         iButtons.add((ImageButton) findViewById(R.id.imageButton2));
-        next = (Button) findViewById(R.id.button1);
 
         i = 0;
-        tv.setText("WORD: " + currentQuestion);
+        String s = "WORD: " + currentQuestion;
+        tv.setText(s);
         for (ImageButton ib : iButtons) {
             if (options.get(i).equals(currentQuestion)) correctImageId = i;
             ib.setImageBitmap(getImageFromPath(options.get(i++).getBrick().getImage()));
