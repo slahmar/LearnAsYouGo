@@ -128,7 +128,11 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 } else {
                     handler.post(new Runnable(){
                         public void run(){
-                            examples.setText(examples.getText()+"\n"+example);
+                            String sentences = examples.getText().toString();
+                            if(!sentences.contains(example)){
+                                sentences+="\n"+example;
+                            }
+                            examples.setText(sentences);
                         }
                     });
                 }
