@@ -8,8 +8,10 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +32,6 @@ import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.dao.QuestionDAO;
 import com.example.laygo.laygo.model.Brick;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +42,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     // Graphic elements
     private ImageView locationButton;
     private ImageView cameraButton;
+    private ImageView recordIcon;
+    private ImageView playIcon;
     private Button saveButton;
     private Button cancelButton;
     private Button editButton;
@@ -56,6 +58,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private Brick b;
     private String photoPath;
     private Location location;
+
+    private static String mFileName;
+    private MediaRecorder mRecorder = null;
+    private MediaPlayer mPlayer = null;
+    private boolean startRecord = true;
+    private boolean startPlay = true;
 
     private Handler handler;
     @Override
@@ -112,6 +120,91 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         if (!editable) {
             setModeView(getIntent());
         }
+
+        recordIcon = (ImageView) this.findViewById(R.id.recordIcon);
+        playIcon = (ImageView) this.findViewById(R.id.playIcon);
+
+        playIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlayIcon(v);
+            }
+        });
+
+        recordIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecordIcon(v);
+            }
+        });
+
+        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        mFileName += "/temp.3gp";
+    }
+
+    public void RecordIcon(View v) {
+        onRecord(startRecord);
+
+        startRecord = !startRecord;
+    }
+
+    public void PlayIcon(View v) {
+        onPlay(startPlay);
+        startPlay = !startPlay;
+    }
+
+    private void onRecord(boolean start) {
+        if (start) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    }
+
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }
+
+    private void startPlaying() {
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource(mFileName);
+            mPlayer.prepare();
+            mPlayer.start();
+        } catch (IOException e) {
+            Log.e("", "prepare() failed");
+        }
+    }
+
+    private void stopPlaying() {
+        mPlayer.release();
+        mPlayer = null;
+    }
+
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFile(mFileName);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e("", "prepare() failed");
+        }
+
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
     }
 
     public void searchExamples(){
@@ -129,11 +222,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 } else {
                     handler.post(new Runnable(){
                         public void run(){
-                            String sentences = examples.getText().toString();
-                            if(!sentences.contains(example)){
-                                sentences+="\n"+example;
-                            }
-                            examples.setText(sentences);
+                            examples.setText(examples.getText()+"\n"+example);
                         }
                     });
                 }
@@ -312,12 +401,17 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             if (b == null) throw new IllegalStateException("Error creating the brick");
         }
 
+        File recordingFile = new File(mFileName);
+        String recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+b.getId()+".3gp";
+        recordingFile.renameTo(new File(recordingPath));
+
         bdao.open();
         b.setImage(photoPath);
         b.setLocation(location);
         b.setWord(word);
         b.setTranslation(transl);
         b.setExamples(examples);
+        b.setRecording(recordingPath);
         bdao.updateBrick(b);
         bdao.close();
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
@@ -330,5 +424,3 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     }
 
 }
-
-

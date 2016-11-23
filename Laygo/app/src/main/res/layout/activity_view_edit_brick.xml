@@ -62,12 +62,32 @@
     android:layout_below="@+id/photo" />
 
     <ImageView android:id="@+id/camera"
-           android:layout_height="60dp"
-           android:src="@drawable/camera_icon"
-           android:layout_width="60dp"
+       android:layout_height="60dp"
+       android:src="@drawable/camera_icon"
+       android:layout_width="60dp"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
         android:layout_below="@+id/photo" />
+
+    <ImageView
+        android:src="@drawable/play_icon"
+        android:id="@+id/playIcon"
+        android:layout_height="54dp"
+        android:layout_width="54dp"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/camera"
+        android:layout_alignLeft="@+id/editButton"
+        android:layout_alignStart="@+id/editButton" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_mic"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/setLocation"
+        android:layout_alignRight="@+id/setLocation"
+        android:layout_alignEnd="@+id/setLocation"
+        android:id="@+id/recordIcon" />
 
 
     <ViewSwitcher
@@ -131,25 +151,22 @@
         android:id="@+id/examplesSwitcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/camera"
-        android:layout_alignLeft="@+id/camera"
-        android:layout_alignStart="@+id/camera">
+        android:layout_below="@+id/recordIcon"
+        android:layout_alignLeft="@+id/recordIcon"
+        android:layout_alignStart="@+id/recordIcon">
 
         <EditText
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
             android:layout_width="wrap_content"
             android:ems="10"
             android:id="@+id/editExamples"
-            android:enabled="true"
-            android:hint="@string/examples" />
+            android:hint="@string/examples"
+            android:inputType="textMultiLine" />
 
         <TextView
             android:id="@+id/viewExamples"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content"/>
     </ViewSwitcher>
 
     <Button

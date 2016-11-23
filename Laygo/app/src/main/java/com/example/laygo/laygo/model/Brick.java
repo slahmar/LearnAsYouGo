@@ -31,6 +31,8 @@ public class Brick {
 
     private Location location;
 
+    private String recording;
+
     public String getTranslation() {
         return translation;
     }
@@ -79,6 +81,10 @@ public class Brick {
     public long getId(){
         return id;
     }
+
+    public String getRecording() { return recording;}
+
+    public void setRecording(String path) { recording = path; }
 
     @Override
     public String toString(){
