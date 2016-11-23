@@ -1,4 +1,4 @@
-package com.example.laygo.laygo;
+package com.example.laygo.laygo.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.laygo.laygo.R;
+import com.example.laygo.laygo.activity.QuizResultActivity;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;

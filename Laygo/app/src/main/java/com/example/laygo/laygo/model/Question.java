@@ -10,8 +10,9 @@ public class Question implements Comparable {
     private Brick brick;
 
     private int asked = 0;
-
+    private long brickID = -1;
     private int correct = 0;
+    private long ID = 0;
 
     public Question(Brick b) {brick = b;}
     public Question() {this(null);}
@@ -28,9 +29,13 @@ public class Question implements Comparable {
      */
     public Brick getBrick() {return brick;}
 
+    public long getID() {return ID;}
+
     public void setAsked(int v) {asked = v;}
     public void setCorrect(int v) {correct = v;}
     public void setBrick(Brick b) {brick = b;}
+    public void setBrickID(long i) {brickID = i;}
+    public void setID(long id) {this.ID = id;}
 
     public void incAsked() {asked++;}
     public void incCorrect() {correct++;}

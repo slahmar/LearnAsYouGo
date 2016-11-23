@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.laygo.laygo.GalleryQuiz">
+    tools:context="com.example.laygo.laygo.activity.GalleryQuiz">
 
     <ImageButton
         android:layout_width="150dp"
@@ -47,7 +47,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/galleryQuizQuestionText"
-        android:textSize="34sp" />
+        android:textSize="34sp"
+        android:text="Word" />
 
 
 
