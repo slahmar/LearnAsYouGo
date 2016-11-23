@@ -27,6 +27,7 @@ import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.RemoteFetchExamples;
 import com.example.laygo.laygo.dao.BrickDAO;
+import com.example.laygo.laygo.dao.QuestionDAO;
 import com.example.laygo.laygo.model.Brick;
 
 import org.json.JSONObject;
@@ -121,7 +122,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                     handler.post(new Runnable(){
                         public void run(){
                             Toast.makeText(getApplicationContext(),
-                                    "No examples found",
+                                    "No examples found. Check your Internet connection.",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
@@ -290,21 +291,28 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
     private void completeBrick(boolean create) {
         BrickDAO bdao = new BrickDAO(getApplicationContext());
-        bdao.open();
         String word = this.word.getText().toString();
         String transl = translation.getText().toString();
         String examples = this.examples.getText().toString();
 
         if (word.length() < 1) throw new IllegalStateException("Empty word");
         if (create) {
+            QuestionDAO qdao = new QuestionDAO(getApplicationContext());
             try {
+                bdao.open();
                 b = bdao.createBrick(word);
+                bdao.close();
+                qdao.open();
+                qdao.createQuestion(b.getId());
+                qdao.close();
             } catch (RuntimeException e) {
                 Log.e("Error", e.toString());
                 Toast.makeText(this, "This word is already in your database", Toast.LENGTH_LONG).show();
             }
             if (b == null) throw new IllegalStateException("Error creating the brick");
         }
+
+        bdao.open();
         b.setImage(photoPath);
         b.setLocation(location);
         b.setWord(word);

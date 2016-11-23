@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
 
-import com.example.laygo.laygo.db.LaygoSQLiteHQuestion;
 import com.example.laygo.laygo.db.LaygoSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
@@ -14,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionDAO extends GenericDAO{
-    private String[] allColumns = { LaygoSQLiteHQuestion.COLUMN_ID, LaygoSQLiteHQuestion.COLUMN_BRICK,
-                                    LaygoSQLiteHQuestion.COLUMN_ASKED, LaygoSQLiteHQuestion.COLUMN_CORRECT, };
-    protected LaygoSQLiteHQuestion dbHelper;
+    private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID, LaygoSQLiteHelper.COLUMN_BRICK,
+            LaygoSQLiteHelper.COLUMN_ASKED, LaygoSQLiteHelper.COLUMN_CORRECT, };
+    protected LaygoSQLiteHelper dbHelper;
     public QuestionDAO(Context context) {
         super(context);
-        dbHelper = new LaygoSQLiteHQuestion(context);
+        dbHelper = new LaygoSQLiteHelper(context);
     }
 
     /**
@@ -28,7 +27,7 @@ public class QuestionDAO extends GenericDAO{
      */
     public List<Question> findAll(){
         List<Question> qs = new ArrayList<>();
-        Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
+        Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -50,8 +49,8 @@ public class QuestionDAO extends GenericDAO{
      */
     public List<Question> findById(long id) throws NullPointerException {
         List<Question> qs = new ArrayList<>();
-        Cursor cursor = database.query(LaygoSQLiteHQuestion.TABLE_QUESTION, allColumns,
-                LaygoSQLiteHQuestion.COLUMN_ID +" = \"" + id +"\"", null, null, null, null);
+        Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
+                LaygoSQLiteHelper.COLUMN_ID +" = \"" + id +"\"", null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -72,8 +71,8 @@ public class QuestionDAO extends GenericDAO{
      */
     public List<Question> findByBrick(Brick b) throws NullPointerException{
         List<Question> qs = new ArrayList<>();
-        Cursor cursor = database.query(LaygoSQLiteHQuestion.TABLE_QUESTION, allColumns,
-                LaygoSQLiteHQuestion.COLUMN_BRICK +" = \"" + b.getId() +"\"", null, null, null, null);
+        Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
+                LaygoSQLiteHelper.COLUMN_BRICK +" = \"" + b.getId() +"\"", null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -87,32 +86,27 @@ public class QuestionDAO extends GenericDAO{
 
     /**
      * Insert a brick in the database
-     * @param b the word of the brick
+     * @param brickId the id of the brick
      * @pre a question with this brick shouldn't already be in the database, b not null
      * @throws NullPointerException if word is null
      * @throws IllegalStateException if a brick with this word is already in the database
      * @return the brick created
      */
-    public Question createQuestion(Brick b) throws NullPointerException, IllegalStateException{
-        if(findByBrick(b).size() == 0) {
-            ContentValues values = new ContentValues(4);
-            values.put(LaygoSQLiteHQuestion.COLUMN_BRICK, b.getId());
-            values.put(LaygoSQLiteHQuestion.COLUMN_ASKED, 0);
-            values.put(LaygoSQLiteHQuestion.COLUMN_CORRECT, 0);
-            long insertId = database.insert(LaygoSQLiteHQuestion.TABLE_QUESTION, null,
-                    values);
-            Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
-                    allColumns, LaygoSQLiteHelper.COLUMN_ID + " = " + insertId, null,
-                    null, null, null);
-            cursor.moveToFirst();
-            Question q = cursorToQuestion(cursor);
-            q.setID(insertId);
-            cursor.close();
-            return q;
-        }
-        else{
-            throw new RuntimeException("Duplicate question");
-        }
+    public Question createQuestion(long brickId) throws NullPointerException, IllegalStateException{
+        ContentValues values = new ContentValues(4);
+        values.put(LaygoSQLiteHelper.COLUMN_BRICK, brickId);
+        values.put(LaygoSQLiteHelper.COLUMN_ASKED, 0);
+        values.put(LaygoSQLiteHelper.COLUMN_CORRECT, 0);
+        long insertId = database.insert(LaygoSQLiteHelper.TABLE_QUESTION, null,
+                values);
+        Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION,
+                allColumns, LaygoSQLiteHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.moveToFirst();
+        Question q = cursorToQuestion(cursor);
+        q.setID(insertId);
+        cursor.close();
+        return q;
     }
 
     private Question cursorToQuestion(Cursor cursor) {
@@ -121,21 +115,20 @@ public class QuestionDAO extends GenericDAO{
         q.setBrickID(cursor.getInt(1));
         q.setAsked(cursor.getInt(2));
         q.setCorrect(cursor.getInt(3));
-
         return q;
     }
 
     public boolean updateQuestion(Question q){
-        ContentValues values = new ContentValues(4);
-        values.put(LaygoSQLiteHQuestion.COLUMN_BRICK, q.getBrick().getId());
-        values.put(LaygoSQLiteHQuestion.COLUMN_ASKED, 0);
-        values.put(LaygoSQLiteHQuestion.COLUMN_CORRECT, 0);
-        return (database.update(LaygoSQLiteHQuestion.TABLE_QUESTION, values,
-                LaygoSQLiteHQuestion.COLUMN_ID + "=" + q.getID(), null) > 0);
+        ContentValues values = new ContentValues(3);
+        values.put(LaygoSQLiteHelper.COLUMN_BRICK, q.getBrick().getId());
+        values.put(LaygoSQLiteHelper.COLUMN_ASKED, q.getAsked());
+        values.put(LaygoSQLiteHelper.COLUMN_CORRECT, q.getCorrect());
+        return (database.update(LaygoSQLiteHelper.TABLE_QUESTION, values,
+                LaygoSQLiteHelper.COLUMN_ID + "=" + q.getID(), null) > 0);
     }
 
     public boolean deleteQuestion(Question q){
         long id = q.getID();
-        return (database.delete(LaygoSQLiteHQuestion.TABLE_QUESTION, LaygoSQLiteHQuestion.COLUMN_ID + "=" + id, null) > 0);
+        return (database.delete(LaygoSQLiteHelper.TABLE_QUESTION, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
     }
 }

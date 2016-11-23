@@ -18,6 +18,11 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_BLOCK = "block";
     public static final String COLUMN_NAME = "name";
 
+    public static final String TABLE_QUESTION = "question";
+    public static final String COLUMN_BRICK = "brickID";
+    public static final String COLUMN_ASKED = "nAsked";
+    public static final String COLUMN_CORRECT = "nCorrect";
+
     private static final String DATABASE_NAME = "brick.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -32,6 +37,12 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
             + " integer primary key autoincrement, " + COLUMN_NAME
             + " text not null);";
 
+    private static final String CREATE_TABLE_QUESTION = "create table "
+            + TABLE_QUESTION + "(" + COLUMN_ID
+            + " integer primary key autoincrement, " + COLUMN_BRICK
+            + " integer not null, "+ COLUMN_ASKED +" integer, " + COLUMN_CORRECT + " integer," +
+            "FOREIGN KEY("+COLUMN_BRICK+") REFERENCES "+TABLE_BRICK+"("+COLUMN_ID+"));";
+
     public LaygoSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -40,6 +51,7 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_BRICK);
         database.execSQL(CREATE_TABLE_BLOCK);
+        database.execSQL(CREATE_TABLE_QUESTION);
     }
 
     @Override
@@ -48,6 +60,8 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BRICK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
         onCreate(db);
     }
 }
