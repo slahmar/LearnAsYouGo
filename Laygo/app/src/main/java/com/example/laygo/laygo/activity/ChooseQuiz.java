@@ -41,16 +41,16 @@ public class ChooseQuiz extends AppCompatActivity {
     }
 
     public void onClickPictureQuiz(View view) {
-        List<Question> tmp = new LinkedList<>();
+        int counter = 0;
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
         List<Brick> bricks = bdao.findAll();
         for (Brick b : bricks) {
             if (b.getImage() == null || b.getImage().equals("")) continue;
-            tmp.add(new Question(b));
+            ++counter;
         }
 
-        if (tmp.size() < Quiz.MIN_PICTURES) {
+        if (counter < Quiz.MIN_PICTURES) {
             Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
         }
         else {

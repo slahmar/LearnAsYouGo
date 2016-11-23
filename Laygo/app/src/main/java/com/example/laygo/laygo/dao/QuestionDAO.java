@@ -112,7 +112,7 @@ public class QuestionDAO extends GenericDAO{
     private Question cursorToQuestion(Cursor cursor) {
         Question q = new Question();
         q.setID(cursor.getInt(0));
-        q.setBrickID(cursor.getInt(1));
+        q.setBrickID(cursor.getLong(1));
         q.setAsked(cursor.getInt(2));
         q.setCorrect(cursor.getInt(3));
         return q;

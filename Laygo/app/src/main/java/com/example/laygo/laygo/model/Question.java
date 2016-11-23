@@ -30,6 +30,7 @@ public class Question implements Comparable {
     public Brick getBrick() {return brick;}
 
     public long getID() {return ID;}
+    public long getBrickID() {return brickID;}
 
     public void setAsked(int v) {asked = v;}
     public void setCorrect(int v) {correct = v;}
@@ -58,6 +59,6 @@ public class Question implements Comparable {
     public boolean equals(Object o) {
         Question q = (Question)o;
         return q.getAsked() == this.getAsked() && q.getCorrect() == this.getCorrect() &&
-                q.getBrick().equals(this.getBrick());
+                q.getBrickID() == this.getBrickID();
     }
 }
