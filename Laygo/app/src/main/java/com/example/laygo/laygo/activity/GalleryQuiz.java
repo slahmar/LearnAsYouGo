@@ -62,7 +62,7 @@ public class GalleryQuiz extends AppCompatActivity {
                     q.setBrick(b);
                 else if (q.getBrickID() == b.getId() && (b.getImage() == null || b.getImage().length() <= 1))
                     deleteQs.add(q);
-        
+
         allQuestions.removeAll(deleteQs);
 
         bdao.close();

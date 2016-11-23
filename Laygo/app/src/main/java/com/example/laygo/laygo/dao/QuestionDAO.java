@@ -9,7 +9,8 @@ import com.example.laygo.laygo.db.LaygoSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionDAO extends GenericDAO{
     private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID, LaygoSQLiteHelper.COLUMN_BRICK,
@@ -24,8 +25,8 @@ public class QuestionDAO extends GenericDAO{
      * Find all the questions in the database
      * @return a list of questions; empty if none is found
      */
-    public Vector<Question> findAll(){
-        Vector<Question> qs = new Vector<>();
+    public List<Question> findAll(){
+        List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION,
                 allColumns, null, null, null, null, null);
 
@@ -46,8 +47,8 @@ public class QuestionDAO extends GenericDAO{
      * @throws NullPointerException if id is null
      * @return a list of bricks empty if none is found
      */
-    public Vector<Question> findById(long id) throws NullPointerException {
-        Vector<Question> qs = new Vector<>();
+    public List<Question> findById(long id) throws NullPointerException {
+        List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
                 LaygoSQLiteHelper.COLUMN_ID +" = \"" + id +"\"", null, null, null, null);
 
@@ -68,8 +69,8 @@ public class QuestionDAO extends GenericDAO{
      * @throws NullPointerException if word is null
      * @return a list of bricks empty if none is found
      */
-    public Vector<Question> findByBrick(Brick b) throws NullPointerException{
-        Vector<Question> qs = new Vector<>();
+    public List<Question> findByBrick(Brick b) throws NullPointerException{
+        List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
                 LaygoSQLiteHelper.COLUMN_BRICK +" = \"" + b.getId() +"\"", null, null, null, null);
 
