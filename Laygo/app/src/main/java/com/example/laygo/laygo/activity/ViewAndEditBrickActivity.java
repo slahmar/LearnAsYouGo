@@ -297,19 +297,19 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
         if (word.length() < 1) throw new IllegalStateException("Empty word");
         if (create) {
-            QuestionDAO qdao = new QuestionDAO(getApplicationContext());
             try {
                 bdao.open();
                 b = bdao.createBrick(word);
-                bdao.close();
-                qdao.open();
-                qdao.createQuestion(b.getId());
-                qdao.close();
             } catch (RuntimeException e) {
                 Log.e("Error", e.toString());
                 Toast.makeText(this, "This word is already in your database", Toast.LENGTH_LONG).show();
+            } finally{
+                bdao.close();
             }
-            if (b == null) throw new IllegalStateException("Error creating the brick");
+            QuestionDAO qdao = new QuestionDAO(getApplicationContext());
+            qdao.open();
+            qdao.createQuestion(b.getId());
+            qdao.close();
         }
 
         bdao.open();
