@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.activity.QuizResultActivity;
 import com.example.laygo.laygo.dao.BrickDAO;
+import com.example.laygo.laygo.dao.QuestionDAO;
 import com.example.laygo.laygo.model.Brick;
 import com.example.laygo.laygo.model.Question;
 import com.example.laygo.laygo.model.Quiz;
@@ -44,21 +45,29 @@ public class TextQuizActivity extends AppCompatActivity {
     }
 
     private void getQuestions() {
-        allQuestions = new LinkedList<>();
+        QuestionDAO dao = new QuestionDAO(getApplicationContext());
+        dao.open();
+        allQuestions = dao.findAll();
+        dao.close();
 
-        /// DELETE
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
-        bricks = bdao.findAll();
-        for (Brick b : bricks) {
-            allQuestions.add(new Question(b));
-        }
-        ///
+        List<Brick> bricks = bdao.findAll();
 
-        // get all questions from the DB: tmp = ..
+        for (Question q : allQuestions)
+            for (Brick b : bricks)
+                if (q.getBrickID() == b.getId())
+                    q.setBrick(b);
+
+        bdao.close();
+
         questions = new LinkedList<>();
         Collections.sort(allQuestions);
-        for (int i = 0; i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS); questions.add(allQuestions.get(i)), i++) ;
+        for (int i = 0;
+             i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS);
+             questions.add(allQuestions.get(i)), ++i)
+            ;
+
     }
 
 
@@ -69,7 +78,7 @@ public class TextQuizActivity extends AppCompatActivity {
         Random r;
         List<Question> options;
         Question tmp;
-        int i;
+        int i, index;
 
         options = new LinkedList<>();
         rButtons = new LinkedList<>();
@@ -78,13 +87,17 @@ public class TextQuizActivity extends AppCompatActivity {
         currentQuestion = questions.get(currentQuestionID++);
 
         options.add(currentQuestion);
-        allQuestions.remove(currentQuestion);
-        for (i = 0; i < questions.size() - 1; ++i) {
-            int index = r.nextInt(allQuestions.size());
-            tmp = allQuestions.get(index);
+        //questions.remove(currentQuestion);
+        for (i = 0; i < questions.size(); ++i) {
+            do {
+                index = r.nextInt(allQuestions.size());
+                tmp = allQuestions.get(index);
+            } while (options.contains(tmp) || tmp.equals(currentQuestion));
+
             tmp.incAsked();
             options.add(tmp);
         }
+
         Collections.shuffle(options, new Random());
 
         tv = (TextView) findViewById(R.id.textViewQuizTitle);
@@ -96,7 +109,8 @@ public class TextQuizActivity extends AppCompatActivity {
         i = 0;
         tv.setText("WORD: " + currentQuestion);
         for (RadioButton rb : rButtons) {
-            rb.setText(options.get(i++).getBrick().getTranslation());
+            rb.setText(options.get(i).getBrick().getTranslation());
+            ++i;
         }
 
         next.setOnClickListener(new View.OnClickListener() {
