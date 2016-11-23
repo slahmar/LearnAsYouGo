@@ -26,8 +26,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".TextQuizActivity" />
-        <activity android:name=".ChooseQuiz" />
+        <activity android:name=".activity.TextQuizActivity" />
+        <activity android:name=".activity.ChooseQuiz" />
         <activity android:name=".activity.ViewAndEditBrickActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
@@ -36,8 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QuizResultActivity" />
-        <activity android:name=".GalleryQuiz"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+        <activity android:name=".activity.QuizResultActivity" />
+        <activity android:name=".activity.GalleryQuiz"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
