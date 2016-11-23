@@ -45,20 +45,25 @@ public class GalleryQuiz extends AppCompatActivity {
     }
 
     private void getQuestions() {
+        List<Question> deleteQs = new LinkedList<>();
 
         QuestionDAO dao = new QuestionDAO(getApplicationContext());
         dao.open();
-        allQuestions = dao.findAll();
+        allQuestions = Collections.synchronizedList(dao.findAll());
         dao.close();
 
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         bdao.open();
-        List<Brick> bricks = bdao.findAll();
+        List<Brick> bricks = Collections.synchronizedList(bdao.findAll());
 
         for (Question q : allQuestions)
             for (Brick b : bricks)
-                if (q.getBrickID() == b.getId())
+                if (q.getBrickID() == b.getId() && b.getImage() != null && b.getImage().length() > 1)
                     q.setBrick(b);
+                else if (q.getBrickID() == b.getId() && (b.getImage() == null || b.getImage().length() <= 1))
+                    deleteQs.add(q);
+        
+        allQuestions.removeAll(deleteQs);
 
         bdao.close();
 
