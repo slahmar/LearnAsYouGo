@@ -14,7 +14,7 @@ import java.util.List;
 public class BrickDAO extends GenericDAO{
     private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID,
                 LaygoSQLiteHelper.COLUMN_WORD, LaygoSQLiteHelper.COLUMN_TRANSLATION,
-                LaygoSQLiteHelper.COLUMN_EXAMPLES, LaygoSQLiteHelper.COLUMN_PHOTO,
+                LaygoSQLiteHelper.COLUMN_EXAMPLES, LaygoSQLiteHelper.COLUMN_PHOTO, LaygoSQLiteHelper.COLUMN_AUDIO,
                 LaygoSQLiteHelper.COLUMN_LATITUDE, LaygoSQLiteHelper.COLUMN_LONGITUDE};
     public BrickDAO(Context context) {
         super(context);
@@ -99,6 +99,7 @@ public class BrickDAO extends GenericDAO{
             values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, "");
             values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, "");
             values.put(LaygoSQLiteHelper.COLUMN_PHOTO, "");
+            values.put(LaygoSQLiteHelper.COLUMN_AUDIO, "");
             values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, Double.MAX_VALUE);
             values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, Double.MAX_VALUE);
             long insertId = database.insert(LaygoSQLiteHelper.TABLE_BRICK, null,
@@ -124,9 +125,10 @@ public class BrickDAO extends GenericDAO{
         brick.setTranslation(cursor.getString(2));
         brick.setExamples(cursor.getString(3));
         brick.setImage(cursor.getString(4));
+        brick.setRecording(cursor.getString(5));
         Location loc = new Location("");
-        loc.setLatitude(cursor.getDouble(5));
-        loc.setLongitude(cursor.getDouble(6));
+        loc.setLatitude(cursor.getDouble(6));
+        loc.setLongitude(cursor.getDouble(7));
         brick.setLocation(loc);
         return brick;
     }
@@ -137,6 +139,7 @@ public class BrickDAO extends GenericDAO{
         values.put(LaygoSQLiteHelper.COLUMN_TRANSLATION, brick.getTranslation());
         values.put(LaygoSQLiteHelper.COLUMN_EXAMPLES, brick.getExamples());
         values.put(LaygoSQLiteHelper.COLUMN_PHOTO, brick.getImage());
+        values.put(LaygoSQLiteHelper.COLUMN_AUDIO, brick.getRecording());
         Location location = brick.getLocation();
         if(location == null){
             values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, 0);

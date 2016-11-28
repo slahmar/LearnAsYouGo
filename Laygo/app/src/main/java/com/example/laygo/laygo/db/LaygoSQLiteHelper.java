@@ -12,11 +12,9 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TRANSLATION = "translation";
     public static final String COLUMN_EXAMPLES = "examples";
     public static final String COLUMN_PHOTO = "photo";
+    public static final String COLUMN_AUDIO = "audio";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
-
-    public static final String TABLE_BLOCK = "block";
-    public static final String COLUMN_NAME = "name";
 
     public static final String TABLE_QUESTION = "question";
     public static final String COLUMN_BRICK = "brickID";
@@ -30,12 +28,7 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
             + TABLE_BRICK + "(" + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_WORD
             + " text not null, "+ COLUMN_TRANSLATION +" text, " + COLUMN_EXAMPLES + " text, "
-            + COLUMN_PHOTO + " text, " + COLUMN_LATITUDE + " double, " + COLUMN_LONGITUDE + " double );";
-
-    private static final String CREATE_TABLE_BLOCK = "create table "
-            + TABLE_BLOCK + "(" + COLUMN_ID
-            + " integer primary key autoincrement, " + COLUMN_NAME
-            + " text not null);";
+            + COLUMN_PHOTO + " text, " + COLUMN_AUDIO + " text, " + COLUMN_LATITUDE + " double, " + COLUMN_LONGITUDE + " double );";
 
     private static final String CREATE_TABLE_QUESTION = "create table "
             + TABLE_QUESTION + "(" + COLUMN_ID
@@ -50,7 +43,6 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_BRICK);
-        database.execSQL(CREATE_TABLE_BLOCK);
         database.execSQL(CREATE_TABLE_QUESTION);
     }
 
@@ -61,7 +53,6 @@ public class LaygoSQLiteHelper extends SQLiteOpenHelper {
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BRICK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
         onCreate(db);
     }
 }

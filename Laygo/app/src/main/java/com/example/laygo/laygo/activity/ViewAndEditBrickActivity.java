@@ -83,13 +83,18 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         saveButton = (Button) this.findViewById(R.id.saveButton);
         cancelButton = (Button) this.findViewById(R.id.cancelButton);
         editButton = (Button) findViewById(R.id.editButton);
+        recordIcon = (ImageView) this.findViewById(R.id.recordIcon);
+        playIcon = (ImageView) this.findViewById(R.id.playIcon);
+
+        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        mFileName += "/temp.3gp";
+
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 completeBrick(true);
             }
         });
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,29 +122,24 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_TAKE_PHOTO);
             }
         });
-        if (!editable) {
-            setModeView(getIntent());
-        }
-
-        recordIcon = (ImageView) this.findViewById(R.id.recordIcon);
-        playIcon = (ImageView) this.findViewById(R.id.playIcon);
-
         playIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlayIcon(v);
             }
         });
-
         recordIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RecordIcon(v);
             }
         });
+        if (!editable) {
+            setModeView(getIntent());
+        }
 
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/temp.3gp";
+
+
     }
 
     public void RecordIcon(View v) {
@@ -241,6 +241,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         locationButton.setVisibility(View.INVISIBLE);
         searchButton.setVisibility(View.INVISIBLE);
         searchButton.setEnabled(false);
+        playIcon.setVisibility(View.INVISIBLE);
+        playIcon.setEnabled(false);
+        recordIcon.setVisibility(View.INVISIBLE);
+        recordIcon.setEnabled(false);
 
         final long id = i.getLongExtra("id", -1);
         final String wordString = i.getStringExtra("word");
@@ -316,6 +320,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 cameraButton.setEnabled(true);
                 locationButton.setVisibility(View.VISIBLE);
                 locationButton.setEnabled(true);
+                recordIcon.setVisibility(View.VISIBLE);
+                recordIcon.setEnabled(true);
+                playIcon.setVisibility(View.VISIBLE);
+                playIcon.setEnabled(true);
             }
         });
     }
