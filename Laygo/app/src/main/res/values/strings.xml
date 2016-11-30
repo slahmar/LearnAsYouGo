@@ -15,4 +15,7 @@
     <string name="examples">Write some examples here.</string>
     <string name="search_examples">Search example sentences</string>
     <string name="title_activity_maps">Map</string>
+    <string name="text_quiz">Text quiz</string>
+    <string name="picture_quiz">Picture quiz</string>
+    <string name="choose_quiz">Choose the type of quiz you want to play !</string>
 </resources>

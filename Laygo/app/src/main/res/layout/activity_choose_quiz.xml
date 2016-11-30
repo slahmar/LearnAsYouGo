@@ -12,44 +12,34 @@
     tools:context="com.example.laygo.laygo.activity.ChooseQuiz">
 
     <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:id="@+id/textChoose"
+        android:text="@string/choose_quiz"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="113dp"
-        android:id="@+id/textViewTextQuiz"
+        android:textAlignment="center"
+        android:textSize="30sp"/>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/textChoose"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:id="@+id/buttonTextQuiz"
         android:clickable="true"
         android:onClick="onClickTextQuiz"
-        android:text="Text Quiz"
-        android:textSize="54sp" />
+        android:text="@string/text_quiz"
+        android:textSize="30sp" />
 
-    <ImageView
-        android:layout_width="100dp"
+    <Button
+        android:text="@string/picture_quiz"
+        android:layout_width="300dp"
         android:layout_height="100dp"
-        app:srcCompat="@drawable/flags_of_the_world_globe"
-        android:id="@+id/imageView4"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="19dp"
-        android:layout_marginStart="19dp" />
-
-    <TextView
-        android:text="Picture\n  Quiz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textSize="54sp"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_toRightOf="@+id/imageView4"
+        android:id="@+id/buttonPictureQuiz"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:textSize="30sp"
         android:clickable="true"
         android:onClick="onClickPictureQuiz"
-        android:layout_toEndOf="@+id/imageView4" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/quiz_logo"
-        android:id="@+id/imageView7"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/buttonTextQuiz" />
 </RelativeLayout>

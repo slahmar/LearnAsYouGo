@@ -1,5 +1,6 @@
 package com.example.laygo.laygo;
 
+import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
 
 import android.content.Context;
@@ -52,14 +53,26 @@ public class BrickListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = inflater.inflate(R.layout.list_brick, parent, false);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final View rowView = inflater.inflate(R.layout.list_brick, parent, false);
         TextView wordView = (TextView) rowView.findViewById(R.id.wordBrick);
         TextView translationView = (TextView) rowView.findViewById(R.id.translationBrick);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageBrick);
+        ImageView delete = (ImageView) rowView.findViewById(R.id.delete);
         wordView.setText(bricksToFilter.get(position).getWord());
         translationView.setText(bricksToFilter.get(position).getTranslation());
+        delete.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                BrickDAO bdao = new BrickDAO(context);
+                bdao.open();
+                bdao.deleteBrick(bricksToFilter.get(position));
+                bdao.close();
+                bricksToFilter.remove(position);
+                BrickListAdapter.this.notifyDataSetChanged();
+            }
+        });
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
         if(imagePath != null && imagePath != ""){

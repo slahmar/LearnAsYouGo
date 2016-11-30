@@ -25,17 +25,16 @@ public class SearchableActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
 
-        // Get ListView object from xml
         listView = (ListView) this.findViewById(android.R.id.list);
 
         BrickDAO b = new BrickDAO(this);
         b.open();
         List<Brick> bricks = b.findAll();
         final BrickListAdapter adapter = new BrickListAdapter(this, bricks);
+        b.close();
         listView.setAdapter(adapter);
 
         final SearchView editSearch = (SearchView) this.findViewById(R.id.search);
-        // Capture Text in EditText
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override

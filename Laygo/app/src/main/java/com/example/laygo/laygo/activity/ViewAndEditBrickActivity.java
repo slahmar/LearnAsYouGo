@@ -263,7 +263,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             location = new Location("");
             location.setLatitude(latitude);
             location.setLongitude(longitude);
-            locationButton.setImageResource(R.drawable.location_set_icon);
+            //locationButton.setImageResource(R.drawable.location_set_icon);
         }
 
         photoPath = path;

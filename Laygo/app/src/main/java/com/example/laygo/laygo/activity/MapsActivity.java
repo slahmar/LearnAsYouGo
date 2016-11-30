@@ -9,10 +9,14 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
+=======
+import com.example.laygo.laygo.R;
+>>>>>>> 80a3459f7acd8600368db7b99b8b5c037b536605
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
