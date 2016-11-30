@@ -1,6 +1,8 @@
 package com.example.laygo.laygo.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,9 +25,11 @@ import com.example.laygo.laygo.model.Quiz;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class TextQuizActivity extends AppCompatActivity {
+    private String PREFS = "Settings";
 
     private List<Question> questions;
     private List<Brick> bricks;
@@ -34,12 +38,18 @@ public class TextQuizActivity extends AppCompatActivity {
     private Question currentQuestion;
     private int score;
 
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
         getQuestions();
-        currentQuestionID = score = 0;
+
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        currentQuestionID = settings.getInt("currentQuestionID", 0);
+        score = settings.getInt("score", 0);
 
         setQuestions();
     }
@@ -148,6 +158,16 @@ public class TextQuizActivity extends AppCompatActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("currentQuestionID", currentQuestionID);
+        editor.putInt("score", score);
+        editor.apply();
+    }
 }
 
