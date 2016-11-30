@@ -9,14 +9,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
-=======
 import com.example.laygo.laygo.R;
->>>>>>> 80a3459f7acd8600368db7b99b8b5c037b536605
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -81,16 +78,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, ZOOM));
         }
 
-        BrickDAO bdao = new BrickDAO(getApplicationContext());
-        bdao.open();
-        for (Brick b : bdao.findAll()) {
-            loc = b.getLocation();
-            if (loc != null){
-                currentPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(currentPosition).title(b.getWord()));
+        BrickDAO bdao = null;
+        try {
+            bdao = new BrickDAO(getApplicationContext());
+            bdao.open();
+            for (Brick b : bdao.findAll()) {
+                loc = b.getLocation();
+                if (loc != null) {
+                    currentPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(currentPosition).title(b.getWord()));
 
+                }
             }
         }
-        bdao.close();
+        finally {
+            if (bdao != null) bdao.close();
+        }
     }
+    protected void onRestart() {
+        super.onRestart();
+    }
+    protected void onPause() {
+        super.onPause();
+    }
+    protected void onStop() {
+        super.onStop();
+    }
+
 }
