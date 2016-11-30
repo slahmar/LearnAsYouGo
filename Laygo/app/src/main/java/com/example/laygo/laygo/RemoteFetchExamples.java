@@ -43,7 +43,6 @@ public class RemoteFetchExamples {
             while((tmp=reader.readLine())!=null)
                 xml.append(tmp).append("\n");
             reader.close();
-
             DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             InputSource is = new InputSource();
@@ -57,7 +56,6 @@ public class RemoteFetchExamples {
             }
             return null;
         }catch(Exception e){
-            Log.e("SALOME", e.getMessage());
             return null;
         }
     }

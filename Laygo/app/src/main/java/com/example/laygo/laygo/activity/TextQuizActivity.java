@@ -37,10 +37,9 @@ public class TextQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-
+        currentQuestionID = 0;
+        score = 0;
         getQuestions();
-        currentQuestionID = score = 0;
-
         setQuestions();
     }
 
@@ -63,11 +62,7 @@ public class TextQuizActivity extends AppCompatActivity {
 
         questions = new LinkedList<>();
         Collections.sort(allQuestions);
-        for (int i = 0;
-             i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS);
-             questions.add(allQuestions.get(i)), ++i)
-            ;
-
+        for (int i = 0; i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS); questions.add(allQuestions.get(i)), ++i);
     }
 
 

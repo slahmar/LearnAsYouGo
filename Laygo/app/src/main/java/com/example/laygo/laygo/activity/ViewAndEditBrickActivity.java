@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -215,7 +216,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                     handler.post(new Runnable(){
                         public void run(){
                             Toast.makeText(getApplicationContext(),
-                                    "No examples found. Check your Internet connection.",
+                                    "No examples found.",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
@@ -342,9 +343,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                     .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
                             null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
-            // Put it in the image view
-            if (cursor != null && cursor.moveToFirst()) {
-                photoPath = cursor.getString(1);
+            if (cursor != null ) {
+                while(cursor.moveToNext()){
+                    String imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
+                    Log.d("photo", imagePath);
+                    File imageFile = new File(imagePath);
+                    if (imageFile.canRead() && imageFile.exists()) {
+                        photoPath = imagePath;
+                        break;
+                    }
+                }
                 setPhotoView();
                 cursor.close();
             }
@@ -386,11 +394,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     }
 
 
-    private void completeBrick(boolean create) {
+    private void completeBrick(final boolean create) {
+
         BrickDAO bdao = new BrickDAO(getApplicationContext());
-        String word = this.word.getText().toString();
-        String transl = translation.getText().toString();
-        String examples = this.examples.getText().toString();
+        String word = ViewAndEditBrickActivity.this.word.getText().toString();
+        String transl = ViewAndEditBrickActivity.this.translation.getText().toString();
+        String examples = ViewAndEditBrickActivity.this.examples.getText().toString();
 
         if (word.length() < 1) throw new IllegalStateException("Empty word");
         if (create) {
@@ -399,7 +408,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 b = bdao.createBrick(word);
             } catch (RuntimeException e) {
                 Log.e("Error", e.toString());
-                Toast.makeText(this, "This word is already in your database", Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
             } finally{
                 bdao.close();
             }
@@ -422,9 +431,11 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         b.setRecording(recordingPath);
         bdao.updateBrick(b);
         bdao.close();
+
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
-        startActivity(i);    }
+        startActivity(i);
+    }
 
     @Override
     protected void onPause() {

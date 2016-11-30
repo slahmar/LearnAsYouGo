@@ -27,31 +27,34 @@ public class SearchableActivity extends ListActivity {
 
         listView = (ListView) this.findViewById(android.R.id.list);
 
-        BrickDAO b = new BrickDAO(this);
-        b.open();
-        List<Brick> bricks = b.findAll();
-        final BrickListAdapter adapter = new BrickListAdapter(this, bricks);
-        b.close();
-        listView.setAdapter(adapter);
+        new Thread() {
+            public void run() {
+                BrickDAO b = new BrickDAO(SearchableActivity.this);
+                b.open();
+                List<Brick> bricks = b.findAll();
+                final BrickListAdapter adapter = new BrickListAdapter(SearchableActivity.this, bricks);
+                listView.setAdapter(adapter);
+                b.close();
 
-        final SearchView editSearch = (SearchView) this.findViewById(R.id.search);
-        editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                final SearchView editSearch = (SearchView) SearchableActivity.this.findViewById(R.id.search);
+                editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);
-                return true;
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
+                        adapter.filter(text);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
+                        adapter.filter(text);
+                        return true;
+                    }
+                });
             }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                String text = editSearch.getQuery().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);
-                return true;
-            }
-        });
-
+        }.start();
 
     }
 
