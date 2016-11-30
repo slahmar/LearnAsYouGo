@@ -158,7 +158,7 @@ public class TextQuizActivity extends AppCompatActivity {
 
         return super.onKeyDown(keyCode, event);
     }
-    
+
     @Override
     protected void onStop() {
         super.onStop();
