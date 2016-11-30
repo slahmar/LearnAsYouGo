@@ -53,27 +53,27 @@
 
     <ImageView
      android:id="@+id/setLocation"
-     android:layout_width="60dp"
-     android:layout_height="60dp"
-     android:src="@drawable/location_icon"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:src="@drawable/ic_location_searching_black_48dp"
      android:scaleType="centerInside"
     android:layout_toRightOf="@+id/camera"
         android:layout_toEndOf="@+id/camera"
     android:layout_below="@+id/photo" />
 
     <ImageView android:id="@+id/camera"
-       android:layout_height="60dp"
-       android:src="@drawable/camera_icon"
-       android:layout_width="60dp"
+       android:layout_height="wrap_content"
+       android:src="@drawable/ic_photo_camera_black_48dp"
+       android:layout_width="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
         android:layout_below="@+id/photo" />
 
     <ImageView
-        android:src="@drawable/play_icon"
+        android:src="@drawable/ic_play_arrow_black_48dp"
         android:id="@+id/playIcon"
-        android:layout_height="54dp"
-        android:layout_width="54dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_below="@+id/camera"
         android:layout_alignLeft="@+id/editButton"
@@ -82,7 +82,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_mic"
+        android:src="@drawable/ic_keyboard_voice_black_48dp"
         android:layout_centerVertical="true"
         android:layout_below="@+id/setLocation"
         android:layout_alignRight="@+id/setLocation"
