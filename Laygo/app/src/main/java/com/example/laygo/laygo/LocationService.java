@@ -37,7 +37,7 @@ public class LocationService implements LocationListener {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             return location;
         } catch (Exception e) {
-            Log.e("SALOME", e.getMessage());
+            Log.e("LOCATION", e.getMessage());
         }
         return null;
     }

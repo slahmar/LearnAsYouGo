@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
 
 import com.example.laygo.laygo.activity.ChooseQuiz;
+import com.example.laygo.laygo.activity.MapsActivity;
 import com.example.laygo.laygo.activity.SearchableActivity;
 import com.example.laygo.laygo.activity.ViewAndEditBrickActivity;
 
@@ -27,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar); //We created a app with a toolbar-free theme
         setSupportActionBar(myToolbar); //So we need to add one and say that it can have buttons
 
-        String truc[] = {"Quiz", "Brick List", "About"};
+        String truc[] = {"Quiz", "Brick List", "Maps", "About"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, truc);
         ListView drawerMenu = (ListView) findViewById(R.id.drawerMenu); //We add some items in the drawer menu
         drawerMenu.setAdapter(adapter);
@@ -78,17 +79,22 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void selectItem (int position){
+        Intent intent = null;
         switch(position){
             case 0:
-                Intent intent = new Intent(this, ChooseQuiz.class);
-                startActivity(intent);
+                intent = new Intent(this, ChooseQuiz.class);
                 break;
 
             case 1:
-                Intent intent2 = new Intent(this, SearchableActivity.class);
-                startActivity(intent2);
+                intent = new Intent(this, SearchableActivity.class);
                 break;
+            case 2:
+                intent = new Intent(this, MapsActivity.class);
+                break;
+            default: break;
         }
+        if (intent != null)
+            startActivity(intent);
     }
 
 }
