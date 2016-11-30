@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -36,6 +37,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.RED;
+import static android.graphics.Color.WHITE;
 
 public class ViewAndEditBrickActivity extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
@@ -156,16 +161,20 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private void onRecord(boolean start) {
         if (start) {
             startRecording();
+            recordIcon.setColorFilter( RED);
         } else {
             stopRecording();
+            recordIcon.setColorFilter( BLACK);
         }
     }
 
     private void onPlay(boolean start) {
         if (start) {
             startPlaying();
+            playIcon.setImageResource(R.drawable.ic_pause_black_48dp);
         } else {
             stopPlaying();
+            playIcon.setImageResource(R.drawable.ic_play_arrow_black_48dp);
         }
     }
 
