@@ -3,7 +3,7 @@
     <string name="app_name">Laygo</string>
     <string name="search_hint">Find your brick</string>
     <string name="add_activity">Add a new word</string>
-    <string name="quiz_next">Next word!</string>
+    <string name="quiz_next">Next question</string>
     <string name="quiz_title">QUIZ</string>
     <string name="quiz_radiobutton">Question</string>
     <string name="navigation_drawer_open">Open Drawer</string>
@@ -19,6 +19,7 @@
     <string name="text_quiz">Text quiz</string>
     <string name="picture_quiz">Picture quiz</string>
     <string name="choose_quiz">Choose the type of quiz you want to play !</string>
+    <string name="score">Congratulations, this is your score !</string>
     <string name="help_title">Help</string>
     <string name="help">&#8226; Add some bricks to your dictionary\n&#8226; Search through your list of bricks to review one of them\n&#8226; Play a quiz to exercise\n&#8226; Check the location of your bricks on the maps</string>
 </resources>

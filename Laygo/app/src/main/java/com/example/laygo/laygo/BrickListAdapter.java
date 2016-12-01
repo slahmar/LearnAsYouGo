@@ -1,6 +1,7 @@
 package com.example.laygo.laygo;
 
 import com.example.laygo.laygo.dao.BrickDAO;
+import com.example.laygo.laygo.dao.QuestionDAO;
 import com.example.laygo.laygo.model.Brick;
 
 import android.content.Context;
@@ -65,11 +66,16 @@ public class BrickListAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
+                long brickId = bricksToFilter.get(position).getId();
                 BrickDAO bdao = new BrickDAO(context);
                 bdao.open();
                 bdao.deleteBrick(bricksToFilter.get(position));
                 bdao.close();
                 bricksToFilter.remove(position);
+                QuestionDAO qdao = new QuestionDAO(context);
+                qdao.open();
+                qdao.deleteQuestion(brickId);
+                qdao.close();
                 BrickListAdapter.this.notifyDataSetChanged();
             }
         });

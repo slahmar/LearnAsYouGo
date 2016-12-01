@@ -19,11 +19,13 @@
         android:id="@+id/textViewQuizTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/quiz_title"
         android:textAlignment="center"
         android:textSize="32sp"
         android:layout_marginTop="36dp"
-        android:layout_weight="1" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"/>
 
 
     <Button
@@ -36,31 +38,36 @@
         android:layout_alignParentStart="true" />
 
     <RadioGroup
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/textViewQuizTitle"
         android:id="@+id/radioGroup0"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="91dp" >
+        android:layout_marginTop="91dp"
+        android:layout_margin="30dp">
 
         <RadioButton
-            android:text="RadioButton"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:id="@+id/radio0"
             android:layout_weight="0.22"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp"
+            />
         <RadioButton
-            android:text="RadioButton"
             android:layout_width="150dp"
             android:id="@+id/radio1"
             android:layout_weight="0.22"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp"/>
         <RadioButton
-            android:text="RadioButton"
             android:layout_width="150dp"
             android:id="@+id/radio2"
             android:layout_weight="0.22"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp"/>
     </RadioGroup>
 
 

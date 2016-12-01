@@ -131,4 +131,8 @@ public class QuestionDAO extends GenericDAO{
         long id = q.getID();
         return (database.delete(LaygoSQLiteHelper.TABLE_QUESTION, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
     }
+
+    public boolean deleteQuestion(long brickId){
+        return (database.delete(LaygoSQLiteHelper.TABLE_QUESTION, LaygoSQLiteHelper.COLUMN_BRICK + "=" + brickId, null) > 0);
+    }
 }

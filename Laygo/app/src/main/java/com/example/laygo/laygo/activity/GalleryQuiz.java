@@ -42,10 +42,31 @@ public class GalleryQuiz extends AppCompatActivity {
 
         getQuestions();
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        currentQuestionID = settings.getInt("currentQuestionID", 0);
-        score = settings.getInt("score", 0);
+        currentQuestionID = 0;
+        score = 0;
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("currentQuestionID", currentQuestionID);
+        editor.putInt("score", score);
+        editor.apply();
         setQuestions();
     }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        currentQuestionID = settings.getInt("currentQuestionID", 0);
+        score = settings.getInt("score", 0);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        currentQuestionID = settings.getInt("currentQuestionID", 0);
+        score = settings.getInt("score", 0);
+    }
+
 
     private void getQuestions() {
         List<Question> deleteQs = new LinkedList<>();
@@ -154,6 +175,7 @@ public class GalleryQuiz extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), QuizResultActivity.class);
 
         i.putExtra("SCORE", score);
+        i.putExtra("NBQUESTIONS", questions.size());
         startActivity(i);
 
     }

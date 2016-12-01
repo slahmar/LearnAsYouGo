@@ -13,23 +13,22 @@ import com.example.laygo.laygo.R;
 public class QuizResultActivity extends AppCompatActivity {
     private String PREFS = "Settings";
 
-    private int score;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
 
-        SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        score = settings.getInt("score", 0);
+        int score = 0;
+        int nbQuestions = 1;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             score = extras.getInt("SCORE");
+            nbQuestions = extras.getInt("NBQUESTIONS");
         }
         if (score < 0) throw new IllegalArgumentException("Score negative");
 
-        String result = score + " point" + (score == 1 ? "!" : "s!");
+        String result = score + "/" + nbQuestions;
         TextView tv = (TextView) findViewById(R.id.scorePoints);
         tv.setText(result);
     }
@@ -45,13 +44,4 @@ public class QuizResultActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt("score", score);
-        editor.apply();
-    }
 }
