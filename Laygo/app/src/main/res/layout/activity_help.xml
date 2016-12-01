@@ -22,6 +22,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/helpText"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
         android:layout_centerVertical="true"
         />
 
