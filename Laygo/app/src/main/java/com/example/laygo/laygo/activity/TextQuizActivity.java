@@ -63,15 +63,6 @@ public class TextQuizActivity extends AppCompatActivity {
         score = settings.getInt("score", 0);
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        currentQuestionID = settings.getInt("currentQuestionID", 0);
-        score = settings.getInt("score", 0);
-    }
-
-
     private void getQuestions() {
         QuestionDAO dao = new QuestionDAO(getApplicationContext());
         dao.open();
@@ -94,6 +85,9 @@ public class TextQuizActivity extends AppCompatActivity {
         for (int i = 0;
              i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS);
              questions.add(allQuestions.get(i)), ++i);
+        for(Question q : questions){
+            Log.d("SALOME", q.toString());
+        }
     }
 
 
@@ -110,8 +104,9 @@ public class TextQuizActivity extends AppCompatActivity {
         rButtons = new LinkedList<>();
         r = new Random();
 
-        Log.d("SALOME", ""+currentQuestionID);
+        Log.d("SALOME", currentQuestionID+"");
         currentQuestion = questions.get(currentQuestionID++);
+        Log.d("SALOME", currentQuestion.toString());
 
         options.add(currentQuestion);
 
@@ -162,7 +157,6 @@ public class TextQuizActivity extends AppCompatActivity {
 
     private void setResults() {
         Intent i = new Intent(getApplicationContext(), QuizResultActivity.class);
-
         i.putExtra("SCORE", score);
         i.putExtra("NBQUESTIONS", questions.size());
         startActivity(i);
