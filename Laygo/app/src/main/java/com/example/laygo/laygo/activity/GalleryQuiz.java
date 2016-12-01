@@ -97,8 +97,8 @@ public class GalleryQuiz extends AppCompatActivity {
         currentQuestion = questions.get(currentQuestionID++);
 
         options.add(currentQuestion);
-        //questions.remove(currentQuestion);
-        for (i = 0; i < questions.size(); ++i) {
+
+        for (i = 0; i < questions.size() - 1; ++i) {
             do {
                 int index = r.nextInt(allQuestions.size());
                 tmp = allQuestions.get(index);

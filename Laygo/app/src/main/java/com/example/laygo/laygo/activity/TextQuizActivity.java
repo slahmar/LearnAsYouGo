@@ -71,7 +71,9 @@ public class TextQuizActivity extends AppCompatActivity {
 
         questions = new LinkedList<>();
         Collections.sort(allQuestions);
-        for (int i = 0; i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS); questions.add(allQuestions.get(i)), ++i);
+        for (int i = 0;
+             i < Math.min(allQuestions.size(), Quiz.MAX_TEXTS);
+             questions.add(allQuestions.get(i)), ++i);
     }
 
 
@@ -91,8 +93,8 @@ public class TextQuizActivity extends AppCompatActivity {
         currentQuestion = questions.get(currentQuestionID++);
 
         options.add(currentQuestion);
-        //questions.remove(currentQuestion);
-        for (i = 0; i < questions.size(); ++i) {
+
+        for (i = 0; i < questions.size() - 1; ++i) {
             do {
                 index = r.nextInt(allQuestions.size());
                 tmp = allQuestions.get(index);
@@ -126,7 +128,7 @@ public class TextQuizActivity extends AppCompatActivity {
                     score++;
                     currentQuestion.incCorrect();
                 }
-                if (currentQuestionID == questions.size() - 1)
+                if (currentQuestionID == questions.size())
                     setResults();
                 else
                     setQuestions();

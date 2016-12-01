@@ -25,38 +25,44 @@ public class ChooseQuiz extends AppCompatActivity {
 
     public void onClickTextQuiz(View view) {
         List<Question> tmp = new LinkedList<>();
-        BrickDAO bdao = new BrickDAO(getApplicationContext());
-        bdao.open();
-        List<Brick> bricks = bdao.findAll();
-        for (Brick b : bricks) {
-            tmp.add(new Question(b));
-        }
-        if (tmp.size() < Quiz.MIN_TEXTS) {
-            Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Intent intent = new Intent(this, TextQuizActivity.class);
-            startActivity(intent);
-        }
+        BrickDAO bdao = null;
+        try {
+            bdao = new BrickDAO(getApplicationContext());
+            bdao.open();
+            List<Brick> bricks = bdao.findAll();
+            for (Brick b : bricks) {
+                tmp.add(new Question(b));
+            }
+            if (tmp.size() < Quiz.MIN_TEXTS) {
+                Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(this, TextQuizActivity.class);
+                startActivity(intent);
+            }
+        } finally {if (bdao != null) bdao.close();}
     }
 
     public void onClickPictureQuiz(View view) {
         int counter = 0;
-        BrickDAO bdao = new BrickDAO(getApplicationContext());
-        bdao.open();
-        List<Brick> bricks = bdao.findAll();
-        for (Brick b : bricks) {
-            if (b.getImage() == null || b.getImage().equals("")) continue;
-            ++counter;
-        }
 
-        if (counter < Quiz.MIN_PICTURES) {
-            Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Intent intent = new Intent(this, GalleryQuiz.class);
-            startActivity(intent);
-        }
+        BrickDAO bdao = null;
+
+        try {
+            bdao = new BrickDAO(getApplicationContext());
+            bdao.open();
+            List<Brick> bricks = bdao.findAll();
+            for (Brick b : bricks) {
+                if (b.getImage() == null || b.getImage().equals("")) continue;
+                ++counter;
+            }
+
+            if (counter < Quiz.MIN_PICTURES) {
+                Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(this, GalleryQuiz.class);
+                startActivity(intent);
+            }
+        } finally {if (bdao != null) bdao.close();}
     }
 
 

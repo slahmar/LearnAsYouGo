@@ -22,7 +22,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
         score = settings.getInt("score", 0);
-        
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             score = extras.getInt("SCORE");
