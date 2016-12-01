@@ -67,6 +67,7 @@ public class SearchableActivity extends ListActivity {
         i.putExtra("photo", selectedBrick.getImage());
         i.putExtra("translation", selectedBrick.getTranslation());
         i.putExtra("examples", selectedBrick.getExamples());
+        i.putExtra("audio", selectedBrick.getRecording());
         Location loc = selectedBrick.getLocation();
         if(loc != null ){
             i.putExtra("latitude", loc.getLatitude());

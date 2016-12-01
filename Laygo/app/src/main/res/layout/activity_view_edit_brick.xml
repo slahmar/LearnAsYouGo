@@ -26,7 +26,8 @@
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cancelButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
         android:id="@+id/editButton" />
@@ -76,8 +77,8 @@
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_below="@+id/camera"
-        android:layout_alignLeft="@+id/editButton"
-        android:layout_alignStart="@+id/editButton" />
+        android:layout_alignLeft="@+id/setLocation"
+        android:layout_alignStart="@+id/setLocation" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -85,89 +86,49 @@
         android:src="@drawable/ic_keyboard_voice_black_48dp"
         android:layout_centerVertical="true"
         android:layout_below="@+id/setLocation"
-        android:layout_alignRight="@+id/setLocation"
-        android:layout_alignEnd="@+id/setLocation"
+        android:layout_toLeftOf="@id/playIcon"
         android:id="@+id/recordIcon" />
-
-
-    <ViewSwitcher
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/wordSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/photo"
-        android:layout_toEndOf="@id/photo"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" >
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:layout_toRightOf="@id/photo"
+            android:layout_toEndOf="@id/photo"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:inputType="textPersonName"
             android:hint="@string/word"
             android:ems="10"
             android:id="@+id/editWord"
         />
 
-        <TextView
-            android:id="@+id/viewWord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
 
-    </ViewSwitcher>
-
-    <ViewSwitcher
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/translationSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/photo"
-        android:layout_toEndOf="@id/photo"
-        android:layout_below="@+id/wordSwitcher"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:hint="@string/translation"
+            android:layout_toRightOf="@id/photo"
+            android:layout_toEndOf="@id/photo"
+            android:layout_below="@+id/editWord"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:ems="10"
             android:id="@+id/editTranslation"
              />
 
-        <TextView
-            android:id="@+id/viewTranslation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-    </ViewSwitcher>
-
-    <ViewSwitcher
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/examplesSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recordIcon"
-        android:layout_alignLeft="@+id/recordIcon"
-        android:layout_alignStart="@+id/recordIcon">
-
         <EditText
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_width="wrap_content"
             android:ems="10"
             android:id="@+id/editExamples"
             android:hint="@string/examples"
-            android:inputType="textMultiLine" />
-
-        <TextView
-            android:id="@+id/viewExamples"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </ViewSwitcher>
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/playIcon"
+            android:layout_centerHorizontal="true"/>
 
     <Button
         android:text="@string/search_examples"
@@ -175,9 +136,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
-        android:layout_below="@id/examplesSwitcher"
-        android:layout_alignStart="@id/examplesSwitcher"
-        android:layout_alignLeft="@id/examplesSwitcher"
+        android:layout_below="@id/editExamples"
+        android:layout_centerHorizontal="true"
         android:id="@+id/searchButton" />
 
 </RelativeLayout>

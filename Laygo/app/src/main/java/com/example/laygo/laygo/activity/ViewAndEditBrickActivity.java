@@ -57,9 +57,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private EditText word;
     private EditText translation;
     private EditText examples;
-    private ViewSwitcher wordSwitcher;
-    private ViewSwitcher translationSwitcher;
-    private ViewSwitcher examplesSwitcher;
     // Model elements
     private Brick b;
     private String photoPath;
@@ -251,8 +248,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         locationButton.setVisibility(View.INVISIBLE);
         searchButton.setVisibility(View.INVISIBLE);
         searchButton.setEnabled(false);
-        playIcon.setVisibility(View.INVISIBLE);
-        playIcon.setEnabled(false);
         recordIcon.setVisibility(View.INVISIBLE);
         recordIcon.setEnabled(false);
 
@@ -260,7 +255,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         final String wordString = i.getStringExtra("word");
         final String translationString = i.getStringExtra("translation");
         final String examplesString = i.getStringExtra("examples");
-        final String path = i.getStringExtra("photo");
+        final String imagePath = i.getStringExtra("photo");
+        final String audioPath = i.getStringExtra("audio");
         final double latitude = i.getDoubleExtra("latitude", Double.MAX_VALUE);
         final double longitude = i.getDoubleExtra("longitude", Double.MAX_VALUE);
 
@@ -269,44 +265,28 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         b.setTranslation(translationString);
         b.setWord(wordString);
         b.setId(id);
-        if(latitude!= Double.MAX_VALUE && longitude!=Double.MAX_VALUE){
+        if(latitude!= Double.MAX_VALUE && longitude!=Double.MAX_VALUE) {
             location = new Location("");
             location.setLatitude(latitude);
             location.setLongitude(longitude);
-            //locationButton.setImageResource(R.drawable.location_set_icon);
         }
+        // TODO : retrieve audio from audioPath + display play icon only if there is audio
 
-        photoPath = path;
-
-        wordSwitcher = (ViewSwitcher) findViewById(R.id.wordSwitcher);
-        wordSwitcher.showNext();
-        TextView wordView = (TextView) wordSwitcher.findViewById(R.id.viewWord);
-        wordView.setText(wordString);
-
-        translationSwitcher = (ViewSwitcher) findViewById(R.id.translationSwitcher);
-        translationSwitcher.showNext();
-        TextView translationView = (TextView) translationSwitcher.findViewById(R.id.viewTranslation);
-        translationView.setText(translationString);
-
-        examplesSwitcher = (ViewSwitcher) findViewById(R.id.examplesSwitcher);
-        examplesSwitcher.showNext();
-        TextView examplesView = (TextView) examplesSwitcher.findViewById(R.id.viewExamples);
-        examplesView.setText(examplesString);
+        photoPath = imagePath;
+        word.setText(wordString);
+        word.setEnabled(false);
+        examples.setText(examplesString);
+        examples.setEnabled(false);
+        translation.setText(translationString);
+        translation.setEnabled(false);
 
         setPhotoView();
-
 
         editButton.setVisibility(View.VISIBLE);
         editButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                wordSwitcher.showPrevious();
-                word.setText(wordString);
-                examplesSwitcher.showPrevious();
-                examples.setText(examplesString);
-                translationSwitcher.showPrevious();
-                translation.setText(translationString);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setEnabled(true);
                 searchButton.setEnabled(true);
