@@ -385,7 +385,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         location = new LocationService().getLocation(context);
         if (location != null) {
-            // set location of the brick
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
             locationButton.setImageResource(R.drawable.location_set_icon);
             // display city name

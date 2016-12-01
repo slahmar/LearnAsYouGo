@@ -9,7 +9,7 @@
         android:id="@+id/imageBrick"
         android:layout_width="100dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:src="@drawable/noimage"
         android:layout_height="100dp">
@@ -41,8 +41,6 @@
     <ImageView
     android:id="@+id/delete"
     android:layout_width="wrap_content"
-        android:layout_toRightOf="@+id/wordBrick"
-        android:layout_toEndOf="@+id/wordBrick"
     android:src="@drawable/ic_delete_black_24dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"

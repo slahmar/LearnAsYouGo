@@ -31,13 +31,11 @@
         <activity android:name=".activity.ChooseQuiz" />
         <activity android:name=".activity.ViewAndEditBrickActivity" />
         <activity android:name=".HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".activity.QuizResultActivity" />
         <activity android:name=".activity.GalleryQuiz" />
@@ -62,8 +60,10 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:label="@string/title_activity_maps"></activity>
+        <activity
+            android:name=".activity.HelpActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>
