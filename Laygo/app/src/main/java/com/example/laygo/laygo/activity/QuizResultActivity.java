@@ -64,13 +64,13 @@ public class QuizResultActivity extends AppCompatActivity {
 
 
         for (int i = 0; i < given.length; ++i) {
+            String resultText = (i + 1) + ". ";
             if (given[i].equals(corrects[i])) {
-                results.add("The word was : " + asked[i] + " and you answered correctly : "
-                        + given[i]);
+                resultText+="The word was : " + asked[i] + " and you answered correctly : " + given[i];
             } else {
-                results.add("The word was : " + asked[i] + ", you answered : " + given[i] +
-                        " and the right answer was : " + corrects[i]);
+                resultText+="The word was : " + asked[i] + ", you answered : " + given[i] + " and the right answer was : "+corrects[i];
             }
+            results.add(resultText);
         }
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, results);
         listView.setAdapter(adapter);
