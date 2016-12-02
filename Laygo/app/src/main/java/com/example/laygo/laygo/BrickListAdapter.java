@@ -66,7 +66,8 @@ public class BrickListAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                long brickId = bricksToFilter.get(position).getId();
+                Brick toDelete = bricksToFilter.get(position);
+                long brickId = toDelete.getId();
                 BrickDAO bdao = new BrickDAO(context);
                 bdao.open();
                 bdao.deleteBrick(bricksToFilter.get(position));
