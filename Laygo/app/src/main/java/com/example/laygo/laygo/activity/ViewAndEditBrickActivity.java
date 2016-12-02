@@ -89,6 +89,14 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         recordIcon = (ImageView) this.findViewById(R.id.recordIcon);
         playIcon = (ImageView) this.findViewById(R.id.playIcon);
 
+        if(!getIntent().getBooleanExtra("editable", true)){
+            String truc = getIntent().getStringExtra("recording");
+            if (truc == "") playIcon.setVisibility(View.INVISIBLE);
+        }
+        else {
+            playIcon.setVisibility(View.INVISIBLE);
+        }
+
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/temp.3gp";
 
@@ -179,7 +187,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource(mFileName);
+            if(!getIntent().getBooleanExtra("editable", true)){
+                mPlayer.setDataSource(getIntent().getStringExtra("audio"));
+            }
+            else{
+                mPlayer.setDataSource(mFileName);
+            }
             mPlayer.prepare();
             mPlayer.start();
         } catch (IOException e) {
@@ -196,7 +209,17 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
+        if (!getIntent().getBooleanExtra("editable", true)){
+            if (getIntent().getStringExtra("audio") != ""){
+                mRecorder.setOutputFile(getIntent().getStringExtra("audio"));
+            }
+            else {
+                mRecorder.setOutputFile(mFileName);
+            }
+        }
+        else {
+            mRecorder.setOutputFile(mFileName);
+        }
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
@@ -212,6 +235,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
+        playIcon.setVisibility(View.VISIBLE);
     }
 
     public void searchExamples(){
@@ -270,7 +294,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             location.setLatitude(latitude);
             location.setLongitude(longitude);
         }
-        // TODO : retrieve audio from audioPath + display play icon only if there is audio
+
+        if(audioPath.equals("")){
+            playIcon.setVisibility(View.INVISIBLE);
+        }
 
         photoPath = imagePath;
         word.setText(wordString);
@@ -312,8 +339,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 locationButton.setEnabled(true);
                 recordIcon.setVisibility(View.VISIBLE);
                 recordIcon.setEnabled(true);
-                playIcon.setVisibility(View.VISIBLE);
-                playIcon.setEnabled(true);
+                if(!audioPath.equals("")){
+                    playIcon.setVisibility(View.VISIBLE);
+                    playIcon.setEnabled(true);
+                }
             }
         });
     }
@@ -407,8 +436,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
 
         File recordingFile = new File(mFileName);
-        String recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+b.getId()+".3gp";
-        recordingFile.renameTo(new File(recordingPath));
+
+        String recordingPath;
+        if(recordingFile.exists()){
+            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".3gp";
+            recordingFile.renameTo(new File(recordingPath));
+        }
+        else{
+            recordingPath = "";
+        }
+
 
         bdao.open();
         b.setImage(photoPath);
