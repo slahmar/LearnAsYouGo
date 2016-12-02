@@ -44,6 +44,9 @@ import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.WHITE;
 
+/**
+ * View and edit a brick
+ */
 public class ViewAndEditBrickActivity extends AppCompatActivity {
     public static final int REQ_TAKE_PHOTO = 0;
     // Graphic elements
@@ -63,16 +66,15 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private String photoPath;
     private String tempImage;
     private Location location;
-
+    // Audio elements
     private static String mFileName;
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
     private boolean startRecord = true;
     private boolean startPlay = true;
-
     private boolean hasRecorded = false;
-
     private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,54 +145,45 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         playIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlayIcon(v);
+                onPlay();
             }
         });
         recordIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecordIcon(v);
+                onRecord();
             }
         });
         if (!editable) {
             setModeView(getIntent());
         }
-
-
-
     }
 
-    public void RecordIcon(View v) {
-        onRecord(startRecord);
-
-        startRecord = !startRecord;
-    }
-
-    public void PlayIcon(View v) {
-        onPlay(startPlay);
-        startPlay = !startPlay;
-    }
-
-    private void onRecord(boolean start) {
-        if (start) {
+    // Record a sound and change the color of the record icon
+    private void onRecord() {
+        if (startRecord) {
             startRecording();
             recordIcon.setColorFilter( RED);
         } else {
             stopRecording();
             recordIcon.setColorFilter( BLACK);
         }
+        startRecord = !startRecord;
     }
 
-    private void onPlay(boolean start) {
-        if (start) {
+    // Play a sound and change the play to pause icon
+    private void onPlay() {
+        if (startPlay) {
             startPlaying();
             playIcon.setImageResource(R.drawable.ic_pause_black_48dp);
         } else {
             stopPlaying();
             playIcon.setImageResource(R.drawable.ic_play_arrow_black_48dp);
         }
+        startPlay = !startPlay;
     }
 
+    // Starts the player
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
@@ -218,28 +211,18 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
     }
 
+    // Stops the media player
     private void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
     }
 
+    // Starts the recorder
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setOutputFile(mFileName);
-
-        /*if (!getIntent().getBooleanExtra("editable", true)){
-            if (!getIntent().getStringExtra("audio").equals("")){
-                mRecorder.setOutputFile(getIntent().getStringExtra("audio"));
-            }
-            else {
-                mRecorder.setOutputFile(mFileName);
-            }
-        }
-        else {
-            mRecorder.setOutputFile(mFileName);
-        }*/
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
@@ -251,6 +234,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mRecorder.start();
     }
 
+    // Stops the recorder
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
@@ -259,6 +243,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         hasRecorded = true;
     }
 
+    // Search examples in the dictionary API
     public void searchExamples(){
         new Thread(){
             public void run(){
@@ -282,6 +267,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }.start();
     }
 
+    // Set the view as read-only
     public void setModeView(Intent i) {
         saveButton.setVisibility(View.INVISIBLE);
         saveButton.setEnabled(false);
@@ -395,20 +381,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
     }
 
+    // Set the photo in the ImageView
     private void setPhotoView() {
         ImageView photoView = (ImageView) findViewById(R.id.photo);
         if(photoPath!=null && photoPath!=""){
             File imageFile = new File(photoPath);
             if (imageFile.exists()) {
-                // First decode with inJustDecodeBounds=true to check dimensions
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeFile(photoPath, options);
-
-                // Calculate inSampleSize
                 options.inSampleSize = calculateInSampleSize(options, 200, 200);
-
-                // Decode bitmap with inSampleSize set
                 options.inJustDecodeBounds = false;
                 Bitmap bm = BitmapFactory.decodeFile(photoPath, options);
                 photoView.setImageBitmap(bm);
@@ -417,7 +399,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
     }
 
-
+    // Retrieve location
     protected void setLocation() {
         Context context = getApplicationContext();
         location = new LocationService().getLocation(context);
@@ -439,6 +421,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     }
 
 
+    // Complete the brick and save it
     private void completeBrick(final boolean create) {
 
         BrickDAO bdao = new BrickDAO(getApplicationContext());
@@ -495,6 +478,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    // Calculate sample size of bitmap
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;

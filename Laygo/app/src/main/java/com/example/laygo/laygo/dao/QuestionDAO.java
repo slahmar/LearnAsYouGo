@@ -12,6 +12,9 @@ import com.example.laygo.laygo.model.Question;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data access object for the questions
+ */
 public class QuestionDAO extends GenericDAO{
     private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID, LaygoSQLiteHelper.COLUMN_BRICK,
             LaygoSQLiteHelper.COLUMN_ASKED, LaygoSQLiteHelper.COLUMN_CORRECT, };
@@ -21,10 +24,7 @@ public class QuestionDAO extends GenericDAO{
         dbHelper = new LaygoSQLiteHelper(context);
     }
 
-    /**
-     * Find all the questions in the database
-     * @return a list of questions; empty if none is found
-     */
+    // Find all the questions in the database
     public List<Question> findAll(){
         List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION,
@@ -40,13 +40,7 @@ public class QuestionDAO extends GenericDAO{
         return qs;
     }
 
-    /**
-     * Find the questions that have the id "id"
-     * @param id
-     * @pre id not null
-     * @throws NullPointerException if id is null
-     * @return a list of bricks empty if none is found
-     */
+    // Find a question by its id
     public List<Question> findById(long id) throws NullPointerException {
         List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
@@ -62,13 +56,7 @@ public class QuestionDAO extends GenericDAO{
         return qs;
     }
 
-    /**
-     * Find the bricks that have the word "word"
-     * @param b
-     * @pre b not null
-     * @throws NullPointerException if word is null
-     * @return a list of bricks empty if none is found
-     */
+    // Find a question by its corresponding brick
     public List<Question> findByBrick(Brick b) throws NullPointerException{
         List<Question> qs = new ArrayList<>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_QUESTION, allColumns,
@@ -84,14 +72,7 @@ public class QuestionDAO extends GenericDAO{
         return qs;
     }
 
-    /**
-     * Insert a brick in the database
-     * @param brickId the id of the brick
-     * @pre a question with this brick shouldn't already be in the database, b not null
-     * @throws NullPointerException if word is null
-     * @throws IllegalStateException if a brick with this word is already in the database
-     * @return the brick created
-     */
+    // Create a question
     public Question createQuestion(long brickId) throws NullPointerException, IllegalStateException{
         ContentValues values = new ContentValues(4);
         values.put(LaygoSQLiteHelper.COLUMN_BRICK, brickId);
@@ -109,6 +90,7 @@ public class QuestionDAO extends GenericDAO{
         return q;
     }
 
+    // Returns a question from a cursor
     private Question cursorToQuestion(Cursor cursor) {
         Question q = new Question();
         q.setID(cursor.getInt(0));
@@ -118,6 +100,7 @@ public class QuestionDAO extends GenericDAO{
         return q;
     }
 
+    // Update a question
     public boolean updateQuestion(Question q){
         ContentValues values = new ContentValues(3);
         values.put(LaygoSQLiteHelper.COLUMN_BRICK, q.getBrick().getId());
@@ -127,11 +110,13 @@ public class QuestionDAO extends GenericDAO{
                 LaygoSQLiteHelper.COLUMN_ID + "=" + q.getID(), null) > 0);
     }
 
+    // Delete a question
     public boolean deleteQuestion(Question q){
         long id = q.getID();
         return (database.delete(LaygoSQLiteHelper.TABLE_QUESTION, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
     }
 
+    // Delete a question from its corresponding brick id
     public boolean deleteQuestion(long brickId){
         return (database.delete(LaygoSQLiteHelper.TABLE_QUESTION, LaygoSQLiteHelper.COLUMN_BRICK + "=" + brickId, null) > 0);
     }

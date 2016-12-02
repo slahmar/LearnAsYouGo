@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Play a quiz
+ */
 public class QuizActivity extends AppCompatActivity {
     private String PREFS = "Settings";
     private static final String TEXT_TYPE = "Text";
@@ -106,6 +109,7 @@ public class QuizActivity extends AppCompatActivity {
         askedQuestions = settings.getString("askedQuestions", askedQuestions);
     }
 
+    // Retrieve the questions and the bricks corresponding from the database
     private void getQuestions() {
         QuestionDAO dao = new QuestionDAO(getApplicationContext());
         dao.open();
@@ -147,7 +151,7 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-
+    // Set the design of the questions
     private void setQuestions() {
         List<RadioButton> rButtons;
         Button next;
@@ -211,6 +215,7 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
+    // Start the result activity
     private void setResults() {
         Intent i = new Intent(getApplicationContext(), QuizResultActivity.class);
         i.putExtra("SCORE", score);

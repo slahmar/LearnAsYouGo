@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * SQLite Helper handling the creation of the database
+ * and its upgrade
+ */
 public class LaygoSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_BRICK = "brick";
     public static final String COLUMN_ID = "_id";

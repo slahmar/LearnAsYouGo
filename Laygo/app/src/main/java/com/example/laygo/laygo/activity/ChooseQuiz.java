@@ -15,7 +15,11 @@ import com.example.laygo.laygo.model.Quiz;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Activity used to choose a type of quiz to play
+ */
 public class ChooseQuiz extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,7 @@ public class ChooseQuiz extends AppCompatActivity {
         setContentView(R.layout.activity_choose_quiz);
     }
 
+    // Start text quiz
     public void onClickTextQuiz(View view) {
         List<Question> tmp = new LinkedList<>();
         BrickDAO bdao = null;
@@ -45,10 +50,9 @@ public class ChooseQuiz extends AppCompatActivity {
             intent.putExtra("QUIZ_TYPE", "Text");
             startActivity(intent);
         }
-
-
     }
 
+    // Start picture quiz
     public void onClickPictureQuiz(View view) {
         int counter = 0;
 

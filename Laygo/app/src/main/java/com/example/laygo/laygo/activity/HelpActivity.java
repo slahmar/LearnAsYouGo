@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.example.laygo.laygo.R;
 
+/**
+ * Help user to understand how the app works
+ */
 public class HelpActivity extends AppCompatActivity {
 
     @Override

@@ -5,46 +5,34 @@ import android.location.Location;
 import java.io.File;
 import java.util.Vector;
 
-
-
 /**
  * A brick is a word with its translation under different formats (audio, picture, text) and example sentences
  */
 public class Brick {
     private long id;
-    /**
-     * The word in the learned language
-     */
     private String word;
-    /**
-     * The word in the user's mother tongue
-     */
     private String translation;
-    /**
-     * A set of example sentences using the word
-     */
     private String examples;
-    /**
-     * An image of the object
-     */
     private String imagePath;
-
     private Location location;
-
     private String recording;
 
+    // Get the translation
     public String getTranslation() {
         return translation;
     }
 
+    // Set the translation
     public void setTranslation(String translation) {
         this.translation = translation;
     }
 
+    // Get the example sentences
     public String getExamples() {
         return examples;
     }
 
+    // Set the example sentences
     public void setExamples(String examples) {
         this.examples = examples;
     }
