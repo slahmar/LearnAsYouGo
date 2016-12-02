@@ -72,7 +72,7 @@ public class ChooseQuiz extends AppCompatActivity {
         } finally {if (bdao != null) bdao.close();}
 
         if (intent != null) {
-            intent.putExtra("QUIZ_TYPE", "Text");
+            intent.putExtra("QUIZ_TYPE", "Gallery");
             startActivity(intent);
         }
     }
