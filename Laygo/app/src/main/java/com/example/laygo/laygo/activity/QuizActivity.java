@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.activity.QuizResultActivity;
 import com.example.laygo.laygo.dao.BrickDAO;
@@ -311,6 +312,11 @@ public class QuizActivity extends AppCompatActivity {
             setQuestions();
         }
 
+    }
+
+    public void backHome(View v) {
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(i);
     }
 }
 
