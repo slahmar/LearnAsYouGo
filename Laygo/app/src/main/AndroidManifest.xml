@@ -27,7 +27,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".activity.TextQuizActivity" />
+        <activity android:name=".activity.QuizActivity" />
         <activity android:name=".activity.ChooseQuiz" />
         <activity android:name=".activity.ViewAndEditBrickActivity" />
         <activity android:name=".HomeActivity">

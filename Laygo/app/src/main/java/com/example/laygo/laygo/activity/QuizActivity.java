@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class TextQuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity {
     private String PREFS = "Settings";
     private static final String TEXT_TYPE = "Text";
     private static final String GALLERY_TYPE = "Gallery";
@@ -47,7 +47,8 @@ public class TextQuizActivity extends AppCompatActivity {
     private int currentQuestionID;
     private Question currentQuestion;
     private int score;
-    private String givenAnswers, correctAnswers, quizType, askedQuestionsIDs;
+    private String givenAnswers, correctAnswers, quizType,
+            askedQuestionsIDs, askedQuestions;
 
 
 
@@ -63,6 +64,7 @@ public class TextQuizActivity extends AppCompatActivity {
         givenAnswers = "";
         correctAnswers = "";
         askedQuestionsIDs = "";
+        askedQuestions = "";
         quizType = extras != null ? extras.getString("QUIZ_TYPE") : TEXT_TYPE; // default
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt("currentQuestionID", currentQuestionID);
@@ -71,6 +73,7 @@ public class TextQuizActivity extends AppCompatActivity {
         editor.putString("correctAnswers", correctAnswers);
         editor.putString("quizType", quizType);
         editor.putString("askedQuestionsIDs", askedQuestionsIDs);
+        editor.putString("askedQuestions", askedQuestions);
         editor.apply();
 
         getQuestions();
@@ -94,6 +97,7 @@ public class TextQuizActivity extends AppCompatActivity {
         correctAnswers = settings.getString("correctAnswers", "");
         quizType = settings.getString("quizType", TEXT_TYPE);
         askedQuestionsIDs = settings.getString("askedQuestionsIDs", askedQuestionsIDs);
+        askedQuestions = settings.getString("askedQuestions", askedQuestions);
     }
 
     private void getQuestions() {
@@ -174,7 +178,7 @@ public class TextQuizActivity extends AppCompatActivity {
         switch (quizType) {
             case TEXT_TYPE:
                 ((TextView)findViewById(R.id.textViewQuizTitle))
-                        .setText("What is the translation for " + currentQuestion+" ?");
+                        .setText("What is the translation for " + currentQuestion + " ?");
                 for (RadioButton rb : rButtons) {
                     rb.setText(options.get(i).getBrick().getTranslation());
                     ++i;
@@ -212,9 +216,10 @@ public class TextQuizActivity extends AppCompatActivity {
                 }
                 String givenAnswer = "" + selected.getText();
 
-                givenAnswers += givenAnswer + "|";
-                correctAnswers += correctAnswer + "|";
-                askedQuestionsIDs += currentQuestion.getID() + "|";
+                givenAnswers += givenAnswer + "//";
+                correctAnswers += correctAnswer + "//";
+                askedQuestions += currentQuestion.getBrick().getWord() + "//";
+                askedQuestionsIDs += currentQuestion.getID() + "//";
                 if (givenAnswer.equals(correctAnswer)) {
                     score++;
                     currentQuestion.incCorrect();
@@ -238,6 +243,7 @@ public class TextQuizActivity extends AppCompatActivity {
         i.putExtra("CORRECT_ANSWERS", correctAnswers);
         i.putExtra("QUIZ_TYPE", quizType);
         i.putExtra("ASKED_IDS", askedQuestionsIDs);
+        i.putExtra("ASKED_QUESTIONS", askedQuestions);
         startActivity(i);
 
     }
@@ -265,6 +271,7 @@ public class TextQuizActivity extends AppCompatActivity {
         editor.putString("correctAnswers", correctAnswers);
         editor.putString("quizType", quizType);
         editor.putString("askedQuestionsIDs", askedQuestionsIDs);
+        editor.putString("askedQuestions", askedQuestions);
         editor.apply();
     }
 

@@ -37,7 +37,7 @@ public class ChooseQuiz extends AppCompatActivity {
             if (tmp.size() < Quiz.MIN_TEXTS) {
                 Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
             } else {
-                intent = new Intent(this, TextQuizActivity.class);
+                intent = new Intent(this, QuizActivity.class);
             }
         } finally {if (bdao != null) bdao.close();}
 
@@ -67,7 +67,7 @@ public class ChooseQuiz extends AppCompatActivity {
             if (counter < Quiz.MIN_PICTURES) {
                 Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
             } else {
-                intent = new Intent(this, TextQuizActivity.class);
+                intent = new Intent(this, QuizActivity.class);
             }
         } finally {if (bdao != null) bdao.close();}
 
