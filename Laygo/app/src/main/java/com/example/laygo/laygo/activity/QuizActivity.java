@@ -121,9 +121,11 @@ public class QuizActivity extends AppCompatActivity {
                 List<Question> deleteQs = new LinkedList<>();
                 for (Question q : allQuestions)
                     for (Brick b : bricks)
-                        if (q.getBrickID() == b.getId() && b.getImage() != null && b.getImage().length() > 1)
+                        if (q.getBrickID() == b.getId() &&
+                                b.getImage() != null && b.getImage().length() > 1)
                             q.setBrick(b);
-                        else if (q.getBrickID() == b.getId() && (b.getImage() == null || b.getImage().length() <= 1))
+                        else if (q.getBrickID() == b.getId() &&
+                                (b.getImage() == null || b.getImage().length() <= 1))
                             deleteQs.add(q);
 
                 allQuestions.removeAll(deleteQs);
@@ -143,7 +145,6 @@ public class QuizActivity extends AppCompatActivity {
     private void setQuestions() {
         List<RadioButton> rButtons;
         Button next;
-        TextView tv;
         Random r;
         List<Question> options;
         Question tmp;
@@ -203,50 +204,9 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         final Activity t = this;
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
-                RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
-                if (selected == null) {
-                    Toast.makeText(t, "You have to select an option", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                String correctAnswer = "";
-                switch (quizType) {
-                    case TEXT_TYPE:
-                        correctAnswer = currentQuestion.getBrick().getTranslation();
-                        break;
-                    case GALLERY_TYPE:
-                        correctAnswer = currentQuestion.getBrick().getWord();
-                        break;
-                }
-                String givenAnswer = "" + selected.getText();
-
-                givenAnswers += givenAnswer + "//";
-                correctAnswers += correctAnswer + "//";
-                askedQuestions += currentQuestion.getBrick().getWord() + "//";
-                askedQuestionsIDs += currentQuestion.getID() + "//";
-                if (givenAnswer.equals(correctAnswer)) {
-                    score++;
-                    currentQuestion.incCorrect();
-                }
-                QuestionDAO dao = null;
-                try {
-                    dao = new QuestionDAO(getApplicationContext());
-                    dao.open();
-                    dao.updateQuestion(currentQuestion);
-                } finally { if(dao != null) dao.close(); }
-                if (currentQuestionID == questions.size())
-                    setResults();
-                else{
-                    g.clearCheck();
-                    setQuestions();
-                }
-
-            }
-        });
+        //next.setOnClickListener(
+        //    onClickNextButton(View, t)
+        //);
     }
 
     private void setResults() {
@@ -302,6 +262,48 @@ public class QuizActivity extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public void onClickNextButton(View v) {
+        RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
+        RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
+        if (selected == null) {
+            Toast.makeText(this, "You have to select an option", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String correctAnswer = "";
+        switch (quizType) {
+            case TEXT_TYPE:
+                correctAnswer = currentQuestion.getBrick().getTranslation();
+                break;
+            case GALLERY_TYPE:
+                correctAnswer = currentQuestion.getBrick().getWord();
+                break;
+        }
+        String givenAnswer = "" + selected.getText();
+
+        givenAnswers += givenAnswer + "//";
+        correctAnswers += correctAnswer + "//";
+        askedQuestions += currentQuestion.getBrick().getWord() + "//";
+        askedQuestionsIDs += currentQuestion.getID() + "//";
+        if (givenAnswer.equals(correctAnswer)) {
+            score++;
+            currentQuestion.incCorrect();
+        }
+        QuestionDAO dao = null;
+        try {
+            dao = new QuestionDAO(getApplicationContext());
+            dao.open();
+            dao.updateQuestion(currentQuestion);
+        } finally { if(dao != null) dao.close(); }
+        if (currentQuestionID == questions.size())
+            setResults();
+        else{
+            g.clearCheck();
+            setQuestions();
+        }
+
     }
 }
 

@@ -57,7 +57,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
         for (int i = 0; i < given.length; ++i)
             results.add("Question: " + asked[i] +
-                    ";Selected: " + given[i] + "; Correct: " + corrects[i]);
+                    "; Selected: " + given[i] + "; Correct: " + corrects[i]);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, results);
         listView.setAdapter(adapter);
     }
