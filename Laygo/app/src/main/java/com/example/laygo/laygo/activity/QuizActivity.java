@@ -79,8 +79,14 @@ public class QuizActivity extends AppCompatActivity {
         getQuestions();
 
         switch (quizType) {
-            case TEXT_TYPE: (findViewById(R.id.quizBrickImage)).setVisibility(View.INVISIBLE); break;
-            case GALLERY_TYPE: (findViewById(R.id.textViewQuizTitle)).setVisibility(View.INVISIBLE); break;
+            case TEXT_TYPE:
+                (findViewById(R.id.quizBrickImage)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.textViewQuizTitle)).setVisibility(View.VISIBLE);
+                break;
+            case GALLERY_TYPE:
+                (findViewById(R.id.textViewQuizTitle)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.quizBrickImage)).setVisibility(View.VISIBLE);
+                break;
         }
 
         setQuestions();
@@ -203,10 +209,6 @@ public class QuizActivity extends AppCompatActivity {
                 break;
         }
 
-        final Activity t = this;
-        //next.setOnClickListener(
-        //    onClickNextButton(View, t)
-        //);
     }
 
     private void setResults() {
