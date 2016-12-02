@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,6 +61,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     // Model elements
     private Brick b;
     private String photoPath;
+    private String tempImage;
     private Location location;
 
     private static String mFileName;
@@ -130,6 +132,9 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                tempImage = Environment.getExternalStorageDirectory().getAbsolutePath()+"/temp.jpg";
+                File temp = new File(tempImage);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
                 startActivityForResult(intent, REQ_TAKE_PHOTO);
             }
         });
@@ -350,29 +355,14 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
         if (resCode == RESULT_OK) {
-            String[] projection = new String[]{
-                    MediaStore.Images.ImageColumns._ID,
-                    MediaStore.Images.ImageColumns.DATA,
-                    MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN,
-                    MediaStore.Images.ImageColumns.MIME_TYPE
-            };
-            final Cursor cursor = getContentResolver()
-                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-                            null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
-
-            if (cursor != null ) {
-                while(cursor.moveToNext()){
-                    String imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-                    Log.d("photo", imagePath);
-                    File imageFile = new File(imagePath);
-                    if (imageFile.canRead() && imageFile.exists()) {
-                        photoPath = imagePath;
-                        break;
-                    }
-                }
+            if(photoPath != null && photoPath!=""){
+                File oldImage = new File(photoPath);
+                oldImage.delete();
+            }
+            File image = new File(tempImage);
+            if(image.exists()){
+                photoPath = tempImage;
                 setPhotoView();
-                cursor.close();
             }
         }
     }
@@ -456,6 +446,11 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             recordingPath = "";
         }
 
+        File imageFile = new File(photoPath);
+        if(imageFile.exists()){
+            photoPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".jpg";
+            imageFile.renameTo(new File(photoPath));
+        }
 
         bdao.open();
         b.setImage(photoPath);
