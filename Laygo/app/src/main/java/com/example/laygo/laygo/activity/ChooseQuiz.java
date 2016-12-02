@@ -26,6 +26,7 @@ public class ChooseQuiz extends AppCompatActivity {
     public void onClickTextQuiz(View view) {
         List<Question> tmp = new LinkedList<>();
         BrickDAO bdao = null;
+        Intent intent = null;
         try {
             bdao = new BrickDAO(getApplicationContext());
             bdao.open();
@@ -36,16 +37,23 @@ public class ChooseQuiz extends AppCompatActivity {
             if (tmp.size() < Quiz.MIN_TEXTS) {
                 Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
             } else {
-                Intent intent = new Intent(this, TextQuizActivity.class);
-                startActivity(intent);
+                intent = new Intent(this, TextQuizActivity.class);
             }
         } finally {if (bdao != null) bdao.close();}
+
+        if (intent != null) {
+            intent.putExtra("QUIZ_TYPE", "Text");
+            startActivity(intent);
+        }
+
+
     }
 
     public void onClickPictureQuiz(View view) {
         int counter = 0;
 
         BrickDAO bdao = null;
+        Intent intent = null;
 
         try {
             bdao = new BrickDAO(getApplicationContext());
@@ -59,10 +67,14 @@ public class ChooseQuiz extends AppCompatActivity {
             if (counter < Quiz.MIN_PICTURES) {
                 Toast.makeText(this, "You don't have enough words!", Toast.LENGTH_LONG).show();
             } else {
-                Intent intent = new Intent(this, GalleryQuiz.class);
-                startActivity(intent);
+                intent = new Intent(this, TextQuizActivity.class);
             }
         } finally {if (bdao != null) bdao.close();}
+
+        if (intent != null) {
+            intent.putExtra("QUIZ_TYPE", "Text");
+            startActivity(intent);
+        }
     }
 
 

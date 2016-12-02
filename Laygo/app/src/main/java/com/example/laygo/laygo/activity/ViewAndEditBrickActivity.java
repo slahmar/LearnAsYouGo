@@ -70,6 +70,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private boolean startRecord = true;
     private boolean startPlay = true;
 
+    private boolean hasRecorded = false;
+
     private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +195,18 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mPlayer = new MediaPlayer();
         try {
             if(!getIntent().getBooleanExtra("editable", true)){
-                mPlayer.setDataSource(getIntent().getStringExtra("audio"));
+                if (!getIntent().getStringExtra("audio").equals("")){
+                    if (hasRecorded) {
+                        mPlayer.setDataSource(mFileName);
+                    }
+                    else {
+                        mPlayer.setDataSource(getIntent().getStringExtra("audio"));
+                    }
+                }
+                else {
+                    mPlayer.setDataSource(mFileName);
+                }
+
             }
             else{
                 mPlayer.setDataSource(mFileName);
@@ -214,8 +227,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        if (!getIntent().getBooleanExtra("editable", true)){
-            if (getIntent().getStringExtra("audio") != ""){
+        mRecorder.setOutputFile(mFileName);
+
+        /*if (!getIntent().getBooleanExtra("editable", true)){
+            if (!getIntent().getStringExtra("audio").equals("")){
                 mRecorder.setOutputFile(getIntent().getStringExtra("audio"));
             }
             else {
@@ -224,7 +239,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
         else {
             mRecorder.setOutputFile(mFileName);
-        }
+        }*/
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
@@ -241,6 +256,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         mRecorder.release();
         mRecorder = null;
         playIcon.setVisibility(View.VISIBLE);
+        hasRecorded = true;
     }
 
     public void searchExamples(){
@@ -299,6 +315,18 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             location.setLatitude(latitude);
             location.setLongitude(longitude);
         }
+
+        File recordingFile = new File(mFileName);
+        String recordingPath;
+        if(recordingFile.exists()){
+            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".3gp";
+            recordingFile.renameTo(new File(recordingPath));
+        }
+        else{
+            recordingPath = "";
+        }
+        b.setRecording(recordingPath);
+
 
         if(audioPath.equals("")){
             playIcon.setVisibility(View.INVISIBLE);
