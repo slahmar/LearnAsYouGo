@@ -410,7 +410,17 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         if(photoPath!=null && photoPath!=""){
             File imageFile = new File(photoPath);
             if (imageFile.exists()) {
-                Bitmap bm = BitmapFactory.decodeFile(photoPath);
+                // First decode with inJustDecodeBounds=true to check dimensions
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(photoPath, options);
+
+                // Calculate inSampleSize
+                options.inSampleSize = calculateInSampleSize(options, 200, 200);
+
+                // Decode bitmap with inSampleSize set
+                options.inJustDecodeBounds = false;
+                Bitmap bm = BitmapFactory.decodeFile(photoPath, options);
                 photoView.setImageBitmap(bm);
             }
         }
@@ -488,6 +498,25 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.location.Location;
 import com.example.laygo.laygo.db.LaygoSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,6 +155,14 @@ public class BrickDAO extends GenericDAO{
 
     public boolean deleteBrick(Brick brick){
         long id = brick.getId();
+        File image = new File(brick.getImage());
+        if(image.exists()){
+            image.delete();
+        }
+        File recording = new File(brick.getRecording());
+        if(recording.exists()){
+            recording.delete();
+        }
         return (database.delete(LaygoSQLiteHelper.TABLE_BRICK, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
     }
 }
