@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
 
+/**
+ * Displays the result at the end of a quiz
+ */
 public class QuizResultActivity extends AppCompatActivity {
     private String PREFS = "Settings";
     private String givenAnswers, correctAnswers, askedQuestionsIDs;

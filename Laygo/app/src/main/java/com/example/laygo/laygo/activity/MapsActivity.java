@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -34,7 +37,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -43,12 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Add a marker for each of the bricks and one at the current location or in Dublin.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -63,14 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Geocoder gc = new Geocoder(context, Locale.getDefault());
             mMap.addMarker(new MarkerOptions().position(currentPosition).title("Current Position"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, ZOOM));
-            // display city name
-            /*try {
-                List<Address> addr = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                if (addr.size() > 0)
-                    Toast.makeText(this, addr.get(0).getLocality(), Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-            }*/
-
         }
         else {
             currentPosition = new LatLng(53.3461092, -6.2714981);
@@ -84,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             bdao.open();
             for (Brick b : bdao.findAll()) {
                 loc = b.getLocation();
-                if (loc != null) {
+                if (loc != null && loc.getLatitude()!=Double.MAX_VALUE && loc.getLongitude()!=Double.MAX_VALUE) {
                     currentPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(currentPosition).title(b.getWord()));
 

@@ -12,6 +12,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data access object for the bricks
+ */
 public class BrickDAO extends GenericDAO{
     private String[] allColumns = { LaygoSQLiteHelper.COLUMN_ID,
                 LaygoSQLiteHelper.COLUMN_WORD, LaygoSQLiteHelper.COLUMN_TRANSLATION,
@@ -22,10 +25,7 @@ public class BrickDAO extends GenericDAO{
         dbHelper = new LaygoSQLiteHelper(context);
     }
 
-    /**
-     * Find all the bricks in the database
-     * @return a list of bricks empty if none is found
-     */
+    // Find all the bricks in the database
     public List<Brick> findAll(){
         List<Brick> bricks = new ArrayList<Brick>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK,
@@ -41,13 +41,7 @@ public class BrickDAO extends GenericDAO{
         return bricks;
     }
 
-    /**
-     * Find the bricks that have the id "id"
-     * @param id
-     * @pre id not null
-     * @throws NullPointerException if id is null
-     * @return a list of bricks empty if none is found
-     */
+    // Find a brick by its id
     public List<Brick> findById(long id) throws NullPointerException {
         List<Brick> bricks = new ArrayList<Brick>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK, allColumns,
@@ -63,13 +57,7 @@ public class BrickDAO extends GenericDAO{
         return bricks;
     }
 
-    /**
-     * Find the bricks that have the word "word"
-     * @param word
-     * @pre word not null
-     * @throws NullPointerException if word is null
-     * @return a list of bricks empty if none is found
-     */
+    // Find a brick by its word
     public List<Brick> findByWord(String word) throws NullPointerException{
         List<Brick> bricks = new ArrayList<Brick>();
         Cursor cursor = database.query(LaygoSQLiteHelper.TABLE_BRICK, allColumns,
@@ -85,14 +73,7 @@ public class BrickDAO extends GenericDAO{
         return bricks;
     }
 
-    /**
-     * Insert a brick in the database
-     * @param word the word of the brick
-     * @pre a brick with this word shouldn't already be in the database, word not null
-     * @throws NullPointerException if word is null
-     * @throws IllegalStateException if a brick with this word is already in the database
-     * @return the brick created
-     */
+    // Create a brick
     public Brick createBrick(String word) throws NullPointerException, IllegalStateException{
         if(findByWord(word).size() == 0) {
             ContentValues values = new ContentValues(4);
@@ -119,6 +100,7 @@ public class BrickDAO extends GenericDAO{
         }
     }
 
+    // Returns a brick from a cursor
     private Brick cursorToBrick(Cursor cursor) {
         Brick brick = new Brick();
         brick.setId(cursor.getLong(0));
@@ -134,6 +116,7 @@ public class BrickDAO extends GenericDAO{
         return brick;
     }
 
+    // Update a brick
     public boolean updateBrick(Brick brick){
         ContentValues values = new ContentValues(4);
         values.put(LaygoSQLiteHelper.COLUMN_WORD, brick.getWord());
@@ -153,6 +136,7 @@ public class BrickDAO extends GenericDAO{
         return (database.update(LaygoSQLiteHelper.TABLE_BRICK, values, LaygoSQLiteHelper.COLUMN_ID + "=" + brick.getId(), null) > 0);
     }
 
+    // Delete a brick and its image and recording
     public boolean deleteBrick(Brick brick){
         long id = brick.getId();
         File image = new File(brick.getImage());

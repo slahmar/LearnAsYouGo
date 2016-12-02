@@ -16,6 +16,9 @@ import com.example.laygo.laygo.model.Brick;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Search functionality in the list of bricks
+ */
 public class SearchableActivity extends ListActivity {
 
     ListView listView;
