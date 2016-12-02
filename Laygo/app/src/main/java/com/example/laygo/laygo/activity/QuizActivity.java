@@ -157,15 +157,23 @@ public class QuizActivity extends AppCompatActivity {
 
         options.add(currentQuestion);
 
-        for (i = 0; i < questions.size() - 1; ++i) {
-            do {
-                index = r.nextInt(allQuestions.size());
-                tmp = allQuestions.get(index);
-            } while (options.contains(tmp) || tmp.equals(currentQuestion));
+        QuestionDAO dao = null;
+        try {
+            dao = new QuestionDAO(getApplicationContext());
+            dao.open();
 
-            tmp.incAsked();
-            options.add(tmp);
-        }
+            for (i = 0; i < questions.size() - 1; ++i) {
+                do {
+                    index = r.nextInt(allQuestions.size());
+                    tmp = allQuestions.get(index);
+                } while (options.contains(tmp) || tmp.equals(currentQuestion));
+
+                tmp.incAsked();
+                options.add(tmp);
+                dao.updateQuestion(tmp);
+            }
+        } finally { if(dao != null) dao.close(); }
+
 
         Collections.shuffle(options, new Random());
 
@@ -224,6 +232,12 @@ public class QuizActivity extends AppCompatActivity {
                     score++;
                     currentQuestion.incCorrect();
                 }
+                QuestionDAO dao = null;
+                try {
+                    dao = new QuestionDAO(getApplicationContext());
+                    dao.open();
+                    dao.updateQuestion(currentQuestion);
+                } finally { if(dao != null) dao.close(); }
                 if (currentQuestionID == questions.size())
                     setResults();
                 else{
