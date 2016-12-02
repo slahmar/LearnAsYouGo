@@ -54,12 +54,13 @@ public class QuizResultActivity extends AppCompatActivity {
         ids = askedQuestionsIDs.split("//");
         asked = askedQuestions.split("//");
 
-        for (int i = 0; i < given.length; ++i)
-            Log.e("ANSW", "Given:" + given[i] + ", corr:" + corrects[i]);
-
-        for (int i = 0; i < given.length; ++i)
-            results.add("Question: " + asked[i] +
-                    "; Selected: " + given[i] + "; Correct: " + corrects[i]);
+        for (int i = 0; i < given.length; ++i) {
+            if (given[i] == corrects[i]) {
+                results.add("The word was : " + asked[i] + " and you answered correctly : " + given[i]);
+            } else {
+                results.add("The word was : " + asked[i] + ", you answered : " + given[i] + " and the right answer was : "+corrects[i]);
+            }
+        }
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, results);
         listView.setAdapter(adapter);
     }

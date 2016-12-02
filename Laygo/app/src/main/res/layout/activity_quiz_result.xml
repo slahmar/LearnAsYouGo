@@ -11,7 +11,7 @@
     tools:context="com.example.laygo.laygo.activity.QuizResultActivity">
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:src="@drawable/score_picture"
         android:id="@+id/score_picture"/>
 
@@ -42,7 +42,6 @@
         android:layout_alignParentStart="true"
         android:id="@+id/resultListView"
         android:layout_marginTop="18dp" >
-
 
     </ListView>
 </RelativeLayout>
