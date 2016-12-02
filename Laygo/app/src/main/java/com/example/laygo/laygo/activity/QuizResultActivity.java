@@ -2,6 +2,8 @@ package com.example.laygo.laygo.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,9 @@ import android.widget.TextView;
 
 import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +25,9 @@ import java.util.List;
  */
 public class QuizResultActivity extends AppCompatActivity {
     private String PREFS = "Settings";
-    private String givenAnswers, correctAnswers, askedQuestionsIDs, askedQuestions;
+    private String givenAnswers, correctAnswers,
+            askedQuestionsIDs, askedQuestions,
+            quizType;
     private ListView listView;
 
     @Override
@@ -41,6 +48,7 @@ public class QuizResultActivity extends AppCompatActivity {
             correctAnswers = extras.getString("CORRECT_ANSWERS");
             askedQuestionsIDs = extras.getString("ASKED_IDS");
             askedQuestions = extras.getString("ASKED_QUESTIONS");
+            quizType = extras.getString("QUIZ_TYPE");
         }
         if (score < 0) throw new IllegalArgumentException("Score negative");
 
@@ -54,11 +62,14 @@ public class QuizResultActivity extends AppCompatActivity {
         ids = askedQuestionsIDs.split("//");
         asked = askedQuestions.split("//");
 
+
         for (int i = 0; i < given.length; ++i) {
-            if (given[i] == corrects[i]) {
-                results.add("The word was : " + asked[i] + " and you answered correctly : " + given[i]);
+            if (given[i].equals(corrects[i])) {
+                results.add("The word was : " + asked[i] + " and you answered correctly : "
+                        + given[i]);
             } else {
-                results.add("The word was : " + asked[i] + ", you answered : " + given[i] + " and the right answer was : "+corrects[i]);
+                results.add("The word was : " + asked[i] + ", you answered : " + given[i] +
+                        " and the right answer was : " + corrects[i]);
             }
         }
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, results);
@@ -74,6 +85,23 @@ public class QuizResultActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+
+
+    private Bitmap getImageFromPath(String path) {
+        BitmapFactory.Options ops;
+        Bitmap bitmap;
+        File file;
+        try {
+            file = new File(path);
+            ops = new BitmapFactory.Options();
+            ops.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, ops);
+            return bitmap;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

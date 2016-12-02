@@ -226,6 +226,7 @@ public class QuizActivity extends AppCompatActivity {
         i.putExtra("QUIZ_TYPE", quizType);
         i.putExtra("ASKED_IDS", askedQuestionsIDs);
         i.putExtra("ASKED_QUESTIONS", askedQuestions);
+        i.putExtra("QUIZ_RESULT", quizType);
         startActivity(i);
 
     }
