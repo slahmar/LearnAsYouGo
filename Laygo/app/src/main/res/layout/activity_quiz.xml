@@ -36,7 +36,9 @@
         android:layout_alignParentBottom="true"
         android:onClick="onClickNextButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2" />
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -53,8 +55,7 @@
             android:layout_weight="0.22"
             android:layout_height="20dp"
             android:layout_marginBottom="20dp"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
         <RadioButton
             android:layout_width="150dp"
             android:id="@+id/radio1"
@@ -79,6 +80,16 @@
         android:layout_above="@+id/radioGroup0"
         android:layout_centerHorizontal="true"
         android:id="@+id/quizBrickImage" />
+
+    <Button
+        android:text="Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="backHome"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

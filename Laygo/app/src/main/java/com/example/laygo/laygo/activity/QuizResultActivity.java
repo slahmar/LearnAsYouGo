@@ -55,7 +55,7 @@ public class QuizResultActivity extends AppCompatActivity {
         asked = askedQuestions.split("//");
 
         for (int i = 0; i < given.length; ++i) {
-            String resultText = ""+(i+1);
+            String resultText = (i+1)+". ";
             if (given[i].equals(corrects[i])) {
                 resultText+="The word was : " + asked[i] + " and you answered correctly : " + given[i];
             } else {
