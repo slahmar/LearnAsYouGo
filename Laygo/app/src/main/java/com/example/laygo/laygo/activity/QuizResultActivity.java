@@ -6,18 +6,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.laygo.laygo.HomeActivity;
 import com.example.laygo.laygo.R;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Displays the result at the end of a quiz
  */
 public class QuizResultActivity extends AppCompatActivity {
     private String PREFS = "Settings";
-    private String givenAnswers, correctAnswers, askedQuestionsIDs;
+    private String givenAnswers, correctAnswers, askedQuestionsIDs, askedQuestions;
     private ListView listView;
 
     @Override
@@ -27,7 +30,8 @@ public class QuizResultActivity extends AppCompatActivity {
 
         int score = 0;
         int nbQuestions = 1;
-        String[] given, corrects, ids;
+        String[] given, corrects, ids, asked;
+        List<String> results = new LinkedList<>();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -36,19 +40,28 @@ public class QuizResultActivity extends AppCompatActivity {
             givenAnswers = extras.getString("GIVEN_ANSWERS");
             correctAnswers = extras.getString("CORRECT_ANSWERS");
             askedQuestionsIDs = extras.getString("ASKED_IDS");
+            askedQuestions = extras.getString("ASKED_QUESTIONS");
         }
         if (score < 0) throw new IllegalArgumentException("Score negative");
 
         String result = score + "/" + nbQuestions;
         TextView tv = (TextView) findViewById(R.id.scorePoints);
         tv.setText(result);
+        listView = (ListView)findViewById(R.id.resultListView);
 
-        given = givenAnswers.split("|");
-        corrects = correctAnswers.split("|");
-        ids = askedQuestionsIDs.split("|");
+        given = givenAnswers.split("//");
+        corrects = correctAnswers.split("//");
+        ids = askedQuestionsIDs.split("//");
+        asked = askedQuestions.split("//");
+
         for (int i = 0; i < given.length; ++i)
             Log.e("ANSW", "Given:" + given[i] + ", corr:" + corrects[i]);
 
+        for (int i = 0; i < given.length; ++i)
+            results.add("Question: " + asked[i] +
+                    "; Selected: " + given[i] + "; Correct: " + corrects[i]);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, results);
+        listView.setAdapter(adapter);
     }
 
     @Override

@@ -38,7 +38,7 @@ import java.util.Random;
 /**
  * Play a quiz
  */
-public class TextQuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity {
     private String PREFS = "Settings";
     private static final String TEXT_TYPE = "Text";
     private static final String GALLERY_TYPE = "Gallery";
@@ -50,7 +50,8 @@ public class TextQuizActivity extends AppCompatActivity {
     private int currentQuestionID;
     private Question currentQuestion;
     private int score;
-    private String givenAnswers, correctAnswers, quizType, askedQuestionsIDs;
+    private String givenAnswers, correctAnswers, quizType,
+            askedQuestionsIDs, askedQuestions;
 
 
 
@@ -66,6 +67,7 @@ public class TextQuizActivity extends AppCompatActivity {
         givenAnswers = "";
         correctAnswers = "";
         askedQuestionsIDs = "";
+        askedQuestions = "";
         quizType = extras != null ? extras.getString("QUIZ_TYPE") : TEXT_TYPE; // default
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt("currentQuestionID", currentQuestionID);
@@ -74,13 +76,20 @@ public class TextQuizActivity extends AppCompatActivity {
         editor.putString("correctAnswers", correctAnswers);
         editor.putString("quizType", quizType);
         editor.putString("askedQuestionsIDs", askedQuestionsIDs);
+        editor.putString("askedQuestions", askedQuestions);
         editor.apply();
 
         getQuestions();
 
         switch (quizType) {
-            case TEXT_TYPE: (findViewById(R.id.quizBrickImage)).setVisibility(View.INVISIBLE); break;
-            case GALLERY_TYPE: (findViewById(R.id.textViewQuizTitle)).setVisibility(View.INVISIBLE); break;
+            case TEXT_TYPE:
+                (findViewById(R.id.quizBrickImage)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.textViewQuizTitle)).setVisibility(View.VISIBLE);
+                break;
+            case GALLERY_TYPE:
+                (findViewById(R.id.textViewQuizTitle)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.quizBrickImage)).setVisibility(View.VISIBLE);
+                break;
         }
 
         setQuestions();
@@ -97,6 +106,7 @@ public class TextQuizActivity extends AppCompatActivity {
         correctAnswers = settings.getString("correctAnswers", "");
         quizType = settings.getString("quizType", TEXT_TYPE);
         askedQuestionsIDs = settings.getString("askedQuestionsIDs", askedQuestionsIDs);
+        askedQuestions = settings.getString("askedQuestions", askedQuestions);
     }
 
     // Retrieve the questions and the bricks corresponding from the database
@@ -121,9 +131,11 @@ public class TextQuizActivity extends AppCompatActivity {
                 List<Question> deleteQs = new LinkedList<>();
                 for (Question q : allQuestions)
                     for (Brick b : bricks)
-                        if (q.getBrickID() == b.getId() && b.getImage() != null && b.getImage().length() > 1)
+                        if (q.getBrickID() == b.getId() &&
+                                b.getImage() != null && b.getImage().length() > 1)
                             q.setBrick(b);
-                        else if (q.getBrickID() == b.getId() && (b.getImage() == null || b.getImage().length() <= 1))
+                        else if (q.getBrickID() == b.getId() &&
+                                (b.getImage() == null || b.getImage().length() <= 1))
                             deleteQs.add(q);
 
                 allQuestions.removeAll(deleteQs);
@@ -143,7 +155,6 @@ public class TextQuizActivity extends AppCompatActivity {
     private void setQuestions() {
         List<RadioButton> rButtons;
         Button next;
-        TextView tv;
         Random r;
         List<Question> options;
         Question tmp;
@@ -157,15 +168,23 @@ public class TextQuizActivity extends AppCompatActivity {
 
         options.add(currentQuestion);
 
-        for (i = 0; i < questions.size() - 1; ++i) {
-            do {
-                index = r.nextInt(allQuestions.size());
-                tmp = allQuestions.get(index);
-            } while (options.contains(tmp) || tmp.equals(currentQuestion));
+        QuestionDAO dao = null;
+        try {
+            dao = new QuestionDAO(getApplicationContext());
+            dao.open();
 
-            tmp.incAsked();
-            options.add(tmp);
-        }
+            for (i = 0; i < questions.size() - 1; ++i) {
+                do {
+                    index = r.nextInt(allQuestions.size());
+                    tmp = allQuestions.get(index);
+                } while (options.contains(tmp) || tmp.equals(currentQuestion));
+
+                tmp.incAsked();
+                options.add(tmp);
+                dao.updateQuestion(tmp);
+            }
+        } finally { if(dao != null) dao.close(); }
+
 
         Collections.shuffle(options, new Random());
 
@@ -178,7 +197,7 @@ public class TextQuizActivity extends AppCompatActivity {
         switch (quizType) {
             case TEXT_TYPE:
                 ((TextView)findViewById(R.id.textViewQuizTitle))
-                        .setText("What is the translation for " + currentQuestion+" ?");
+                        .setText("What is the translation for " + currentQuestion + " ?");
                 for (RadioButton rb : rButtons) {
                     rb.setText(options.get(i).getBrick().getTranslation());
                     ++i;
@@ -194,44 +213,6 @@ public class TextQuizActivity extends AppCompatActivity {
                 break;
         }
 
-        final Activity t = this;
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
-                RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
-                if (selected == null) {
-                    Toast.makeText(t, "You have to select an option", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                String correctAnswer = "";
-                switch (quizType) {
-                    case TEXT_TYPE:
-                        correctAnswer = currentQuestion.getBrick().getTranslation();
-                        break;
-                    case GALLERY_TYPE:
-                        correctAnswer = currentQuestion.getBrick().getWord();
-                        break;
-                }
-                String givenAnswer = "" + selected.getText();
-
-                givenAnswers += givenAnswer + "|";
-                correctAnswers += correctAnswer + "|";
-                askedQuestionsIDs += currentQuestion.getID() + "|";
-                if (givenAnswer.equals(correctAnswer)) {
-                    score++;
-                    currentQuestion.incCorrect();
-                }
-                if (currentQuestionID == questions.size())
-                    setResults();
-                else{
-                    g.clearCheck();
-                    setQuestions();
-                }
-
-            }
-        });
     }
 
     // Start the result activity
@@ -243,6 +224,7 @@ public class TextQuizActivity extends AppCompatActivity {
         i.putExtra("CORRECT_ANSWERS", correctAnswers);
         i.putExtra("QUIZ_TYPE", quizType);
         i.putExtra("ASKED_IDS", askedQuestionsIDs);
+        i.putExtra("ASKED_QUESTIONS", askedQuestions);
         startActivity(i);
 
     }
@@ -270,6 +252,7 @@ public class TextQuizActivity extends AppCompatActivity {
         editor.putString("correctAnswers", correctAnswers);
         editor.putString("quizType", quizType);
         editor.putString("askedQuestionsIDs", askedQuestionsIDs);
+        editor.putString("askedQuestions", askedQuestions);
         editor.apply();
     }
 
@@ -286,6 +269,48 @@ public class TextQuizActivity extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public void onClickNextButton(View v) {
+        RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup0);
+        RadioButton selected = (RadioButton) findViewById(g.getCheckedRadioButtonId());
+        if (selected == null) {
+            Toast.makeText(this, "You have to select an option", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String correctAnswer = "";
+        switch (quizType) {
+            case TEXT_TYPE:
+                correctAnswer = currentQuestion.getBrick().getTranslation();
+                break;
+            case GALLERY_TYPE:
+                correctAnswer = currentQuestion.getBrick().getWord();
+                break;
+        }
+        String givenAnswer = "" + selected.getText();
+
+        givenAnswers += givenAnswer + "//";
+        correctAnswers += correctAnswer + "//";
+        askedQuestions += currentQuestion.getBrick().getWord() + "//";
+        askedQuestionsIDs += currentQuestion.getID() + "//";
+        if (givenAnswer.equals(correctAnswer)) {
+            score++;
+            currentQuestion.incCorrect();
+        }
+        QuestionDAO dao = null;
+        try {
+            dao = new QuestionDAO(getApplicationContext());
+            dao.open();
+            dao.updateQuestion(currentQuestion);
+        } finally { if(dao != null) dao.close(); }
+        if (currentQuestionID == questions.size())
+            setResults();
+        else{
+            g.clearCheck();
+            setQuestions();
+        }
+
     }
 }
 
