@@ -443,16 +443,20 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             try {
                 bdao.open();
                 b = bdao.createBrick(word);
+
+                // create an empty question for this new brick
+                // only if the brick has been created now (for the first time)
+                QuestionDAO qdao = new QuestionDAO(getApplicationContext());
+                qdao.open();
+                qdao.createQuestion(b.getId());
+                qdao.close();
             } catch (RuntimeException e) {
                 Log.e("Error", e.toString());
                 Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
             } finally {
                 bdao.close();
             }
-            QuestionDAO qdao = new QuestionDAO(getApplicationContext());
-            qdao.open();
-            qdao.createQuestion(b.getId());
-            qdao.close();
+
         }
 
         File recordingFile = new File(mFileName);
