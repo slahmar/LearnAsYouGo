@@ -69,6 +69,8 @@ public class QuizActivity extends AppCompatActivity {
 
     // Retrieve the questions and the bricks corresponding from the database
     private void getQuestions() {
+        switcher = (ViewSwitcher)findViewById(R.id.switcher);
+
         QuestionDAO dao = new QuestionDAO(getApplicationContext());
         dao.open();
         allQuestions = dao.findAll();
@@ -153,7 +155,6 @@ public class QuizActivity extends AppCompatActivity {
                 }
                 break;
             case GALLERY_TYPE:
-                Log.d("SALOME", currentQuestion.getBrick().getImage());
                 ((ImageView)switcher.findViewById(R.id.quizBrickImage))
                         .setImageBitmap(ViewAndEditBrickActivity.getResizedImage(currentQuestion.getBrick().getImage(), 200));
                 for (RadioButton rb : rButtons) {
