@@ -44,7 +44,9 @@ public class ChooseQuiz extends AppCompatActivity {
             } else {
                 intent = new Intent(this, QuizActivity.class);
             }
-        } finally {if (bdao != null) bdao.close();}
+        } finally {
+            if (bdao != null) bdao.close();
+        }
 
         if (intent != null) {
             intent.putExtra("QUIZ_TYPE", "Text");
@@ -73,7 +75,9 @@ public class ChooseQuiz extends AppCompatActivity {
             } else {
                 intent = new Intent(this, QuizActivity.class);
             }
-        } finally {if (bdao != null) bdao.close();}
+        } finally {
+            if (bdao != null) bdao.close();
+        }
 
         if (intent != null) {
             intent.putExtra("QUIZ_TYPE", "Gallery");

@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
 
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
-                this,  mDrawerLayout, myToolbar,
+                this, mDrawerLayout, myToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startAddBrick (View view) {
+    public void startAddBrick(View view) {
         Intent intent = new Intent(this, ViewAndEditBrickActivity.class);
         startActivity(intent);
     }
@@ -75,9 +75,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void selectItem (int position){
+    private void selectItem(int position) {
         Intent intent = null;
-        switch(position){
+        switch (position) {
             case 0:
                 intent = new Intent(this, ChooseQuiz.class);
                 break;
@@ -89,7 +89,8 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case 3:
                 intent = new Intent(this, HelpActivity.class);
-            default: break;
+            default:
+                break;
         }
         if (intent != null)
             startActivity(intent);

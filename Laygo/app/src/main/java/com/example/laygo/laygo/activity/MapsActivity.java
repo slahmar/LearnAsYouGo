@@ -48,8 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Geocoder gc = new Geocoder(context, Locale.getDefault());
             mMap.addMarker(new MarkerOptions().position(currentPosition).title("Current Position"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, ZOOM));
-        }
-        else {
+        } else {
             currentPosition = new LatLng(53.3461092, -6.2714981);
             mMap.addMarker(new MarkerOptions().position(currentPosition).title("Dublin"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, ZOOM));
@@ -61,23 +60,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             bdao.open();
             for (Brick b : bdao.findAll()) {
                 loc = b.getLocation();
-                if (loc != null && loc.getLatitude()!=Double.MAX_VALUE && loc.getLongitude()!=Double.MAX_VALUE) {
+                if (loc != null && loc.getLatitude() != Double.MAX_VALUE && loc.getLongitude() != Double.MAX_VALUE) {
                     currentPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(currentPosition).title(b.getWord()));
 
                 }
             }
-        }
-        finally {
+        } finally {
             if (bdao != null) bdao.close();
         }
     }
+
     protected void onRestart() {
         super.onRestart();
     }
+
     protected void onPause() {
         super.onPause();
     }
+
     protected void onStop() {
         super.onStop();
     }

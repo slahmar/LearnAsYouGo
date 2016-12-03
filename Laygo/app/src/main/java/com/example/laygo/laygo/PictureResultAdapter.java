@@ -20,13 +20,14 @@ public class PictureResultAdapter extends ArrayAdapter<String> {
     private String[] correctAnswers;
     Context context;
 
-    public PictureResultAdapter(Context context, String[]photos, String[] answers, String[] correctAnswers) {
+    public PictureResultAdapter(Context context, String[] photos, String[] answers, String[] correctAnswers) {
         super(context, R.layout.picture_result, answers);
         this.photos = photos;
         this.answers = answers;
         this.correctAnswers = correctAnswers;
         this.context = context;
     }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -37,9 +38,9 @@ public class PictureResultAdapter extends ArrayAdapter<String> {
         String correctAnswer = correctAnswers[position];
         String result;
         if (answer.equals(correctAnswer)) {
-            result = "<font color='#31B404'>You answered correctly : " + answer+"</font>";
+            result = "<font color='#31B404'>You answered correctly : " + answer + "</font>";
         } else {
-            result = "<font color='#DF0101'>You answered : " + answer + ", the right answer was : " + correctAnswer+"</font>";
+            result = "<font color='#DF0101'>You answered : " + answer + ", the right answer was : " + correctAnswer + "</font>";
         }
         textView.setText(Html.fromHtml(result));
         imageView.setImageBitmap(ViewAndEditBrickActivity.getResizedImage(photos[position], 200));

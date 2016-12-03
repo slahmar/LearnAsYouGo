@@ -89,11 +89,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         recordIcon = (ImageView) this.findViewById(R.id.recordIcon);
         playIcon = (ImageView) this.findViewById(R.id.playIcon);
 
-        if(!getIntent().getBooleanExtra("editable", true)){
+        if (!getIntent().getBooleanExtra("editable", true)) {
             String truc = getIntent().getStringExtra("recording");
-            if (truc == "") playIcon.setVisibility(View.INVISIBLE);
-        }
-        else {
+            if (truc.equals("")) playIcon.setVisibility(View.INVISIBLE);
+        } else {
             playIcon.setVisibility(View.INVISIBLE);
         }
 
@@ -130,7 +129,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                tempImage = Environment.getExternalStorageDirectory().getAbsolutePath()+"/temp.jpg";
+                tempImage = Environment.getExternalStorageDirectory().getAbsolutePath() + "/temp.jpg";
                 File temp = new File(tempImage);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
                 startActivityForResult(intent, REQ_TAKE_PHOTO);
@@ -157,10 +156,10 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private void onRecord() {
         if (startRecord) {
             startRecording();
-            recordIcon.setColorFilter( RED);
+            recordIcon.setColorFilter(RED);
         } else {
             stopRecording();
-            recordIcon.setColorFilter( BLACK);
+            recordIcon.setColorFilter(BLACK);
         }
         startRecord = !startRecord;
     }
@@ -181,20 +180,17 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
-            if(!getIntent().getBooleanExtra("editable", true)){
-                if (!getIntent().getStringExtra("audio").equals("")){
+            if (!getIntent().getBooleanExtra("editable", true)) {
+                if (!getIntent().getStringExtra("audio").equals("")) {
                     if (hasRecorded) {
                         mPlayer.setDataSource(mFileName);
-                    }
-                    else {
+                    } else {
                         mPlayer.setDataSource(getIntent().getStringExtra("audio"));
                     }
-                }
-                else {
+                } else {
                     mPlayer.setDataSource(mFileName);
                 }
-            }
-            else{
+            } else {
                 mPlayer.setDataSource(mFileName);
             }
             mPlayer.prepare();
@@ -236,22 +232,22 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     }
 
     // Search examples in the dictionary API
-    public void searchExamples(){
-        new Thread(){
-            public void run(){
+    public void searchExamples() {
+        new Thread() {
+            public void run() {
                 final String example = RemoteFetchExamples.getXML(getApplicationContext(), word.getText().toString());
-                if(example == null){
-                    handler.post(new Runnable(){
-                        public void run(){
+                if (example == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
                             Toast.makeText(getApplicationContext(),
                                     "No examples found.",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
-                    handler.post(new Runnable(){
-                        public void run(){
-                            examples.setText(examples.getText()+"\n"+example);
+                    handler.post(new Runnable() {
+                        public void run() {
+                            examples.setText(examples.getText() + "\n" + example);
                         }
                     });
                 }
@@ -288,7 +284,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         b.setTranslation(translationString);
         b.setWord(wordString);
         b.setId(id);
-        if(latitude!= Double.MAX_VALUE && longitude!=Double.MAX_VALUE) {
+        if (latitude != Double.MAX_VALUE && longitude != Double.MAX_VALUE) {
             location = new Location("");
             location.setLatitude(latitude);
             location.setLongitude(longitude);
@@ -296,17 +292,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
         File recordingFile = new File(mFileName);
         String recordingPath;
-        if(recordingFile.exists()){
-            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".3gp";
+        if (recordingFile.exists()) {
+            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".3gp";
             recordingFile.renameTo(new File(recordingPath));
-        }
-        else{
+        } else {
             recordingPath = "";
         }
         b.setRecording(recordingPath);
 
 
-        if(audioPath.equals("")){
+        if (audioPath.equals("")) {
             playIcon.setVisibility(View.INVISIBLE);
         }
 
@@ -353,7 +348,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 locationButton.setEnabled(true);
                 recordIcon.setVisibility(View.VISIBLE);
                 recordIcon.setEnabled(true);
-                if(!audioPath.equals("")){
+                if (!audioPath.equals("")) {
                     playIcon.setVisibility(View.VISIBLE);
                     playIcon.setEnabled(true);
                 }
@@ -364,12 +359,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
         if (resCode == RESULT_OK) {
-            if(photoPath != null && photoPath!=""){
+            if (photoPath != null && !photoPath.equals("")) {
                 File oldImage = new File(photoPath);
                 oldImage.delete();
             }
             File image = new File(tempImage);
-            if(image.exists()){
+            if (image.exists()) {
                 photoPath = tempImage;
                 setPhotoView();
             }
@@ -379,7 +374,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     // Set the photo in the ImageView
     private void setPhotoView() {
         ImageView photoView = (ImageView) findViewById(R.id.photo);
-        if(photoPath!=null && photoPath!=""){
+        if (photoPath != null && !photoPath.equals("")) {
             File imageFile = new File(photoPath);
             if (imageFile.exists()) {
                 photoView.setImageBitmap(getResizedImage(photoPath, 200));
@@ -388,7 +383,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     }
 
     // Get a resized bitmap version of a picture
-    public static Bitmap getResizedImage(String path, int requiredSize){
+    public static Bitmap getResizedImage(String path, int requiredSize) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
@@ -451,7 +446,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             } catch (RuntimeException e) {
                 Log.e("Error", e.toString());
                 Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
-            } finally{
+            } finally {
                 bdao.close();
             }
             QuestionDAO qdao = new QuestionDAO(getApplicationContext());
@@ -462,17 +457,16 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
         File recordingFile = new File(mFileName);
         String recordingPath;
-        if(recordingFile.exists()){
-            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".3gp";
+        if (recordingFile.exists()) {
+            recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".3gp";
             recordingFile.renameTo(new File(recordingPath));
-        }
-        else{
+        } else {
             recordingPath = "";
         }
 
         File imageFile = new File(photoPath);
-        if(imageFile.exists()){
-            photoPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".jpg";
+        if (imageFile.exists()) {
+            photoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".jpg";
             imageFile.renameTo(new File(photoPath));
         }
 

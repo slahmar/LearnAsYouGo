@@ -58,7 +58,7 @@ public class BrickListAdapter extends BaseAdapter {
         ImageView delete = (ImageView) rowView.findViewById(R.id.delete);
         wordView.setText(bricksToFilter.get(position).getWord());
         translationView.setText(bricksToFilter.get(position).getTranslation());
-        delete.setOnClickListener(new View.OnClickListener(){
+        delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -78,7 +78,7 @@ public class BrickListAdapter extends BaseAdapter {
         });
         // Get image path of image
         String imagePath = bricksToFilter.get(position).getImage();
-        if(imagePath != null && imagePath != ""){
+        if (imagePath != null && imagePath != "") {
             File imageFile = new File(imagePath);
             if (imageFile.exists()) {
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);
@@ -94,14 +94,10 @@ public class BrickListAdapter extends BaseAdapter {
         bricksToFilter.clear();
         if (charText.length() == 0) {
             bricksToFilter.addAll(bricks);
-        } 
-        else 
-        {
-            for (Brick b : bricks) 
-            {
+        } else {
+            for (Brick b : bricks) {
                 if (b.getWord().toLowerCase(Locale.getDefault()).contains(charText) ||
-                        b.getTranslation().toLowerCase(Locale.getDefault()).contains(charText))
-                {
+                        b.getTranslation().toLowerCase(Locale.getDefault()).contains(charText)) {
                     bricksToFilter.add(b);
                 }
             }

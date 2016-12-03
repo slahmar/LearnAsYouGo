@@ -68,7 +68,7 @@ public class SearchableActivity extends ListActivity {
         i.putExtra("examples", selectedBrick.getExamples());
         i.putExtra("audio", selectedBrick.getRecording());
         Location loc = selectedBrick.getLocation();
-        if(loc != null ){
+        if (loc != null) {
             i.putExtra("latitude", loc.getLatitude());
             i.putExtra("longitude", loc.getLongitude());
         }
