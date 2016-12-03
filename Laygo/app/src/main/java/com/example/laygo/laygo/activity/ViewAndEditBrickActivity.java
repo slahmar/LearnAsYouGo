@@ -325,6 +325,9 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                word.setEnabled(true);
+                examples.setEnabled(true);
+                translation.setEnabled(true);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setEnabled(true);
                 searchButton.setEnabled(true);
