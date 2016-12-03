@@ -2,17 +2,14 @@ package com.example.laygo.laygo.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -23,12 +20,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
-import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.HomeActivity;
+import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.RemoteFetchExamples;
 import com.example.laygo.laygo.dao.BrickDAO;
@@ -42,7 +37,6 @@ import java.util.Locale;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
-import static android.graphics.Color.WHITE;
 
 /**
  * View and edit a brick
@@ -199,7 +193,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 else {
                     mPlayer.setDataSource(mFileName);
                 }
-
             }
             else{
                 mPlayer.setDataSource(mFileName);
@@ -230,7 +223,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e("", "prepare() failed");
         }
-
         mRecorder.start();
     }
 
@@ -387,16 +379,37 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         if(photoPath!=null && photoPath!=""){
             File imageFile = new File(photoPath);
             if (imageFile.exists()) {
-                final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(photoPath, options);
-                options.inSampleSize = calculateInSampleSize(options, 200, 200);
-                options.inJustDecodeBounds = false;
-                Bitmap bm = BitmapFactory.decodeFile(photoPath, options);
-                photoView.setImageBitmap(bm);
+                photoView.setImageBitmap(getResizedImage(photoPath, 200));
             }
         }
+    }
 
+    // Get a resized bitmap version of a picture
+    public static Bitmap getResizedImage(String path, int requiredSize){
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        options.inSampleSize = calculateInSampleSize(options, requiredSize, requiredSize);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
+    // Calculate sample size of bitmap
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
     }
 
     // Retrieve location
@@ -420,10 +433,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
     }
 
-
     // Complete the brick and save it
     private void completeBrick(final boolean create) {
-
         BrickDAO bdao = new BrickDAO(getApplicationContext());
         String word = ViewAndEditBrickActivity.this.word.getText().toString();
         String transl = ViewAndEditBrickActivity.this.translation.getText().toString();
@@ -447,7 +458,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         }
 
         File recordingFile = new File(mFileName);
-
         String recordingPath;
         if(recordingFile.exists()){
             recordingPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+b.getId()+".3gp";
@@ -476,26 +486,6 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         Toast.makeText(this, "Word saved", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
-    }
-
-    // Calculate sample size of bitmap
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
     }
 
     @Override

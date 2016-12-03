@@ -14,20 +14,6 @@
     android:orientation="vertical"
     tools:context=".activity.QuizActivity">
 
-
-    <TextView
-        android:id="@+id/textViewQuizTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="32sp"
-        android:layout_marginTop="36dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginRight="10dp"/>
-
-
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
@@ -43,10 +29,9 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textViewQuizTitle"
+        android:layout_below="@+id/switcher"
         android:id="@+id/radioGroup0"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="91dp"
         android:layout_margin="30dp">
 
         <RadioButton
@@ -72,15 +57,29 @@
             android:textSize="20sp"/>
     </RadioGroup>
 
-    <ImageView
+    <ViewSwitcher
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/noimage"
+        android:id="@+id/switcher"
         android:layout_marginTop="30dp"
-        android:layout_above="@+id/radioGroup0"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/quizBrickImage" />
+        android:measureAllChildren="false">
+        <TextView
+            android:id="@+id/textViewQuizTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="32sp" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/noimage"
+            android:id="@+id/quizBrickImage" />
+
+    </ViewSwitcher>
     <Button
         android:text="Home"
         android:layout_width="wrap_content"
@@ -90,6 +89,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
 
 </RelativeLayout>

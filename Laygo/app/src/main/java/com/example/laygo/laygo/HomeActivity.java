@@ -1,18 +1,17 @@
 package com.example.laygo.laygo;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.support.v4.widget.DrawerLayout;
 
 import com.example.laygo.laygo.activity.ChooseQuiz;
 import com.example.laygo.laygo.activity.HelpActivity;
@@ -20,6 +19,7 @@ import com.example.laygo.laygo.activity.MapsActivity;
 import com.example.laygo.laygo.activity.SearchableActivity;
 import com.example.laygo.laygo.activity.ViewAndEditBrickActivity;
 
+// Activity for the homepage
 public class HomeActivity extends AppCompatActivity {
 
     @Override
@@ -28,7 +28,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
         String pages[] = {"Quiz", "Brick List", "Maps", "Help"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, pages);
         ListView drawerMenu = (ListView) findViewById(R.id.drawerMenu);
@@ -56,14 +55,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             Intent intent = new Intent(this, SearchableActivity.class);
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -85,7 +81,6 @@ public class HomeActivity extends AppCompatActivity {
             case 0:
                 intent = new Intent(this, ChooseQuiz.class);
                 break;
-
             case 1:
                 intent = new Intent(this, SearchableActivity.class);
                 break;

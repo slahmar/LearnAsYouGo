@@ -49,7 +49,4 @@
         android:id="@+id/galleryQuizQuestionText0"
         android:textSize="34sp"
         android:text="Word" />
-
-
-
 </RelativeLayout>

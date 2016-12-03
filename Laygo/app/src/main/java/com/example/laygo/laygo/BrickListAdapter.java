@@ -1,29 +1,25 @@
 package com.example.laygo.laygo;
 
-import com.example.laygo.laygo.dao.BrickDAO;
-import com.example.laygo.laygo.dao.QuestionDAO;
-import com.example.laygo.laygo.model.Brick;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.laygo.laygo.dao.BrickDAO;
+import com.example.laygo.laygo.dao.QuestionDAO;
+import com.example.laygo.laygo.model.Brick;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+// Adapter used to display a list of bricks
 public class BrickListAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
@@ -92,6 +88,7 @@ public class BrickListAdapter extends BaseAdapter {
         return rowView;
     }
 
+    // Filter the list of bricks with a text
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         bricksToFilter.clear();

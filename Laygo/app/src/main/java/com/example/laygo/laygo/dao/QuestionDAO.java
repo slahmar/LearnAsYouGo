@@ -3,7 +3,6 @@ package com.example.laygo.laygo.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.location.Location;
 
 import com.example.laygo.laygo.db.LaygoSQLiteHelper;
 import com.example.laygo.laygo.model.Brick;

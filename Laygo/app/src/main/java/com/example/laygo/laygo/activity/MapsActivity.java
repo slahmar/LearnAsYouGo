@@ -1,19 +1,15 @@
 package com.example.laygo.laygo.activity;
 
 import android.content.Context;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.FragmentActivity;
 
 import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.R;
 import com.example.laygo.laygo.dao.BrickDAO;
 import com.example.laygo.laygo.model.Brick;
-import com.example.laygo.laygo.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,13 +17,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
-/**
- *
- */
+// Displays a Google Maps activity with the locations of the user's bricks
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -43,15 +35,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * Add a marker for each of the bricks and one at the current location or in Dublin.
-     */
+    // Add a marker for each of the bricks and one at the current location or in Dublin.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Context context = getApplicationContext();
-
 
         Location loc = new LocationService().getLocation(context);
         LatLng currentPosition;

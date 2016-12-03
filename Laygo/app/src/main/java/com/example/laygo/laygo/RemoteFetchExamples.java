@@ -24,11 +24,13 @@ import android.util.Xml;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+// Fetch example sentences in Merriam-Webster Thesaurus API
 public class RemoteFetchExamples {
 
     private static final String DICTIONARY_API =
             "http://www.dictionaryapi.com/api/v1/references/thesaurus/xml/%s?key=214b2fb8-6e13-42c2-aa19-94bc1c0d4fbf";
 
+    // Get XML string for a word
     public static String getXML(Context context, String word){
         try {
             URL url = new URL(String.format(DICTIONARY_API, word));
