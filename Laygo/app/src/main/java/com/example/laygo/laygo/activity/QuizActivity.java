@@ -87,14 +87,17 @@ public class QuizActivity extends AppCompatActivity {
             case TEXT_TYPE:
                 for (Question q : allQuestions)
                     for (Brick b : bricks)
-                        if (q.getBrickID() == b.getId())
+                        if (q == null || b == null) ;
+                        else if (q.getBrickID() == b.getId() &&
+                                b.getTranslation() != null && !b.getTranslation().equals(""))
                             q.setBrick(b);
                 break;
             case GALLERY_TYPE:
                 List<Question> deleteQs = new LinkedList<>();
                 for (Question q : allQuestions)
                     for (Brick b : bricks)
-                        if (q.getBrickID() == b.getId() &&
+                        if (q == null || b == null) ;
+                        else if (q.getBrickID() == b.getId() &&
                                 b.getImage() != null && b.getImage().length() > 1)
                             q.setBrick(b);
                         else if (q.getBrickID() == b.getId() &&
@@ -139,7 +142,8 @@ public class QuizActivity extends AppCompatActivity {
 
                 tmp.incAsked();
                 options.add(tmp);
-                dao.updateQuestion(tmp);
+                if (tmp != null && tmp.getBrick() != null)
+                    dao.updateQuestion(tmp);
             }
         } finally {
             if (dao != null) dao.close();
