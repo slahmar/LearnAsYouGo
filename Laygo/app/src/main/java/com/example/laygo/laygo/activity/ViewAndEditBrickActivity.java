@@ -434,29 +434,24 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
     // Complete the brick and save it
     private void completeBrick(final boolean create) {
         BrickDAO bdao = new BrickDAO(getApplicationContext());
-        String word = ViewAndEditBrickActivity.this.word.getText().toString();
-        String transl = ViewAndEditBrickActivity.this.translation.getText().toString();
-        String examples = ViewAndEditBrickActivity.this.examples.getText().toString();
+        String word = ViewAndEditBrickActivity.this.word.getText()+"";
+        String transl = ViewAndEditBrickActivity.this.translation.getText()+"";
+        String examples = ViewAndEditBrickActivity.this.examples.getText()+"";
 
         if (word.length() < 1) throw new IllegalStateException("Empty word");
         if (create) {
             try {
                 bdao.open();
                 b = bdao.createBrick(word);
-
-                // create an empty question for this new brick
-                // only if the brick has been created now (for the first time)
+                bdao.close();
                 QuestionDAO qdao = new QuestionDAO(getApplicationContext());
                 qdao.open();
                 qdao.createQuestion(b.getId());
                 qdao.close();
             } catch (RuntimeException e) {
-                Log.e("Error", e.toString());
-                Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
-            } finally {
                 bdao.close();
+                Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
             }
-
         }
 
         File recordingFile = new File(mFileName);
@@ -468,10 +463,12 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             recordingPath = "";
         }
 
-        File imageFile = new File(photoPath);
-        if (imageFile.exists()) {
-            photoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".jpg";
-            imageFile.renameTo(new File(photoPath));
+        if (photoPath != null) {
+            File imageFile = new File(photoPath);
+            if(imageFile.exists()){
+                photoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".jpg";
+                imageFile.renameTo(new File(photoPath));
+            }
         }
 
         bdao.open();
