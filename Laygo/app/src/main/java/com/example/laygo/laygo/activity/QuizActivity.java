@@ -36,6 +36,7 @@ public class QuizActivity extends AppCompatActivity {
     public static final String TEXT_TYPE = "Text";
     public static final String GALLERY_TYPE = "Gallery";
     public static final String STRING_SPLIT = "//";
+    public static final int nOptions = 3;
 
     private String PREFS = "Settings";
     private List<Question> questions;
@@ -134,7 +135,7 @@ public class QuizActivity extends AppCompatActivity {
             dao = new QuestionDAO(getApplicationContext());
             dao.open();
 
-            for (i = 0; i < questions.size() - 1; ++i) {
+            for (i = 0; i < nOptions - 1; ++i) {
                 do {
                     index = r.nextInt(allQuestions.size());
                     tmp = allQuestions.get(index);
