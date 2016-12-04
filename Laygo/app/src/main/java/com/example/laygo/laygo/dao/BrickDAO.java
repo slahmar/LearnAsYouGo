@@ -139,14 +139,22 @@ public class BrickDAO extends GenericDAO{
     // Delete a brick and its image and recording
     public boolean deleteBrick(Brick brick){
         long id = brick.getId();
-        File image = new File(brick.getImage());
-        if(image.exists()){
-            image.delete();
+        String imagePath = brick.getImage();
+        if(imagePath != null && !imagePath.equals("")){
+            File image = new File(imagePath);
+            if(image.exists()){
+                image.delete();
+            }
         }
-        File recording = new File(brick.getRecording());
-        if(recording.exists()){
-            recording.delete();
+
+        String audioRecording = brick.getRecording();
+        if(audioRecording != null && !audioRecording.equals("")){
+            File recording = new File(audioRecording);
+            if(recording.exists()){
+                recording.delete();
+            }
         }
+
         return (database.delete(LaygoSQLiteHelper.TABLE_BRICK, LaygoSQLiteHelper.COLUMN_ID + "=" + id, null) > 0);
     }
 }

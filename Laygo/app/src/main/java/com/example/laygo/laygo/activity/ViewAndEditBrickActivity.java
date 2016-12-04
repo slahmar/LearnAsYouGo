@@ -90,8 +90,8 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         playIcon = (ImageView) this.findViewById(R.id.playIcon);
 
         if (!getIntent().getBooleanExtra("editable", true)) {
-            String truc = getIntent().getStringExtra("recording");
-            if (truc.equals("")) playIcon.setVisibility(View.INVISIBLE);
+            String record = getIntent().getStringExtra("recording");
+            if (record == null || record.equals("")) playIcon.setVisibility(View.INVISIBLE);
         } else {
             playIcon.setVisibility(View.INVISIBLE);
         }
@@ -299,12 +299,9 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             recordingPath = "";
         }
         b.setRecording(recordingPath);
-
-
         if (audioPath.equals("")) {
             playIcon.setVisibility(View.INVISIBLE);
         }
-
         photoPath = imagePath;
         word.setText(wordString);
         word.setEnabled(false);
@@ -469,6 +466,9 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
                 photoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + b.getId() + ".jpg";
                 imageFile.renameTo(new File(photoPath));
             }
+        }
+        else{
+            photoPath = "";
         }
 
         bdao.open();
