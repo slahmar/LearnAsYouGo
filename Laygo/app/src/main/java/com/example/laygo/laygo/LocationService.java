@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class LocationService implements LocationListener {
     private long minTime = 0; // minimum time interval between location updates, in milliseconds
-    private float minDistance = 12; // 12 m (minimum distance between location updates)
+    private float minDistance = 0; // 12 m (minimum distance between location updates)
 
     public Location getLocation(Context context) {
         Location location = null;
@@ -25,10 +25,12 @@ public class LocationService implements LocationListener {
                         PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
+            Log.d("SALOM", "SDK >23 ");
             return null;
         }
 
         try {
+            Log.d("SALOMé", "Get service");
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 Intent onGPS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);

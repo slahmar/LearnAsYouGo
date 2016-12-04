@@ -413,7 +413,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         location = new LocationService().getLocation(context);
         if (location != null) {
             Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
-            locationButton.setImageResource(R.drawable.location_set_icon);
+            locationButton.setImageResource(R.drawable.ic_my_location_black_48dp);
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
             try {
