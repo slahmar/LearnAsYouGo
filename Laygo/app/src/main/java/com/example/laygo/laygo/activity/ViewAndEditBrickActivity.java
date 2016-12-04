@@ -448,6 +448,7 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
             } catch (RuntimeException e) {
                 bdao.close();
                 Toast.makeText(ViewAndEditBrickActivity.this, "This word is already in your database", Toast.LENGTH_LONG).show();
+                return;
             }
         }
 
