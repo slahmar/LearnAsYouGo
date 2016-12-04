@@ -126,8 +126,8 @@ public class BrickDAO extends GenericDAO{
         values.put(LaygoSQLiteHelper.COLUMN_AUDIO, brick.getRecording());
         Location location = brick.getLocation();
         if(location == null){
-            values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, 0);
-            values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, 0);
+            values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, Double.MAX_VALUE);
+            values.put(LaygoSQLiteHelper.COLUMN_LONGITUDE, Double.MAX_VALUE);
         }
         else{
             values.put(LaygoSQLiteHelper.COLUMN_LATITUDE, brick.getLocation().getLatitude());

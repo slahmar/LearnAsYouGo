@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.example.laygo.laygo.LocationService;
 import com.example.laygo.laygo.R;
@@ -61,9 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (Brick b : bdao.findAll()) {
                 loc = b.getLocation();
                 if (loc != null && loc.getLatitude() != Double.MAX_VALUE && loc.getLongitude() != Double.MAX_VALUE) {
-                    currentPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(currentPosition).title(b.getWord()));
-
+                    LatLng location = new LatLng(loc.getLatitude(), loc.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(location).title(b.getWord()));
                 }
             }
         } finally {

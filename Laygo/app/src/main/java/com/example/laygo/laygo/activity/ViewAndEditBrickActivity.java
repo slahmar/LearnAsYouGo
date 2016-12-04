@@ -412,14 +412,14 @@ public class ViewAndEditBrickActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         location = new LocationService().getLocation(context);
         if (location != null) {
-            Toast.makeText(this, "Location retrieved", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Location retrieved", Toast.LENGTH_SHORT).show();
             locationButton.setImageResource(R.drawable.ic_my_location_black_48dp);
             // display city name
             Geocoder gc = new Geocoder(context, Locale.getDefault());
             try {
                 List<Address> addr = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 if (addr.size() > 0)
-                    Toast.makeText(this, addr.get(0).getLocality(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, addr.get(0).getLocality(), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
             }
 
